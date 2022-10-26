@@ -1,2 +1,2 @@
-# compilSoS
+# SoS
 

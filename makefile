@@ -1,5 +1,5 @@
 CC			:= gcc
-TARGET		:= compilSoS
+TARGET		:= SoS
 
 #Directories
 SRCDIR		:= src
@@ -23,7 +23,7 @@ debug: CFLAGS += -g
 debug: $(TARGETDIR)/$(TARGET)
 
 $(TARGETDIR)/$(TARGET): $(OBJS) #On construit l'executable
-	$(CC) $(CFLAGS) -o $@ $^ -lpcap
+	$(CC) $(CFLAGS) -o $@ $^
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c #On construit le reste
 	$(CC) $(CFLAGS) -c -o $@ $<

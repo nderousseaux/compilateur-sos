@@ -16,7 +16,7 @@
       {
         "label": "launch",
         "type": "shell",
-        "command": "make clean && make && gdbserver :8888 ./compilSoS ",
+        "command": "make clean && make && gdbserver :8888 ./SoS ",
         "isBackground": true,
         "presentation": {
           "panel": "shared",

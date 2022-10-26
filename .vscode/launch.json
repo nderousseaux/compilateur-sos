@@ -9,7 +9,7 @@
             "type": "gdb",
             "request": "attach",
             "name": "Launch debug",
-            "executable": "./analyzer",
+            "executable": "./SoS",
             "target": ":8888",
             "remote": true,
             "cwd": "${workspaceRoot}",

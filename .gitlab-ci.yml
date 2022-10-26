@@ -1,0 +1,28 @@
+stages:
+  - lint
+  - build
+
+lint-job:
+    stage: lint
+    before_script:
+      - echo "Download some packages..."
+      - apt-get update -y
+      - apt-get install -y python3-pip
+      - python3 -m pip install cpplint
+      - echo "Download complete."
+    script:
+        - echo "Linting the code..."
+        - python3 -m cpplint --quiet --recursive *
+        - echo "Linting complete."
+
+build-job:
+  stage: build
+  before_script:
+      - echo "Download some packages..."
+      - apt-get update -y
+      - apt-get install -y make gcc
+      - echo "Download complete."
+  script:
+    - echo "Compiling the code..."
+    - make
+    - echo "Compile complete."

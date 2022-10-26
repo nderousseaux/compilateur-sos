@@ -1,5 +1,5 @@
-#include "includes/compilSoS.h"
+#include "includes/SoS.h"
 
-int main(void){
-    return compilSoS();
+int main(void) {
+    return SoS();
 }
