@@ -3,3 +3,5 @@ SoS
 .DS_Store
 *.todo
 *.log
+out/
+*.dSYM

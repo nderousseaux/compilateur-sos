@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+/*
+* Boucle principale du programme
+*/
 int SoS(FILE * input, FILE * output);
 
 #endif  // SRC_INCLUDES_SOS_H_

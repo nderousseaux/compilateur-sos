@@ -21,7 +21,7 @@ build-job:
   before_script:
       - echo "Download some packages..."
       - apt-get update -y
-      - apt-get install -y make gcc
+      - apt-get install -y make gcc flex bison
       - echo "Download complete."
   script:
     - echo "Compiling the code..."
@@ -33,7 +33,7 @@ tests-job:
   before_script:
       - echo "Download some packages..."
       - apt-get update -y
-      - apt-get install -y make gcc openjdk-17-jdk
+      - apt-get install -y make gcc flex bison openjdk-17-jdk
       - java -jar tests/mars.jar nc tests/1-base/1-mars/in.asm
       - export COLORIZE=0
       - echo "Download complete."

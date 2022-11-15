@@ -11,18 +11,18 @@
             "panel": "shared",
             "showReuseMessage": false,
             "reveal": "silent",
+            "focus": false,
           }
       },
       {
-        "label": "launch",
+        "label": "build",
         "type": "shell",
-        "command": "make clean && make && gdbserver :8888 ./SoS ",
-        "isBackground": true,
+        "command": "make clean && make debug",
         "presentation": {
           "panel": "shared",
           "showReuseMessage": false,
-          "reveal": "always",
-          "focus": true,
+          "reveal": "silent",
+          "focus": false,
         }
       }
     ]
