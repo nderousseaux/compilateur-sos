@@ -1,0 +1,2 @@
+i=2; #ceci est un commentaire
+echo ""$i"\n";
