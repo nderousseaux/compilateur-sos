@@ -1,0 +1,4 @@
+i=2;
+nom="jean";
+j=3;
+echo "Salut : " $nom "\ntu as " $i " ans et tu as " $j " freres et soeurs";
