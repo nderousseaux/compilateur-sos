@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "sos.h": "c",
+        "utils.h": "c"
+    }
+}
