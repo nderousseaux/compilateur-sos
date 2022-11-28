@@ -1,7 +1,7 @@
 #!/bin/bash
 TEST_FOLDER=$PWD"/tests"
 LOG_FILE=$TEST_FOLDER"/tests.log"
-SIMULATEUR=$TEST_FOLDER"/mars.jar"
+SIMULATEUR="spim"
 MAIN=$PWD"/SoS"
 NB_SUCCESS=0
 NB_TESTS=1
@@ -105,8 +105,13 @@ do_test(){
     if [ -f "in-err.sos" ]; then
       
       if test_compilation in-err.sos; then
-        fail
-        return
+        if test_execution $FILE_ASM; then
+          fail
+          return
+        else
+          success
+          return
+        fi
       else
         success
         return
@@ -174,15 +179,14 @@ test_execution(){
   in=$1
 
   echo "\n#### Execution" >> $LOG_FILE
-  echo "#### java -jar $SIMULATEUR nc $in" >> $LOG_FILE
-  java -Djava.awt.headless=true -jar $SIMULATEUR nc $in 2>&1 | grep -v -e '^$' >> $OUTPUT
-  #Si le fichier de sortie termine par "Processing terminated due to errors." on considère que le test a échoué
-  fin=$(tail -n 1 $OUTPUT)
-  attendu="Processing terminated due to errors."
-  if [ "$fin" = "$attendu" ]; then
-    EXITCODE=1
-  else
-    EXITCODE=0
+  echo "#### $SIMULATEUR -file $in" >> $LOG_FILE
+  $SIMULATEUR -file $in 2>&1 >> $OUTPUT
+  EXITCODE=$?
+  if [ $EXITCODE -eq 0 ]; then
+    sed -i '1d' $OUTPUT
+    sed -i -e '$a\' $OUTPUT
+    
+
   fi
   
   # conserve la sorte dans le log

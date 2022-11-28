@@ -42,7 +42,7 @@ FILE * open_file(char * file_name, char * mode) {
 
 int main(int argc, char *argv[]) {
     char * finput = NULL;
-    char * foutput = foutput;
+    char * foutput = OUTPUT_FILE;
     FILE * input, * output;
 
     // On récupère les arguments
