@@ -1,25 +1,39 @@
 #include "includes/SoS.h"
-
 #define OUTPUT_FILE "out.asm"
 
 void print_usage(char * program_name) {
-    printf("Usage: %s [-o output-file] <input file>\n", program_name);
-    exit(EXIT_FAILURE);
+    printf("Usage:\t%s [-o output-file] <input file>\n", program_name);
+    printf("\t%s [-c]\n\n", program_name);
+    printf("\t-o\t\tSpecify output file (default: %s)\n", OUTPUT_FILE);
+    printf("\t-c\t\tPrint copyright\n");
+}
+
+void print_copyright() {
+    char *file = {
+        #include "includes/copyright"
+    };
+    printf("%s", file);
 }
 
 void parse_args(char ** finput, char ** foutput, int argc, char ** argv) {
     // On récupère les options
     int opt;
-    while ((opt = getopt(argc, argv, "ho:")) != -1) {
+    while ((opt = getopt(argc, argv, "cho:")) != -1) {
         switch (opt) {
             case 'o':
                 *foutput = optarg;
                 break;
             case 'h':
                 print_usage(argv[0]);
+                exit(EXIT_SUCCESS);
+                break;
+            case 'c':
+                print_copyright();
+                exit(EXIT_SUCCESS);
                 break;
             default:
                 print_usage(argv[0]);
+                exit(EXIT_FAILURE);
         }
     }
 
@@ -28,6 +42,7 @@ void parse_args(char ** finput, char ** foutput, int argc, char ** argv) {
         *finput = argv[optind];
     } else {
         print_usage(argv[0]);
+        exit(EXIT_FAILURE);
     }
 }
 

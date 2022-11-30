@@ -183,10 +183,22 @@ test_execution(){
   $SIMULATEUR -file $in 2>&1 >> $OUTPUT
   EXITCODE=$?
   if [ $EXITCODE -eq 0 ]; then
-    sed -i '1d' $OUTPUT
-    sed -i -e '$a\' $OUTPUT
-    
 
+  # On supprime les lignes une par une, jusqu'à trouver le mot "exception.s"
+
+  #Pour chaque ligne du fichier
+  while read line
+  do
+    #On supprime la ligne
+    sed -i '1d' $OUTPUT
+
+    #Si la ligne contient "exceptions.s"
+    if echo $line | grep -q "exceptions.s"; then
+      break
+    fi
+  done < $OUTPUT
+
+  sed -i -e '$a\' $OUTPUT
   fi
   
   # conserve la sorte dans le log

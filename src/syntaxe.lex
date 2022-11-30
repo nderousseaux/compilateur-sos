@@ -11,7 +11,7 @@ integer                 [0-9]+
 
 %%
 
-{integer}                                            {  
+{integer}                                           {  
                                                         yylval.integer=atoi(yytext);
                                                         return INTEGER;
                                                     }

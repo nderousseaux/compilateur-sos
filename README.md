@@ -9,7 +9,7 @@ $ make
 $ ./sos [-o asm-file] [sos-file]
 
 #Éxécuter un programme
-$ java -Djava.awt.headless=true -jar mars.jar nc [asm-file]
+$ spim -file asm-file
 ```
 
 ## Tests

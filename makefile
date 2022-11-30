@@ -8,7 +8,7 @@ OBJDIR		:= out
 TARGETDIR	:= .
 
 #Flags
-TEMP_FLAGS  := -Wno-unneeded-internal-declaration -Wno-sign-compare -Wno-unused-function#FIXME: supprimer ces flags
+TEMP_FLAGS  := -Wno-unneeded-internal-declaration -Wno-sign-compare -Wno-unused-function #FIXME: supprimer ces flags
 CFLAGS		:= -Wall -Wextra -Wall -Werror $(TEMP_FLAGS) -I$(INCDIR)
 
 #Files
@@ -20,7 +20,7 @@ INCLUDES	:= $(wildcard $(INCDIR)/*.h)
 
 
 #Rules
-all: $(TARGETDIR)/$(TARGET)
+all: copyright $(TARGETDIR)/$(TARGET) 
 
 debug: CFLAGS += -g
 debug: $(TARGETDIR)/$(TARGET)
@@ -38,5 +38,8 @@ $(OBJDIR)/$(SYNTAX).yy.c: $(SRCDIR)/$(SYNTAX).lex $(OBJDIR)/$(GRAMMAR).tab.h #On
 $(OBJDIR)/%.o: $(SRCDIR)/%.c #On construit le reste des .c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+copyright: .git logo.ans
+	sh gen-copyright.sh
+
 clean:
-	rm -f $(OBJDIR)/*
+	rm -f $(OBJS)
