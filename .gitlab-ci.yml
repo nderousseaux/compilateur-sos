@@ -1,7 +1,7 @@
 stages:
   - lint
   - build
-  - test
+  - tests
   
 lint-job:
     stage: lint
@@ -29,17 +29,16 @@ build-job:
     - echo "Compile complete."
 
 tests-job:
-  stage: test
+  stage: tests
   before_script:
       - echo "Download some packages..."
       - apt-get update -y
-      - apt-get install -y make gcc openjdk-17-jdk
-      - java -jar tests/mars.jar nc tests/1-base/1-mars/in.asm
+      - apt-get install -y make gcc spim
       - export COLORIZE=0
       - echo "Download complete."
   script:
-    - echo "Launching test..."
+    - echo "Launching tests..."
     - sh tests.sh
-    - echo "Test finished"
+    - echo "Tests finished."
   only:
     - main

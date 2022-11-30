@@ -17,7 +17,7 @@ INCLUDES	:= $(wildcard $(INCDIR)/*.h)
 
 
 #Rules
-all: $(TARGETDIR)/$(TARGET)
+all: copyright $(TARGETDIR)/$(TARGET) 
 
 debug: CFLAGS += -g
 debug: $(TARGETDIR)/$(TARGET)
@@ -30,3 +30,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c #On construit le reste
 
 clean:
 	rm -f $(OBJS)
+
+copyright: .git logo.ans
+	sh gen-copyright.sh
