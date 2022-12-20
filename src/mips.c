@@ -2,6 +2,8 @@
 
 #include "includes/mips.h"
 
+FILE * f;  // Fichier de sortie
+
 /* Génère les données */
 void gen_data() {
     fprintf(f, ".data\n");
