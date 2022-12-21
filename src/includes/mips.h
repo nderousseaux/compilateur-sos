@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include "./quad.h"
 
-FILE * f;  // Fichier de sortie
-
 /* Génère les données */
 void gen_data();
 
