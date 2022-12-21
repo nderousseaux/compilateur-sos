@@ -1,0 +1,6 @@
+i = 5 ;
+if test ${i} -gt 5 then
+    echo "Reel" 
+else
+    echo "Cornichon" 
+fi ;

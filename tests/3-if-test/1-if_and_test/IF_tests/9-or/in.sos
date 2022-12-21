@@ -1,0 +1,4 @@
+i = 5 ;
+if test ${i} -lt 0 -o ${i} -lt 10 then
+    echo "Reel 9"
+fi ;

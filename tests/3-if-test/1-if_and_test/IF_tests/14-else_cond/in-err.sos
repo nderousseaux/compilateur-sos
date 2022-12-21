@@ -1,0 +1,6 @@
+i = 5 ;
+if test ${i} -le 0 then
+    echo "Reel" 
+else test ${i} -ge 0 then
+    echo "Non\n" 
+fi ;
