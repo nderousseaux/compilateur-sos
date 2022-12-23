@@ -19,6 +19,11 @@ typedef enum Operator
     OP_STINF,
     OP_INFEQ,
     OP_IF
+    OP_PLUS,
+    OP_MOINS,
+    OP_FOIS,
+    OP_DIVISION,
+    OP_MODULO,
 } Operator;
 
 // Définit le type d'une operande

@@ -20,6 +20,14 @@ enum operateur_type
     O_EMPTY
 };
 
+enum operator_type{
+    O_PLUS,
+    O_MOINS, 
+    O_FOIS,
+    O_DIVISION,
+    O_MODULO,
+};
+
 enum operand_type
 {
     O_VAR,
@@ -48,6 +56,9 @@ void quad_assign(char *src, char *dest, enum operand_type type);
 
 /* Crée une quadruplet echo */
 void quad_echo(char *str, enum operand_type type);
+
+void quad_somme(Operand_y op1, Operand_y op2);
+
 
 /* Crée une quadruplet goto */
 void quad_goto(int idx);

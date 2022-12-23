@@ -55,15 +55,15 @@ expr			        {}
 !=				        {}
 !				        { return EXCLA;}
 &				        {}
-\*				        {}
+\*				        { return FOIS; }
 \"				        { return DQUOTE; }
 '				        { return QUOTE; }
 \$				        { return DOLLAR; }
 
-\+				        {} // Opérateurs
-\-				        {}
-\/				        {}
-\%				        {}
+\+				        { return PLUS;} // Opérateurs
+\-				        { return MOINS;}
+\/				        { return DIVISION;}
+\%				        { return MODULO;}
 \<				        {}
 \>				        {}
 \<=				        {}

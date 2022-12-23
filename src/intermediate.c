@@ -126,6 +126,11 @@ void quad_assign(char *src, char *dest, enum operand_type type)
     }
 }
 
+void quad_somme(Operand_y op1, Operand_y op2){
+    
+}
+
+
 /* Crée une quadruplet goto */
 void quad_goto(int idx)
 {

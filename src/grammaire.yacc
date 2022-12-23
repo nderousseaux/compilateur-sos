@@ -13,6 +13,7 @@
 %union {
     Operand_y operand;
     int integer;
+    Operator operator;
     Operateur_y operateur;
     Bool booleen;
 }
@@ -32,6 +33,11 @@
 %token DQUOTE
 %token QUOTE
 %token DOLLAR
+%token PLUS
+%token MOINS
+%token FOIS
+%token DIVISION
+%token MODULO
 %token IF
 %token FI
 %token ELSE
@@ -66,7 +72,12 @@
 %type <operand> concatenation
 %type <operand> operande
 %type <operand> liste-operandes
+%type <operand> somme-entiere
+%type <operand> produit-entier
 %type <integer> operande-entier
+
+%type <operator> plus-ou-moins
+%type <operator> fois-div-mod
 %type <operateur> operateur2
 %type <operateur> operateur1
 %type <booleen> test-instruction
@@ -132,6 +143,37 @@ operande            : MOT                                               { $$ = $
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
+
+
+somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type == O_PLUS){
+                                                                                quad_somme($1,$3);
+                                                                            }  
+                                                                            else{
+                                                                                quad_soustraction($1,$3);
+                                                                            }
+                                                                    
+                                                                            
+                                                                            }
+					| produit-entier									{$$=$1;}
+
+produit-entier		: produit-entier fois-div-mod operande-entier		{   if($2.type == O_FOIS){
+                                                                                quad_multiplication($1,$3);
+                                                                            }
+                                                                            else if($2.type==O_DIVISION){
+                                                                                quad_division($1,$3);
+                                                                            }
+                                                                            else{
+                                                                                quad_reste($1,$3);
+                                                                            }
+                                                                        }
+					| operande-entier									{$$=$1;}
+
+
+plus-ou-moins		: PLUS												{$$.type=O_PLUS;}
+					| MOINS												{$$.type=O_MOINS;}
+fois-div-mod		: FOIS												{$$.type=O_FOIS;}
+					| DIVISION											{$$.type=O_DIVISION;}
+					| MODULO                                            {$$.type=O_MODULO;}
 
 test-block		    : TEST test-expr                                    { $$ = $2;}
 
