@@ -60,7 +60,7 @@ expr			        {return EXPR;}
 '				        { return QUOTE; }
 \$				        { return DOLLAR; }
 
-"+"  			        { return PLUS;} // Opérateurs
+\+  			        { return PLUS;} // Opérateurs
 \-				        { return MOINS;}
 \/				        { return DIVISION;}
 \%				        { return MODULO;}

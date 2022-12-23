@@ -130,6 +130,9 @@ void quad_somme(Operand_y op1, Operand_y op2){
     add_quad(OP_PLUS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
 }
 
+void quad_soustraction(Operand_y op1, Operand_y op2){
+    add_quad(OP_MOINS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+}
 
 /* Crée une quadruplet goto */
 void quad_goto(int idx)

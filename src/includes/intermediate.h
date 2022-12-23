@@ -45,6 +45,16 @@ typedef struct
 
 typedef struct
 {
+    enum operator_type type;
+} Operator_y;
+
+typedef struct
+{
+    enum operator_type type;
+} Operator_y;
+
+typedef struct
+{
     enum operateur_type type;
 } Operateur_y;
 
@@ -59,9 +69,7 @@ void quad_echo(char *str, enum operand_type type);
 
 void quad_somme(Operand_y op1, Operand_y op2);
 void quad_soustraction(Operand_y op1, Operand_y op2);
-void quad_multiplication(Operand_y op1, Operand_y op2);
-void quad_division(Operand_y op1, Operand_y op2);
-void quad_reste(Operand_y op1, Operand_y op2);
+
 
 
 /* Crée une quadruplet goto */

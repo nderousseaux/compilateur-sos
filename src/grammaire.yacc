@@ -13,7 +13,7 @@
 %union {
     Operand_y operand;
     int integer;
-    Operator operator;
+    Operator_y operator;
     Operateur_y operateur;
     Bool booleen;
 }
@@ -155,14 +155,14 @@ somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type == O
                                                                             }
                                                                     
                                                                             
-                                                                            }
+                                                                        }
 					| produit-entier									{$$=$1;}
 
 produit-entier		: produit-entier fois-div-mod operande-entier		{}
-					| operande-entier									{$$=$1;}
+					| operande-entier									{$$.val=$1;}
 
 
-plus-ou-moins		: PLUS												{$$.type=O_PLUS;}
+plus-ou-moins		: PLUS				    							{$$.type=O_PLUS;}
 					| MOINS												{$$.type=O_MOINS;}
 fois-div-mod		: FOIS												{$$.type=O_FOIS;}
 					| DIVISION											{$$.type=O_DIVISION;}
