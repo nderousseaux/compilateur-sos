@@ -41,7 +41,7 @@ else			        {return ELSE;}
 fi				        {return FI;}
 declare			        {}
 test			        {return TEST;}
-expr			        {}
+expr			        {return EXPR;}
 
 ;				        { return SEMICOLON; } //Caractères spéciaux
 \[				        {}
@@ -60,7 +60,7 @@ expr			        {}
 '				        { return QUOTE; }
 \$				        { return DOLLAR; }
 
-\+				        { return PLUS;} // Opérateurs
+"+"  			        { return PLUS;} // Opérateurs
 \-				        { return MOINS;}
 \/				        { return DIVISION;}
 \%				        { return MODULO;}

@@ -24,6 +24,7 @@
 // Mots clés
 %token ECHO_T
 %token EXIT
+%token EXPR
 
 // Caractères spéciaux
 %token SEMICOLON
@@ -140,6 +141,7 @@ concatenation		: operande						        			{ $$ = $1; }
 operande            : MOT                                               { $$ = $1; $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
+                    | '$' '(' EXPR somme-entiere ')'                    {}
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
@@ -156,16 +158,7 @@ somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type == O
                                                                             }
 					| produit-entier									{$$=$1;}
 
-produit-entier		: produit-entier fois-div-mod operande-entier		{   if($2.type == O_FOIS){
-                                                                                quad_multiplication($1,$3);
-                                                                            }
-                                                                            else if($2.type==O_DIVISION){
-                                                                                quad_division($1,$3);
-                                                                            }
-                                                                            else{
-                                                                                quad_reste($1,$3);
-                                                                            }
-                                                                        }
+produit-entier		: produit-entier fois-div-mod operande-entier		{}
 					| operande-entier									{$$=$1;}
 
 

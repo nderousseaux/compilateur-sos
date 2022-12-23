@@ -21,6 +21,8 @@ void gen_assign(Quad quad);
 /* Génére le code d'affichage */
 void gen_echo(Quad quad);
 
+void gen_plus(Quad quad);
+
 /* Génére le code pour un test d'égalité*/
 void gen_equal(Quad quad);
 

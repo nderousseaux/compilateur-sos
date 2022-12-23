@@ -127,7 +127,7 @@ void quad_assign(char *src, char *dest, enum operand_type type)
 }
 
 void quad_somme(Operand_y op1, Operand_y op2){
-    
+    add_quad(OP_PLUS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
 }
 
 

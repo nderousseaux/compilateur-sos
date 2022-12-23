@@ -1,4 +1,21 @@
 .data
+.text
+main:
+
+	# On alloue la mémoire pour la pile
+	addiu	$sp,	$sp,	-8
+	sw		$fp,	4($sp)
+	move	$fp,	$sp
+
+	# On met 3 dans i
+	li	$t2,	3
+	sw	$t2,	0($fp)
+
+	# On génère le code de terminaison
+	li	$a0,	0
+	li	$v0,	17
+	syscall
+.data
 	string_0: .asciiz	"Reel 1"
 .text
 main:

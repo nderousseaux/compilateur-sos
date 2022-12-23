@@ -75,6 +75,10 @@ void gen_code()
             gen_end(quad.operand1.integer_value);
             exit = 1;
             break;
+
+            case OP_PLUS:
+                gen_plus(quad);
+                break;
         case OP_EQUAL:
             gen_equal(quad);
             break;
@@ -413,6 +417,13 @@ void gen_end(int exit_code)
     fprintf(f, "\tsyscall\n");
 }
 
+void gen_plus(Quad quad) {
+    fprintf(f, "\n\t# On génère le code de somme\n");
+    fprintf(f, "\tli $t0, %d\n", quad.operand1.integer_value);
+    fprintf(f, "\tli $t1, %d\n", quad.operand1.integer_value);
+    fprintf(f, "\tadd $a0, $t0, $t1\n");
+}
+
 /* Génére code assembleur final dans le .asm */
 void gen_mips(FILE *output, char debug)
 {
@@ -431,3 +442,6 @@ void gen_mips(FILE *output, char debug)
     // On intègre le code
     gen_code();
 }
+
+
+
