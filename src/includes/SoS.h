@@ -11,9 +11,12 @@
 /* Initialise les structures de mémoire */
 void init();
 
+/* Supprime les structure de mémoire */
+void destroy();
+
 /*
 * Boucle principale du programme
 */
-int SoS(FILE * input, FILE * output);
+int SoS(FILE * input, FILE * output, char debug);
 
 #endif  // SRC_INCLUDES_SOS_H_

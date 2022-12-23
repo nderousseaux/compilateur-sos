@@ -36,6 +36,15 @@ struct Quad_list* init_quad_list();
 void add_quad(
     Operator op, Operand operand1, Operand operand2, Operand result);
 
+/* On affiche la table des quad */
+void print_quad_list(Quad_list *quad_list);
+
+/* Affiche un quad */
+void print_quad(Quad quad);
+
+/* Affiche un operand */
+void print_operand(Operand operand);
+
 /* Supprime la quad_list */
 void destroy_quad_list(Quad_list* quad_list);
 
