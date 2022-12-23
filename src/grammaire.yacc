@@ -38,7 +38,6 @@
 %token ELSE
 %token THEN
 %token TEST
-%token EQ
 
 %token <operand> IDENTIFIER
 %token <operand> MOT
@@ -51,6 +50,7 @@
 %type <operand> liste-operandes
 %type <integer> operande-entier
 %type <operateur> operateur2
+%type <operateur> operateur1
 
 %%
 programme           : liste-instructions                                {  }
@@ -80,13 +80,31 @@ test-block		    : TEST test-expr                                    { }
 
 test-expr			: test-instruction                                  { }
 
-test-instruction	: operande operateur2 operande						{ if($2.type == O_EQUAL){
-                                                                            quad_equal($1,$3);
-                                                                            } }
+test-instruction	: operande operateur2 operande						{ switch($2.type){
+                                                                                case O_EQUAL:
+                                                                                    break;
+                                                                                case O_NEQUAL:
+                                                                                    break;
+                                                                                case O_STSUP:
+                                                                                    break;
+                                                                                case O_SUPEQ:
+                                                                                    break;
+                                                                                case O_STINF:
+                                                                                    break;
+                                                                                case O_INFEQ:
+                                                                                    break;
+                                                                                default:
+                                                                        } }
 
-operateur2			: EQ										        { $$.type = O_EQUAL; }
+operateur1			: '-' 'n'												{ $$.type = O_NOTEMPTY; }
+					| '-' 'z'												{ $$.type = O_EMPTY; }
 
-
+operateur2			: '-' 'e' 'q'									        { $$.type = O_EQUAL; }
+					| '-' 'n' 'e'											{ $$.type = O_NEQUAL;}
+					| '-' 'l' 't'											{ $$.type = O_STSUP; }
+					| '-' 'l' 'e'											{ $$.type = O_SUPEQ; }
+					| '-' 'g' 't'											{ $$.type = O_STINF; }
+					| '-' 'g' 'e'											{ $$.type = O_INFEQ; }
 %%
 
 

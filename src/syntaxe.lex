@@ -42,7 +42,6 @@ fi				        {return FI;}
 declare			        {}
 test			        {return TEST;}
 expr			        {}
--eq                     {return EQ;} //temp
 
 ;				        { return SEMICOLON; } //Caractères spéciaux
 \[				        {}

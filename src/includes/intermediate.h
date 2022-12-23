@@ -13,7 +13,14 @@
 
 enum operateur_type
 {
-    O_EQUAL
+    O_EQUAL,  //==
+    O_NEQUAL, //!=
+    O_STSUP,  //>
+    O_SUPEQ,  //>=
+    O_STINF,  //<
+    O_INFEQ,  // <=
+    O_NOEMPTY,
+    O_EMPTY
 };
 
 enum operand_type

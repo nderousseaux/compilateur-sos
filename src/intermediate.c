@@ -146,20 +146,128 @@ void quad_equal(Operand_y op1, Operand_y op2)
     {
         add_quad(OP_EQUAL, id(op1.str), integer(to_int(op2.str)), empty());
     }
-    else if (op1.type == O_VAR && op2.type == O_VAR)
-    {
-        add_quad(OP_EQUAL, var(op1.str), var(op2.str), empty());
-    }
-    else if (op1.type == O_VAR && op2.type == O_ID)
-    {
-        add_quad(OP_EQUAL, var(op1.str), id(op2.str), empty());
-    }
-    else if (op1.type == O_ID && op2.type == O_VAR)
-    {
-        add_quad(OP_EQUAL, id(op1.str), var(op2.str), empty());
-    }
     else
     {
         fprintf(stderr, "Erreur quad_equal, operand assignation\n");
+    }
+}
+
+void quad_nequal(Operand_y op1, Operand_y op2)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_NEQUAL, id(op1.str), id(op2.str), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_NEQUAL, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_NEQUAL, integer(to_int(op1.str)), id(op2.str), empty());
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_NEQUAL, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_nequal, operand assignation\n");
+    }
+}
+
+void quad_stsup(Operand_y op1, Operand_y op2)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_STSUP, id(op1.str), id(op2.str), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_STSUP, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_STSUP, integer(to_int(op1.str)), id(op2.str), empty());
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_STSUP, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_stsup, operand assignation\n");
+    }
+}
+
+void quad_supeq(Operand_y op1, Operand_y op2)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_SUPEQ, id(op1.str), id(op2.str), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_SUPEQ, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_SUPEQ, integer(to_int(op1.str)), id(op2.str), empty());
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_SUPEQ, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_supeq, operand assignation\n");
+    }
+}
+
+void quad_stinf(Operand_y op1, Operand_y op2)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_STINF, id(op1.str), id(op2.str), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_STINF, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_STINF, integer(to_int(op1.str)), id(op2.str), empty());
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_STINF, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_stinf, operand assignation\n");
+    }
+}
+
+void quad_infeq(Operand_y op1, Operand_y op2)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_INFEQ, id(op1.str), id(op2.str), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_INFEQ, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_INFEQ, integer(to_int(op1.str)), id(op2.str), empty());
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_INFEQ, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_infeq, operand assignation\n");
     }
 }

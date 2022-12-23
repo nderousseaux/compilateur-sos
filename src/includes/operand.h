@@ -11,7 +11,12 @@ typedef enum Operator
     OP_EXIT,
     OP_ASSIGN,
     OP_ECHO,
-    OP_EQUAL
+    OP_EQUAL,
+    OP_NEQUAL,
+    OP_STSUP,
+    OP_SUPEQ,
+    OP_STINF,
+    OP_INFEQ
 } Operator;
 
 // Définit le type d'une operande
