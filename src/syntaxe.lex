@@ -77,7 +77,7 @@ expr			        {}
 [{com} \n\t]	        {  } // Blancs
 
 
-(\".*\")|(\'.*\')       {   // Chaine
+(\"[^"]*\")|(\'[^']*\') {   // Chaine
                             assign_string(yytext);
                             printf("%s\n", yytext);
                             return CHAINE;

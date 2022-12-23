@@ -35,10 +35,10 @@ void quad_assign(char * src, char * dest, enum operand_type type);
 void quad_echo(char * str, enum operand_type type);
 
 /* Ajoute une operande à la liste chainée */
-Operand_y add_operand(Operand_y list, Operand_y op);
+Operand_y * add_operand(Operand_y * list, Operand_y * op);
 
 /* Fait une opération sur toutes les opérandes de la liste */
-void op_all_operand(Operand_y list, Operator op);
+void op_all_operand(Operand_y * list, Operator op);
 
 /* Renvoie un entier à partir d'une chaine de caractères */
 int to_int(char * str);

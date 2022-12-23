@@ -40,19 +40,24 @@ int to_int(char * str) {
 }
 
 /* Ajoute une operande à la liste chainée */
-Operand_y add_operand(Operand_y list, Operand_y op){
-    Operand_y * tmp = &list;
-    while (tmp->next != NULL) {
-        tmp = (Operand_y *)tmp->next;
+Operand_y * add_operand(Operand_y * list, Operand_y * op){
+    if (list == NULL) {
+        return op;
     }
-    tmp->next = (struct Operand_y*)&op;
-    return list;
+    else {
+        Operand_y * tmp = list;
+        while (tmp->next != NULL) {
+            tmp = (Operand_y *)tmp->next;
+        }
+        tmp->next = (struct Operand_y *)op;
+        return list;
+    }
 }
 
 /* Fait une opération sur toutes les opérandes de la liste */
-void op_all_operand(Operand_y list, Operator op)
+void op_all_operand(Operand_y * list, Operator op)
 {
-    Operand_y * tmp = &list;
+    Operand_y * tmp = list;
     while (tmp != NULL) {
         switch (op)
         {
@@ -63,7 +68,6 @@ void op_all_operand(Operand_y list, Operator op)
         default:
             break;
         }
-
 
         tmp = (Operand_y *)tmp->next;
     }

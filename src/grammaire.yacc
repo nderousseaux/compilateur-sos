@@ -51,11 +51,11 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { }
                     | instruction										{ }
                     
 instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
-                    | ECHO_T liste-operandes                            { op_all_operand($2, OP_ECHO); }
+                    | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
 
-liste-operandes     : liste-operandes operande                          { $$ = add_operand($1, $2); }
+liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
 
 concatenation		: operande						        			{ $$ = $1; }
