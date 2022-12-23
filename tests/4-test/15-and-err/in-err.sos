@@ -1,0 +1,4 @@
+i = 321 ;
+if test -a ${i} -lt 321 ${i} -ge 320 then
+    echo "Reel 1" 
+fi ;
