@@ -15,6 +15,7 @@
 %union {
     Operand_y operand;
     int integer;
+    Operateur_y operateur;
 }
 
 %start programme
@@ -32,6 +33,12 @@
 %token DQUOTE
 %token QUOTE
 %token DOLLAR
+%token IF
+%token FI
+%token ELSE
+%token THEN
+%token TEST
+%token EQ
 
 %token <operand> IDENTIFIER
 %token <operand> MOT
@@ -43,6 +50,7 @@
 %type <operand> operande
 %type <operand> liste-operandes
 %type <integer> operande-entier
+%type <operateur> operateur2
 
 %%
 programme           : liste-instructions                                {  }
@@ -54,6 +62,7 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
+                    | test-block                                        {  }
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
@@ -66,6 +75,18 @@ operande            : MOT                                               { $$ = $
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
+
+test-block		    : TEST test-expr                                    { }
+
+test-expr			: test-instruction                                  { }
+
+test-instruction	: operande operateur2 operande						{ if($2.type == O_EQUAL){
+                                                                            quad_equal($1,$3);
+                                                                            } }
+
+operateur2			: EQ										        { $$.type = O_EQUAL; }
+
+
 %%
 
 
