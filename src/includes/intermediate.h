@@ -67,8 +67,7 @@ void quad_assign(char *src, char *dest, enum operand_type type);
 /* Crée une quadruplet echo */
 void quad_echo(char *str, enum operand_type type);
 
-void quad_somme(Operand_y op1, Operand_y op2);
-void quad_soustraction(Operand_y op1, Operand_y op2);
+void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type);
 
 
 

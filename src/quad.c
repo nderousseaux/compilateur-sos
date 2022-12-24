@@ -69,6 +69,10 @@ void print_quad(Quad quad)
     case OP_ECHO:
         printf("ECHO ");
         break;
+
+    case OP_PLUS:
+        printf("PLUS ");
+        break;
     case OP_EQUAL:
         printf("EQUAL ");
         break;

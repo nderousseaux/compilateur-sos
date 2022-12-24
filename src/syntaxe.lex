@@ -1,6 +1,7 @@
 %option nounput
 %option noinput
 %option noyywrap
+%option yylineno
 
 %{
     #include "imports.h"
@@ -101,7 +102,6 @@ expr			        {return EXPR;}
                             assign_string(yytext);
                             return MOT;
                         }
-
 
 
 . fprintf(stderr, "Unexpected character: %s\n", yytext);

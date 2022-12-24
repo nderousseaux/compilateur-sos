@@ -1,6 +1,7 @@
 %{
     #include "imports.h"
     extern int yylex();
+
     void yyerror(const char * error);
     extern int nextquad;
 %}
@@ -30,6 +31,8 @@
 %token SEMICOLON
 %token OBRACE
 %token CBRACE
+%token OPAR 
+%token CPAR
 %token EQUAL
 %token DQUOTE
 %token QUOTE
@@ -93,6 +96,7 @@
 %type <booleen> else-part
 
 %%
+
 programme           : liste-instructions                                { }
             
 liste-instructions  : liste-instructions SEMICOLON instruction          { $$.next = creelist(-1);
@@ -102,6 +106,7 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
 instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
+                    | error   // Si il y a une erreur, yacc reprend quand même
                     | IF test-block THEN M liste-instructions N else-part FI        {
                                                                             $6.next = concat($7.next,$6.next);
                                                                             complete($6.next,nextquad);
@@ -141,21 +146,14 @@ concatenation		: operande						        			{ $$ = $1; }
 operande            : MOT                                               { $$ = $1; $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
-                    | '$' '(' EXPR somme-entiere ')'                    {}
+                    | DOLLAR OPAR EXPR somme-entiere CPAR           {}
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
 
-
-somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type == O_PLUS){
-                                                                                quad_somme($1,$3);
-                                                                            }  
-                                                                            else{
-                                                                                quad_soustraction($1,$3);
+somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   
+                                                                            quad_operation($1,$3,$2.type);
                                                                             }
-                                                                    
-                                                                            
-                                                                        }
 					| produit-entier									{$$=$1;}
 
 produit-entier		: produit-entier fois-div-mod operande-entier		{}
@@ -167,6 +165,7 @@ plus-ou-moins		: PLUS				    							{$$.type=O_PLUS;}
 fois-div-mod		: FOIS												{$$.type=O_FOIS;}
 					| DIVISION											{$$.type=O_DIVISION;}
 					| MODULO                                            {$$.type=O_MODULO;}
+
 
 test-block		    : TEST test-expr                                    { $$ = $2;}
 
