@@ -146,7 +146,7 @@ concatenation		: operande						        			{ $$ = $1; }
 operande            : MOT                                               { $$ = $1; $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
-                    | DOLLAR OPAR EXPR somme-entiere CPAR           {}
+                    | DOLLAR OPAR EXPR somme-entiere CPAR               { $$ = $4;}
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
@@ -161,11 +161,17 @@ operande-entier     : MOT                                               { $$ = t
 
                                                                     
 
-somme-entiere		: somme-entiere plus-ou-moins produit-entier		{ quad_operation($1,$3,$2.type); }
+somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type==O_PLUS){
+                                                                                $$.val= $1.val+$3.val; $$.type=O_INT;
+                                                                            }
+                                                                            else{
+                                                                                $$.val= $1.val-$3.val; $$.type=O_INT;
+                                                                            }
+                                                                            quad_operation($1,$3,$2.type,$$); }
 					| produit-entier									{$$=$1;}
 
 produit-entier		: produit-entier fois-div-mod operande-entier		{}
-					| operande-entier									{$$.val=$1;}
+					| operande-entier									{$$.val=$1; $$.type=O_INT;}
 
 
 plus-ou-moins		: PLUS				    							{$$.type=O_PLUS;}

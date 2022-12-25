@@ -8,12 +8,12 @@ main:
 	move	$fp,	$sp
 
 	# On génère le code de somme
-	li $t0, 3
-	li $t1, 3
+	li $t0, 4
+	li $t1, 4
 	add $a0, $t0, $t1
 
-	# On met i dans i
-	la	$t2,	i
+	# On met 4 dans i
+	li	$t2,	4
 	sw	$t2,	0($fp)
 
 	# On affiche i
