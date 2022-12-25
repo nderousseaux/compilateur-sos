@@ -1,1 +1,1 @@
-j = arezr ; i=3  ; z=3;
+i=3;  echo ${j};

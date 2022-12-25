@@ -188,14 +188,14 @@ int hash(char* key){
     while (c != '\0'){
         i++;
 
-        hash += hash + (i * i) + (c * c); //Des carrés pour augmenter la dispersion en cas de chaines similaire (key1 et key2 par exemple)
+        hash += hash + (i * i) + (c * c); // Des carrés pour augmenter la dispersion en cas de chaines similaire (key1 et key2 par exemple)
         c = key[i];
     }
     return hash;
 }
 
 /* Renvoie le nom de la prochaine constante (et l'incrémente) */
-char * next_const(){
+char * next_const() {
     char * key;
     CHECK(key = calloc(10, sizeof(char)));
 
