@@ -7,13 +7,8 @@ main:
 	sw		$fp,	4($sp)
 	move	$fp,	$sp
 
-	# On génère le code de somme
-	li $t0, 4
-	li $t1, 4
-	add $a0, $t0, $t1
-
-	# On met 4 dans i
-	li	$t2,	4
+	# On met 12 dans i
+	li	$t2,	12
 	sw	$t2,	0($fp)
 
 	# On affiche i

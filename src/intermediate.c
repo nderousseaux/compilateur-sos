@@ -116,7 +116,7 @@ void quad_assign(char *src, char *dest, enum operand_type type)
         add_quad(OP_ASSIGN, var(src), empty(), id(dest));
         break;
     case O_INT:
-        add_quad(OP_ASSIGN, integer(to_int(src)), empty(), id(dest));
+        add_quad(OP_ASSIGN, integer(val_src), empty(), id(dest));
         break;
     case O_ID:
         add_quad(OP_ASSIGN, id(src), empty(), id(dest));

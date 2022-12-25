@@ -103,7 +103,7 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
                                                                           $3.next = creelist(-1);}
                     | instruction										{ $$.next = creelist(-1) ; }
                     
-instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
+instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $3.val, $1.str, $3.type); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
                     | error   // Si il y a une erreur, yacc reprend quand même
@@ -141,9 +141,9 @@ else-part           : ELIF test-block THEN M liste-instructions N else-part     
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
 
-concatenation		: operande						        			{ $$ = $1; }
+concatenation		: operande						        			{ $$ = $1;}
 
-operande            : MOT                                               { $$ = $1; $$.type = O_INT;}
+operande            : MOT                                               { $$.val = to_int($1.str); $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
                     | DOLLAR OPAR EXPR somme-entiere CPAR               { $$ = $4;}
@@ -167,7 +167,8 @@ somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type==O_P
                                                                             else{
                                                                                 $$.val= $1.val-$3.val; $$.type=O_INT;
                                                                             }
-                                                                            quad_operation($1,$3,$2.type,$$); }
+                                                                            //quad_operation($1,$3,$2.type,$$); 
+                                                                        }
 					| produit-entier									{$$=$1;}
 
 produit-entier		: produit-entier fois-div-mod operande-entier		{}
