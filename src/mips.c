@@ -419,9 +419,9 @@ void gen_end(int exit_code)
 
 void gen_plus(Quad quad) {
     fprintf(f, "\n\t# On génère le code de somme\n");
-    fprintf(f, "\tli $t0, %d\n", quad.operand1.integer_value);
-    fprintf(f, "\tli $t1, %d\n", quad.operand1.integer_value);
-    fprintf(f, "\tadd $a0, $t0, $t1\n");
+    fprintf(f, "\taddi $t2, $t2, %d\n", quad.operand1.integer_value);
+    fprintf(f, "\taddi $t2, $t2, %d\n", quad.operand2.integer_value);
+
 }
 
 /* Génére code assembleur final dans le .asm */

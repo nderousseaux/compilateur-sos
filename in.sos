@@ -1,1 +1,1 @@
-i=$(expr 3+3+3+3); echo ${i}
+i=$(expr 1+2+3+4); echo ${i}

@@ -116,7 +116,7 @@ void quad_assign(char *src, char *dest, enum operand_type type)
         add_quad(OP_ASSIGN, var(src), empty(), id(dest));
         break;
     case O_INT:
-        add_quad(OP_ASSIGN, integer(val_src), empty(), id(dest));
+        add_quad(OP_ASSIGN, integer(to_int(src)), empty(), id(dest));
         break;
     case O_ID:
         add_quad(OP_ASSIGN, id(src), empty(), id(dest));
@@ -126,7 +126,9 @@ void quad_assign(char *src, char *dest, enum operand_type type)
     }
 }
 
-void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type, Operand_y res) {
+
+
+void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type) {
 
     /* On crée l'identifiant dans la table des symboles */
 
@@ -134,19 +136,19 @@ void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type, Opera
     switch (type)
     {
     case O_PLUS:
-        add_quad(OP_PLUS, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(to_int(res.str)));
+        add_quad(OP_PLUS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
         break;
     case O_MOINS:
-        add_quad(OP_MOINS, integer(to_int(op1.str)), integer(to_int(op2.str)),  integer(to_int(res.str)));
+        add_quad(OP_MOINS, integer(to_int(op1.str)), integer(to_int(op2.str)),  empty());
         break;
     case O_FOIS:
-        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(to_int(res.str)));
+        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
         break;
     case O_DIVISION:
-        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(to_int(res.str)));
+        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
         break;
     case O_MODULO:
-        add_quad(OP_MODULO, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(to_int(res.str)));
+        add_quad(OP_MODULO, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
         break;
     default:
         break;

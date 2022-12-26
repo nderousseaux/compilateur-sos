@@ -103,7 +103,8 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
                                                                           $3.next = creelist(-1);}
                     | instruction										{ $$.next = creelist(-1) ; }
                     
-instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $3.val, $1.str, $3.type); }
+instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
+                    | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
                     | error   // Si il y a une erreur, yacc reprend quand même
@@ -161,17 +162,12 @@ operande-entier     : MOT                                               { $$ = t
 
                                                                     
 
-somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   if($2.type==O_PLUS){
-                                                                                $$.val= $1.val+$3.val; $$.type=O_INT;
-                                                                            }
-                                                                            else{
-                                                                                $$.val= $1.val-$3.val; $$.type=O_INT;
-                                                                            }
-                                                                            //quad_operation($1,$3,$2.type,$$); 
+somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   $$ = *add_operand(&$1, &$3);
+                                                                            quad_operation($1,$3,$2.type); 
                                                                         }
 					| produit-entier									{$$=$1;}
 
-produit-entier		: produit-entier fois-div-mod operande-entier		{}
+produit-entier		: produit-entier fois-div-mod operande-entier		{ }
 					| operande-entier									{$$.val=$1; $$.type=O_INT;}
 
 
