@@ -6,6 +6,8 @@
 
 Quad_list *quad_list;
 
+int nextquad = 0;
+
 /* Crée une quad_list de taille définie */
 Quad_list *init_quad_list()
 {
@@ -22,7 +24,7 @@ Quad_list *init_quad_list()
 void add_quad(
     Operator op, Operand operand1, Operand operand2, Operand result)
 {
-    Quad quad = {op, operand1, operand2, result};
+    Quad quad = {op, operand1, operand2, result, nextquad};
     if (quad_list->size == quad_list->capacity)
     {
         quad_list->capacity *= 2;
@@ -31,6 +33,7 @@ void add_quad(
                 quad_list->data, quad_list->capacity * sizeof(Quad)));
     }
     quad_list->data[quad_list->size++] = quad;
+    nextquad++;
 }
 
 /* On affiche la table des quad */
@@ -53,6 +56,9 @@ void print_quad(Quad quad)
     printf("| OPERATEUR\t");
     switch (quad.op)
     {
+    case OP_GOTO:
+        printf("GOTO ");
+        break;
     case OP_EXIT:
         printf("EXIT ");
         break;
@@ -126,41 +132,61 @@ void destroy_quad_list(Quad_list *quad_list)
 
 /* Ajout personnel à discuter avec le grand Natha*/
 
-Quad_list *creelist(Quad Quad)
+void add_idx_quad(idx_quad *dest, int idx)
 {
-    Quad_list *quad_list;
-    CHECK(quad_list = malloc(sizeof(Quad_list)));
-    quad_list->size = 0;
-    quad_list->capacity = QUAD_LIST_CAPACITY;
+    idx_quad *next = dest->next_idx;
 
-    CHECK(quad_list->data = calloc(quad_list->capacity, sizeof(Quad)));
-    quad_list->data[0] = Quad;
-    return quad_list;
+    while (next != NULL)
+    {
+        idx_quad *next = dest->next_idx;
+    }
+
+    idx_quad *new_quad = malloc(sizeof(idx_quad));
+
+    CHECK(new_quad);
 }
 
-Quad_list *concat(Quad_list *Q1, Quad_list *Q2)
+void destroy_idx_quad(idx_quad *dest)
 {
-    if (Q1->size + Q2->size > 100)
+    idx_quad *next = dest->next_idx;
+
+    if (next != NULL)
     {
-        return 0;
+        destroy_idx_quad(next);
     }
 
-    Quad_list *Q3 = init_quad_list();
+    free(dest);
+}
 
-    int k = 0;
+idx_quad *creelist(Quad *Quad)
+{
 
-    for (k; k < Q1->size; k++)
+    idx_quad *list;
+    CHECK(list = malloc(sizeof(idx_quad)));
+
+    if (Quad != NULL)
+        add_idx_quad(list, Quad->idx);
+
+    return list;
+}
+
+idx_quad *concat(idx_quad *Q1, idx_quad *Q2)
+{
+
+    Quad_list *Q3 = creelist(NULL);
+
+    idx_quad *next = Q1;
+    while (next != NULL)
     {
-        Q3->data[k] = Q1->data[k];
+        add_idx_quad(Q3, next);
+        next = next->next_idx;
     }
-
-    for (int j = 0; j < Q2->size; j++)
+    idx_quad *next = Q2;
+    while (next != NULL)
     {
-        Q3->data[k + j] = Q2->data[j];
+        add_idx_quad(Q3, next);
+        next = next->next_idx;
     }
-
-    Q3->capacity = QUAD_LIST_CAPACITY;
-    Q3->size = Q1->size + Q2->size;
 
     destroy_quad_list(Q1);
     destroy_quad_list(Q2);
@@ -168,11 +194,15 @@ Quad_list *concat(Quad_list *Q1, Quad_list *Q2)
     return Q3;
 }
 
-void complete(Quad_list list, int address)
+void complete(idx_quad *list, int address)
 {
-    for (int k = 0; k < list.size; k++)
+    int indice = list->idx;
+    quad_list->data[indice].result.integer_value = address;
+
+    idx_quad *next = list->next_idx;
+    while (next != NULL)
     {
-        list.data[k].result.type = INTEGER;
-        list.data[k].result.integer_value = address;
+        int indice = list->idx;
+        quad_list->data[indice].result.integer_value = address;
     }
 }

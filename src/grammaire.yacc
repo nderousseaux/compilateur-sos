@@ -54,6 +54,9 @@
 %type <operateur> operateur2
 %type <operateur> operateur1
 %type <booleen> test-instruction
+%type <integer> M
+%type <booleen> test-expr
+%type <booleen> test-block
 
 %%
 programme           : liste-instructions                                {  }
@@ -65,7 +68,9 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
-                    | test-block                                        {  }
+                    | IF test-block THEN M liste-instructions FI          { complete($2.tru,$4.quad);
+                                                                            
+                                                                            }
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
@@ -79,14 +84,15 @@ operande            : MOT                                               { $$ = $
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
 
-test-block		    : TEST test-expr                                    { }
+test-block		    : TEST test-expr                                    { $$ = $2;}
 
-test-expr			: test-instruction                                  { }
+test-expr			: test-instruction                                  { $$ = $1;}
 
-test-instruction	: operande operateur2 operande						{ switch($2.type){
+test-instruction	: operande operateur2 operande						{
+                                                                            $$.tru = creelist();
+                                                                            $$.fals = creelist();
+                                                                            switch($2.type){
                                                                                 case O_EQUAL:
-                                                                                    $$.tru = init_quad_list();
-
                                                                                     break;
                                                                                 case O_NEQUAL:
                                                                                     break;
@@ -99,7 +105,8 @@ test-instruction	: operande operateur2 operande						{ switch($2.type){
                                                                                 case O_INFEQ:
                                                                                     break;
                                                                                 default:
-                                                                        } }
+                                                                            }
+                                                                        }
 
 operateur1			: '-' 'n'												{ $$.type = O_NOTEMPTY; }
 					| '-' 'z'												{ $$.type = O_EMPTY; }
@@ -110,6 +117,8 @@ operateur2			: '-' 'e' 'q'									        { $$.type = O_EQUAL; }
 					| '-' 'l' 'e'											{ $$.type = O_SUPEQ; }
 					| '-' 'g' 't'											{ $$.type = O_STINF; }
 					| '-' 'g' 'e'											{ $$.type = O_INFEQ; }
+
+M                   : /*Empty*/                                             { M.quad = nextquad;}
 %%
 
 

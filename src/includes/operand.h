@@ -8,6 +8,7 @@
 // Définit le type d'un operateur
 typedef enum Operator
 {
+    OP_GOTO,
     OP_EXIT,
     OP_ASSIGN,
     OP_ECHO,
@@ -38,8 +39,9 @@ typedef struct Operand
 
 typedef struct Bool
 {
-    Quad_list *tru;  // Liste des quads incomplets à exécuter si Vrai
-    Quad_list *fals; // Liste des quads incomplets à exécuter si faux
+    int *tru;  // Liste des quads incomplets à exécuter si Vrai
+    int *fals; // Liste des quads incomplets à exécuter si faux
+    int *next; // Liste des positions de tous les quads incomplets pour la suite du code
 } Bool;
 
 /* Crée une opérande de type var */

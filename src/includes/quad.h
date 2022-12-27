@@ -19,6 +19,7 @@ typedef struct Quad
     Operand operand1;
     Operand operand2;
     Operand result;
+    int idx; // Index du quad
 } Quad;
 
 // Liste de quads
@@ -28,6 +29,13 @@ typedef struct Quad_list
     int size;
     int capacity;
 } Quad_list;
+
+// Liste de positions de quads
+typedef struct idx_quad
+{
+    int idx;
+    idx_quad *next_idx;
+} idx_quad;
 
 extern Quad_list *quad_list; // Liste des quadruplets
 
@@ -52,10 +60,14 @@ void destroy_quad_list(Quad_list *quad_list);
 
 // Ajout personnel, à discuter avec Natha
 
-Quad_list *creelist(Quad Quad);
+void add_idx_quad(idx_quad *dest, int idx);
 
-Quad_list *concat(Quad_list *Q1, Quad_list *Q2);
+void destroy_idx_quad(idx_quad *dest);
 
-void complete(Quad_list list, int address);
+idx_quad *creelist(Quad Quad);
+
+idx_quad *concat(idx_quad *Q1, idx_quad *Q2);
+
+void complete(idx_quad *list, int address);
 
 #endif // SRC_INCLUDES_QUAD_H_
