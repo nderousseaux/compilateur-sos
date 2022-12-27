@@ -13,24 +13,34 @@
 #define QUAD_LIST_CAPACITY 100
 
 // Définit un quad
-typedef struct Quad {
+typedef struct Quad
+{
     Operator op;
     Operand operand1;
     Operand operand2;
     Operand result;
+    int idx; // Index du quad
 } Quad;
 
 // Liste de quads
-typedef struct Quad_list {
-    Quad* data;
+typedef struct Quad_list
+{
+    Quad *data;
     int size;
     int capacity;
 } Quad_list;
 
-extern Quad_list* quad_list;         // Liste des quadruplets
+// Liste de positions de quads
+typedef struct idx_quad
+{
+    int idx;
+    idx_quad *next_idx;
+} idx_quad;
+
+extern Quad_list *quad_list; // Liste des quadruplets
 
 /* Crée une quad_list */
-struct Quad_list* init_quad_list();
+struct Quad_list *init_quad_list();
 
 /* Crée un quad dans la liste */
 void add_quad(
@@ -46,6 +56,18 @@ void print_quad(Quad quad);
 void print_operand(Operand operand);
 
 /* Supprime la quad_list */
-void destroy_quad_list(Quad_list* quad_list);
+void destroy_quad_list(Quad_list *quad_list);
 
-#endif  // SRC_INCLUDES_QUAD_H_
+// Ajout personnel, à discuter avec Natha
+
+void add_idx_quad(idx_quad *dest, int idx);
+
+void destroy_idx_quad(idx_quad *dest);
+
+idx_quad *creelist(Quad Quad);
+
+idx_quad *concat(idx_quad *Q1, idx_quad *Q2);
+
+void complete(idx_quad *list, int address);
+
+#endif // SRC_INCLUDES_QUAD_H_

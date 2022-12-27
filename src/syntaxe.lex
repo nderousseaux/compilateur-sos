@@ -21,8 +21,8 @@ id              [a-zA-Z_][a-zA-Z0-9_]*
 %%
 
 
-if				        {} // Mots reservés
-then			        {}
+if				        {return IF;} // Mots reservés
+then			        {return THEN;}
 for				        {}
 do				        {}
 done			        {}
@@ -37,10 +37,10 @@ return			        {}
 exit			        { return EXIT; }
 local			        {}
 elif			        {}
-else			        {}
-fi				        {}
+else			        {return ELSE;}
+fi				        {return FI;}
 declare			        {}
-test			        {}
+test			        {return TEST;}
 expr			        {}
 
 ;				        { return SEMICOLON; } //Caractères spéciaux

@@ -7,7 +7,7 @@
 #include "./quad.h"
 
 /* Récupère l'index de la variable dans la pile */
-int get_address(char * name);
+int get_address(char *name);
 
 /* Génère les données */
 void gen_data();
@@ -24,10 +24,13 @@ void gen_assign(Quad quad);
 /* Génére le code d'affichage */
 void gen_echo(Quad quad);
 
+/* Génére le code pour un test d'égalité*/
+void gen_equal(Quad quad);
+
 /* On génère le code de terminaison */
 void gen_end(int exit_code);
 
 /* Génére code assembleur final dans le .asm */
-void gen_mips(FILE * output, char debug);
+void gen_mips(FILE *output, char debug);
 
-#endif  // SRC_INCLUDES_MIPS_H_
+#endif // SRC_INCLUDES_MIPS_H_
