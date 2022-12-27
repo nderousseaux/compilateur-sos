@@ -36,6 +36,12 @@ typedef struct Operand
     int integer_value; // Valeur de l'operande (si c'est une constante)
 } Operand;
 
+typedef struct Bool
+{
+    Quad_list *tru;  // Liste des quads incomplets à exécuter si Vrai
+    Quad_list *fals; // Liste des quads incomplets à exécuter si faux
+} Bool;
+
 /* Crée une opérande de type var */
 Operand var(char *value);
 

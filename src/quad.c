@@ -123,3 +123,56 @@ void destroy_quad_list(Quad_list *quad_list)
     free(quad_list->data);
     free(quad_list);
 }
+
+/* Ajout personnel à discuter avec le grand Natha*/
+
+Quad_list *creelist(Quad Quad)
+{
+    Quad_list *quad_list;
+    CHECK(quad_list = malloc(sizeof(Quad_list)));
+    quad_list->size = 0;
+    quad_list->capacity = QUAD_LIST_CAPACITY;
+
+    CHECK(quad_list->data = calloc(quad_list->capacity, sizeof(Quad)));
+    quad_list->data[0] = Quad;
+    return quad_list;
+}
+
+Quad_list *concat(Quad_list *Q1, Quad_list *Q2)
+{
+    if (Q1->size + Q2->size > 100)
+    {
+        return 0;
+    }
+
+    Quad_list *Q3 = init_quad_list();
+
+    int k = 0;
+
+    for (k; k < Q1->size; k++)
+    {
+        Q3->data[k] = Q1->data[k];
+    }
+
+    for (int j = 0; j < Q2->size; j++)
+    {
+        Q3->data[k + j] = Q2->data[j];
+    }
+
+    Q3->capacity = QUAD_LIST_CAPACITY;
+    Q3->size = Q1->size + Q2->size;
+
+    destroy_quad_list(Q1);
+    destroy_quad_list(Q2);
+
+    return Q3;
+}
+
+void complete(Quad_list list, int address)
+{
+    for (int k = 0; k < list.size; k++)
+    {
+        list.data[k].result.type = INTEGER;
+        list.data[k].result.integer_value = address;
+    }
+}

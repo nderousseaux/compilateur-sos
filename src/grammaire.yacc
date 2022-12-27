@@ -4,6 +4,7 @@
     #include "symbols.h"
     extern int yylex();
     void yyerror(const char * error);
+
 %}
 
 %code requires {
@@ -16,6 +17,7 @@
     Operand_y operand;
     int integer;
     Operateur_y operateur;
+    Bool booleen;
 }
 
 %start programme
@@ -51,6 +53,7 @@
 %type <integer> operande-entier
 %type <operateur> operateur2
 %type <operateur> operateur1
+%type <booleen> test-instruction
 
 %%
 programme           : liste-instructions                                {  }
@@ -82,6 +85,8 @@ test-expr			: test-instruction                                  { }
 
 test-instruction	: operande operateur2 operande						{ switch($2.type){
                                                                                 case O_EQUAL:
+                                                                                    $$.tru = init_quad_list();
+
                                                                                     break;
                                                                                 case O_NEQUAL:
                                                                                     break;
