@@ -57,6 +57,7 @@
 %type <integer> M
 %type <booleen> test-expr
 %type <booleen> test-block
+%type <booleen> instruction
 
 %%
 programme           : liste-instructions                                {  }
@@ -69,7 +70,8 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
                     | IF test-block THEN M liste-instructions FI          { complete($2.tru,$4.quad);
-                                                                            
+                                                                            $$.next = creelist(NULL);
+                                                                            $$.next = concat()
                                                                             }
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
@@ -89,8 +91,8 @@ test-block		    : TEST test-expr                                    { $$ = $2;}
 test-expr			: test-instruction                                  { $$ = $1;}
 
 test-instruction	: operande operateur2 operande						{
-                                                                            $$.tru = creelist();
-                                                                            $$.fals = creelist();
+                                                                            $$.tru = creelist(NULL);
+                                                                            $$.fals = creelist(NULL);
                                                                             switch($2.type){
                                                                                 case O_EQUAL:
                                                                                     break;
