@@ -19,6 +19,7 @@ enum operateur_type
     O_NOEMPTY,
     O_EMPTY
 };
+#include "./symbols.h"
 
 enum operator_type{
     O_PLUS,
@@ -32,7 +33,8 @@ enum operand_type
 {
     O_VAR,
     O_INT,
-    O_ID
+    O_ID,
+    O_TEMP,
 };
 
 typedef struct
@@ -40,7 +42,9 @@ typedef struct
     enum operand_type type;
     char *str;
     int val;
+    Symbol * s;
     struct Operand_y *next;
+     
 } Operand_y;
 
 typedef struct

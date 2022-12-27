@@ -3,28 +3,26 @@
 main:
 
 	# On alloue la mémoire pour la pile
-	addiu	$sp,	$sp,	-8
-	sw		$fp,	4($sp)
+	addiu	$sp,	$sp,	-12
+	sw		$fp,	8($sp)
 	move	$fp,	$sp
 
 	# On génère le code de somme
-	addi $t2, $t2, 1
-	addi $t2, $t2, 2
+	addi $a0, $a0, 1
+	addi $a0, $a0, 2
+	li	$v0,	1
+	syscall
 
 	# On génère le code de somme
-	addi $t2, $t2, 1
-	addi $t2, $t2, 3
-
-	# On génère le code de somme
-	addi $t2, $t2, 1
-	addi $t2, $t2, 4
-
-	# On met 1 dans i
-	li	$t2,	1
-	sw	$t2,	0($fp)
+	addi $a0, $a0, 1
+	addi $a0, $a0, 3
+	li	$v0,	1
+	syscall
+	li	$t3,	1
+	sw	$t3,	4($fp)
 
 	# On affiche i
-	lw	$a0,	0($fp)
+	lw	$a0,	4($fp)
 	li	$v0,	1
 	syscall
 

@@ -151,19 +151,14 @@ operande            : MOT                                               { $$.val
 
 
 operande-entier     : MOT                                               { $$ = to_int($1.str); }
-                    | plus-ou-moins MOT                                 {   if ($1.type==O_PLUS){
-                                                                                $$ = to_int($2.str);
-                                                                            }
-                                                                            else{
-                                                                                $$ = -1*to_int($2.str);
-                                                                            }
-                                                                        }
+                    | plus-ou-moins MOT                                 { }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$ = $3.val;}
 
                                                                     
 
-somme-entiere		: somme-entiere plus-ou-moins produit-entier		{   $$ = *add_operand(&$1, &$3);
-                                                                            quad_operation($1,$3,$2.type); 
+somme-entiere		: somme-entiere plus-ou-moins produit-entier		{  
+                                                                            $$=;
+                                                                            quad_operation($1.str,$3.str,$2.type); 
                                                                         }
 					| produit-entier									{$$=$1;}
 

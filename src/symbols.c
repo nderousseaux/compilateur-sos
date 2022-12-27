@@ -35,6 +35,20 @@ void create_symbol(char* id)
     add_st(symbols_table, id, s);
 }
 
+Symbol * newtemp(char * id){
+    //Si il existe déjà
+    if(get_st(symbols_table, id) != NULL)
+        return get_st(symbols_table, id);
+
+    Symbol* s;
+    CHECK(s = malloc(sizeof(Symbol)));
+    s->data = NULL;
+    s->position = symbols_table->last_pos;
+    symbols_table->last_pos++;
+    add_st(symbols_table, id, s);
+    return s;
+}
+
 /* Crée un symbole (constante) */
 char * create_const(char * data)
 {

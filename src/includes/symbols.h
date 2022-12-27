@@ -39,10 +39,12 @@ void create_symbol(char* id);
 /* Crée un symbole (constante) */
 char * create_const(char * data);
 
+Symbol * newtemp(char * id);
+
 /* Ajoute une donnée dans la hashtable*/
 void add_st(St* ht, char* key, Symbol* data);
 
-/* Crée et un élément et renvoie son adresse */
+/* Crée un élément et renvoie son adresse */
 St_element *add_element_st(char* key, Symbol* data);
 
 /* Récupère une donnée dans la hashtable */

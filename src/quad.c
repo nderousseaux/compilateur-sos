@@ -123,6 +123,9 @@ void print_operand(Operand operand)
     case INTEGER:
         printf("INTEGER\t%d", operand.integer_value);
         break;
+    case TEMP:
+        printf("TEMP\t");
+        break;
     case EMPTY:
         printf("EMPTY");
         break;

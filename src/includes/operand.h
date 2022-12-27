@@ -32,6 +32,7 @@ typedef enum Type_operand
     ID,
     VAR,
     INTEGER,
+    TEMP,
     EMPTY
 } Type_operand;
 
@@ -51,6 +52,9 @@ Operand integer(int value);
 
 /* Crée une opérande de type id */
 Operand id(char *name);
+
+/* Crée une opérande de type temp */
+Operand temp();
 
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty();

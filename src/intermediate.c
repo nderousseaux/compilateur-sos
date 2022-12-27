@@ -128,7 +128,7 @@ void quad_assign(char *src, char *dest, enum operand_type type)
 
 
 
-void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type) {
+void quad_operation(char * op1, char * op2, enum operator_type type, Operand_y res) {
 
     /* On crée l'identifiant dans la table des symboles */
 
@@ -136,19 +136,7 @@ void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type) {
     switch (type)
     {
     case O_PLUS:
-        add_quad(OP_PLUS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
-        break;
-    case O_MOINS:
-        add_quad(OP_MOINS, integer(to_int(op1.str)), integer(to_int(op2.str)),  empty());
-        break;
-    case O_FOIS:
-        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
-        break;
-    case O_DIVISION:
-        add_quad(OP_FOIS, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
-        break;
-    case O_MODULO:
-        add_quad(OP_MODULO, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+        add_quad(OP_PLUS, integer(to_int(op1)), integer(to_int(op2)), temp(res));
         break;
     default:
         break;

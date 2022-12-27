@@ -419,9 +419,27 @@ void gen_end(int exit_code)
 
 void gen_plus(Quad quad) {
     fprintf(f, "\n\t# On génère le code de somme\n");
-    fprintf(f, "\taddi $t2, $t2, %d\n", quad.operand1.integer_value);
-    fprintf(f, "\taddi $t2, $t2, %d\n", quad.operand2.integer_value);
+    fprintf(f, "\taddi $a0, $a0, %i\n", quad.operand1.integer_value);
+    fprintf(f, "\taddi $a0, $a0, %i\n", quad.operand2.integer_value);
+    fprintf(f,"\tli\t$v0,\t1\n");
+    fprintf(f,"\tsyscall\n");
+}
 
+void gen_plus2(Quad quad)
+{
+    //On récupère la variable dans la pile
+    // int pos_arg1 = get_address(quad.operand1.value);
+    int pos_res = get_address(quad.result.value);
+
+
+    //On teste le type du premier opérande
+   
+    fprintf(f,"\n\t# On met %d dans %s\n", quad.operand1.integer_value, quad.result.value);
+    fprintf(f,"\tli\t$t2,\t%d\n", quad.operand1.integer_value);
+    fprintf(f,"\tsw\t$t2,\t%d($fp)\n", pos_res);
+         
+
+      
 }
 
 /* Génére code assembleur final dans le .asm */

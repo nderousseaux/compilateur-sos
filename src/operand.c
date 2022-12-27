@@ -26,6 +26,11 @@ Operand id(char *name)
     return o;
 }
 
+Operand temp() {
+    Operand o = { TEMP, NULL, 0};
+    return o;
+}
+
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty()
 {
