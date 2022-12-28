@@ -105,6 +105,8 @@ void gen_code()
     if (!exit)
     {
         gen_end(0);
+        fprintf(f, "\t# On termine le programme\n");
+        fprintf(f, "quad_%d:", quad_list->size);
     }
 }
 

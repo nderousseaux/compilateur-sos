@@ -36,7 +36,7 @@ read			        {}
 return			        {}
 exit			        { return EXIT; }
 local			        {}
-elif			        {}
+elif			        {return ELIF;}
 else			        {return ELSE;}
 fi				        {return FI;}
 declare			        {}
@@ -77,7 +77,8 @@ expr			        {}
 -le                     { return SUPEQ_COMP;}
 -gt                     { return STINF_COMP;}
 -ge                     { return INFEQ_COMP;}
-
+-n                      { return NOEMPTY_COMP;}
+-z                      { return EMPTY_COMP;}
 
 {com}			        {  } // Commentaires
 

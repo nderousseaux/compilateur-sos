@@ -37,6 +37,7 @@
 %token ELSE
 %token THEN
 %token TEST
+%token ELIF
 
 %token EQUAL_COMP
 %token NEQUAL_COMP
@@ -44,6 +45,8 @@
 %token SUPEQ_COMP
 %token STINF_COMP
 %token INFEQ_COMP
+%token NOEMPTY_COMP
+%token EMPTY_COMP
 
 %token <operand> IDENTIFIER
 %token <operand> MOT
@@ -59,10 +62,12 @@
 %type <operateur> operateur1
 %type <booleen> test-instruction
 %type <integer> M
+%type <booleen> N
 %type <booleen> test-expr
 %type <booleen> test-block
 %type <booleen> instruction
 %type <booleen> liste-instructions
+%type <booleen> else-part
 
 %%
 programme           : liste-instructions                                { }
@@ -74,13 +79,29 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
 instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
-                    | IF test-block THEN M liste-instructions FI        {  
-                                                                            $$.next = concat($2.fals,$5.next);
+                    | IF test-block THEN M liste-instructions N else-part FI        {
+                                                                            complete($2.fals, $6.idx);
+                                                                            complete($2.tru, $4);
+                                                                            $$.next = concat($5.next,$7.next);
+                                                                            $$.next = concat($$.next,creelist($6.idx));
                                                                             $$.next = concat($$.next,creelist(nextquad));
-                                                                            complete($2.fals, nextquad);
-                                                                            
+                                                                            quad_goto(-1);
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
+                    | error
+
+else-part           : ELIF test-block THEN M liste-instructions N else-part         { 
+                                                                            complete($2.fals, $6.idx);
+                                                                            complete($2.tru, $4);
+                                                                            $$.next = concat($5.next,$7.next);
+                                                                            $$.next = concat($$.next,creelist($6.idx));
+                                                                            $$.next = concat($$.next,creelist(nextquad));
+                                                                            quad_goto(-1);
+                                                                                     }
+					| ELSE liste-instructions                                     {$$.next = concat($2.next,creelist(nextquad));
+                                                                                    quad_goto(-1);}
+                    |
+                    | error
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
@@ -128,8 +149,8 @@ test-instruction	: operande operateur2 operande						{
                                                                             add_idx_quad($$.fals, nextquad-1);
                                                                         }
 
-operateur1			: '-' 'n'												{ $$.type = O_NOTEMPTY; }
-					| '-' 'z'												{ $$.type = O_EMPTY; }
+operateur1			: NOEMPTY_COMP											{ $$.type = O_NOTEMPTY; }
+					| EMPTY_COMP											{ $$.type = O_EMPTY; }
 
 operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }
 					| NEQUAL_COMP											{ $$.type = O_NEQUAL;}
@@ -139,6 +160,11 @@ operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }
 					| INFEQ_COMP											{ $$.type = O_INFEQ; }
 
 M                   : /*Empty*/                                             { $$ = nextquad;}
+
+N                   : /*Empty*/                                             { $$.next = creelist(nextquad);
+                                                                              quad_goto(-1);
+                                                                              $$.idx = nextquad;
+                                                                            }
 %%
 
 
@@ -149,9 +175,18 @@ void yyerror(const char * error)
 
 // #brouillax
 // idx     
-// 0       quad(IF, 32, 32, 2) 
-// 1       quad(GOTO, 3)
-// 2       quad(ECHO, "si VRAI")
-// 3       quad(ECHO, "RESTE du code")
+// 0       equal si vrai go 2
+// 1       goto next test 5
+// 2       bonjour
+// 3       comment vas-tu
+// 4       goto nulle part !!!!!!!!!!!!
+// 5       test equal sinon va 7
+// 6       goto test 10
+// 7       echo au revoir
+// 8       echo a bientot
+// 9       goto nulle part !!!!!!!!!!!!
+// 10      echo sex
+// 11      goto nulle part !!!!!!!!!!!!
+// 12      goto nulle part !!!!!!!!!!!!
 
 

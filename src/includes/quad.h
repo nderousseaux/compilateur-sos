@@ -39,6 +39,7 @@ typedef struct Bool
     idx_quad *tru;  // Liste des quads incomplets à exécuter si Vrai
     idx_quad *fals; // Liste des quads incomplets à exécuter si faux
     idx_quad *next; // Liste des positions de tous les quads incomplets pour la suite du code
+    int idx;        // Peut indiquer un quad transporté
 } Bool;
 
 extern Quad_list *quad_list; // Liste des quadruplets

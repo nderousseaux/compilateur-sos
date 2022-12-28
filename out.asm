@@ -16,7 +16,7 @@ main:
 	li	$t1,	1
 	beq	$t0,	$t1,	quad_2
 	quad_1:
-	j quad_6
+	j quad_5
 	quad_2:
 	# On affiche string_0
 	la	$a0,	string_0
@@ -28,22 +28,40 @@ main:
 	li	$v0,	4
 	syscall
 	quad_4:
+	j quad_0
+	quad_5:
+	li	$t0,	0
+	li	$t1,	2
+	beq	$t0,	$t1,	quad_7
+	quad_6:
+	j quad_10
+	quad_7:
 	# On affiche string_2
 	la	$a0,	string_2
 	li	$v0,	4
 	syscall
-	quad_5:
+	quad_8:
 	# On affiche string_3
 	la	$a0,	string_3
 	li	$v0,	4
 	syscall
-	quad_6:
+	quad_9:
+	j quad_0
+	quad_10:
 	# On affiche string_4
 	la	$a0,	string_4
 	li	$v0,	4
 	syscall
+	quad_11:
+	j quad_0
+	quad_12:
+	j quad_0
+	quad_13:
+	j quad_0
 
 	# On génère le code de terminaison
 	li	$a0,	0
 	li	$v0,	17
 	syscall
+	# On termine le programme
+quad_14:
