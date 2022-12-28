@@ -80,28 +80,25 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
                     | IF test-block THEN M liste-instructions N else-part FI        {
+                                                                            $6.next = concat($7.next,$6.next);
+                                                                            complete($6.next,nextquad);
                                                                             complete($2.fals, $6.idx);
                                                                             complete($2.tru, $4);
-                                                                            $$.next = concat($5.next,$7.next);
-                                                                            $$.next = concat($$.next,creelist($6.idx));
-                                                                            $$.next = concat($$.next,creelist(nextquad));
-                                                                            quad_goto(-1);
+
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
-                    | error
 
-else-part           : ELIF test-block THEN M liste-instructions N else-part         { 
+else-part           : ELIF test-block THEN M liste-instructions N else-part         {
+                                                                            $$.next = creelist(-1);
+                                                                            $$.next = concat($$.next,$7.next);
+                                                                            $$.next = concat($$.next,$6.next); 
                                                                             complete($2.fals, $6.idx);
                                                                             complete($2.tru, $4);
-                                                                            $$.next = concat($5.next,$7.next);
-                                                                            $$.next = concat($$.next,creelist($6.idx));
-                                                                            $$.next = concat($$.next,creelist(nextquad));
-                                                                            quad_goto(-1);
                                                                                      }
-					| ELSE liste-instructions                                     {$$.next = concat($2.next,creelist(nextquad));
-                                                                                    quad_goto(-1);}
+					| ELSE liste-instructions                                       {
+                                                                                    $$.next = creelist(-1);
+                                                                                    }
                     |
-                    | error
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
@@ -175,18 +172,17 @@ void yyerror(const char * error)
 
 // #brouillax
 // idx     
-// 0       equal si vrai go 2
-// 1       goto next test 5
+// 0       equal si vrai go 2 
+// 1       goto next test 10        
 // 2       bonjour
-// 3       comment vas-tu
-// 4       goto nulle part !!!!!!!!!!!!
-// 5       test equal sinon va 7
+
+// 3       test egal goto5
+// 4       goto 7
+// 5       une phrase
 // 6       goto test 10
-// 7       echo au revoir
-// 8       echo a bientot
-// 9       goto nulle part !!!!!!!!!!!!
-// 10      echo sex
-// 11      goto nulle part !!!!!!!!!!!!
-// 12      goto nulle part !!!!!!!!!!!!
+// 7       goto empty
+// 8       echo phrase 2
+// 9       goto 10
+// 10      exit
 
 
