@@ -3,7 +3,7 @@
 %option noyywrap
 
 %{
-    #include <stdio.h>
+    #include "imports.h"
     #include "grammaire.tab.h"
 
     void assign_string(char *s) {
@@ -81,7 +81,6 @@ expr			        {}
 
 (\"[^"]*\")|(\'[^']*\') {   // Chaine
                             assign_string(yytext);
-                            printf("%s\n", yytext);
                             return CHAINE;
                         }
 

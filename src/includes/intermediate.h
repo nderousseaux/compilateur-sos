@@ -6,10 +6,7 @@
 #ifndef SRC_INCLUDES_INTERMEDIATE_H_
 #define SRC_INCLUDES_INTERMEDIATE_H_
 
-#include <string.h>
-
-#include "./operand.h"
-#include "./quad.h"
+#include "quad.h"
 
 enum operateur_type
 {
@@ -67,6 +64,5 @@ void op_all_operand(Operand_y *list, Operator op);
 /* Renvoie un entier à partir d'une chaine de caractères */
 int to_int(char *str);
 
-void quad_equal(Operand_y op1, Operand_y op2);
-
+void quad_equal(Operand_y op1, Operand_y op2, int go);
 #endif // SRC_INCLUDES_INTERMEDIATE_H_

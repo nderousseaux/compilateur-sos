@@ -1,16 +1,12 @@
 %{
-    #include <stdio.h>
-    #include "intermediate.h"
-    #include "symbols.h"
+    #include "imports.h"
     extern int yylex();
     void yyerror(const char * error);
     extern int nextquad;
 %}
 
 %code requires {
-    #include "intermediate.h"
-    #include "operand.h"
-    #include "quad.h"
+    #include "imports.h"
 }
 
 // Type des noeuds
@@ -73,10 +69,11 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
 instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2); }
-                    | IF test-block THEN M liste-instructions FI        {   complete($2.tru,$4);
+                    | IF test-block THEN M liste-instructions FI        {  
                                                                             $$.next = concat($2.fals,$5.next);
                                                                             $$.next = concat($$.next,creelist(nextquad));
-                                                                            //complete($2.fals, nextquad+1) //TODO complete cherche dans tout les goto empty de $2.fals et remplace par goto nextquad+1
+                                                                            complete($2.fals, nextquad);
+                                                                            
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
 
@@ -102,7 +99,7 @@ test-instruction	: operande operateur2 operande						{
                                                                             $$.next = creelist(-1);
                                                                             switch($2.type){
                                                                                 case O_EQUAL:
-                                                                                    quad_if($1, $3, nextquad+2); //TODO renommer quad if en quad equal
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_NEQUAL:
                                                                                     break;
@@ -115,9 +112,10 @@ test-instruction	: operande operateur2 operande						{
                                                                                 case O_INFEQ:
                                                                                     break;
                                                                                 default:
+                                                                                    break;
                                                                             }
-                                                                            quad_goto(nextquad+2); //TODO : GOTO INCONNU, complete dans if case (voir explication simon)
-                                                                            // quad_goto_empty() //TODO crée goto_empty
+                                                                            quad_goto(-1);
+                                                                            add_idx_quad($$.fals, nextquad-1);
                                                                         }
 
 operateur1			: '-' 'n'												{ $$.type = O_NOTEMPTY; }

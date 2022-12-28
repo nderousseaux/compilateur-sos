@@ -3,9 +3,6 @@
 #ifndef SRC_INCLUDES_UTILS_H_
 #define SRC_INCLUDES_UTILS_H_
 
-#include <errno.h>
-#include <stdio.h>
-
 // Affiche un message d'erreur et quitte le programme
 #define CHECK(x) \
   do { \

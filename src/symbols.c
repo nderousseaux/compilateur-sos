@@ -2,7 +2,7 @@
 // On y retrouve aussi une liste et ses fonctions associées
 // pour stocker les symboles
 
-#include "includes/symbols.h"
+#include "includes/imports.h"
 
 St* symbols_table; 
 

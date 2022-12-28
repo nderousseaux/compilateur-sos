@@ -1,7 +1,6 @@
 // Module permettant de passer du code intermédiaire au code MIPS
 
-#include "includes/mips.h"
-#include "includes/symbols.h"
+#include "includes/imports.h"
 
 FILE *f; // Fichier de sortie
 
@@ -59,6 +58,8 @@ void gen_code()
     for (int i = 0; i < quad_list->size; i++)
     {
         quad = quad_list->data[i];
+        fprintf(f, "\t%s:", gen_flag_quad(i));
+
         switch (quad.op)
         {
         case OP_ASSIGN:
@@ -77,6 +78,9 @@ void gen_code()
         case OP_EQUAL:
             gen_equal(quad);
             break;
+        case OP_GOTO:
+            gen_goto(quad);
+            break;
         default:
             break;
         }
@@ -88,6 +92,15 @@ void gen_code()
         gen_end(0);
     }
 }
+
+
+char * gen_flag_quad(int idx_quad){
+    char * flag ;
+    CHECK (flag= calloc(sizeof(char), 10));
+    sprintf(flag, "quad_%d", idx_quad);
+    return(flag);
+}
+
 
 /* Génère la pile */
 void gen_stack()
@@ -154,14 +167,45 @@ void gen_echo(Quad quad)
     }
 }
 
+void gen_goto(Quad quad)
+{
+    fprintf(f, "\n\tj %s\n", gen_flag_quad(quad.result.integer_value));
+}
+
 void gen_equal(Quad quad)
 {
-    if (quad.operand1.type == INTEGER && quad.operand2.type == INTEGER)
+    int pos_arg1;
+    int pos_arg2;
+
+    //TODO: gérer 
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
     {
-        fprintf(f, "li $t0,%d\n", quad.operand1.integer_value);
-        fprintf(f, "li $t1,%d\n", quad.operand2.integer_value);
-        fprintf(f, "beq $t0,$t1,test\n");
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
     }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tbeq\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
 }
 
 /* On génère le code de terminaison */

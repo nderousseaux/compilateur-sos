@@ -2,7 +2,7 @@
 // On y retrouve aussi une liste et ses fonctions associées
 // pour stocker les quadruplets
 
-#include "includes/quad.h"
+#include "includes/imports.h"
 
 Quad_list *quad_list;
 
@@ -136,18 +136,27 @@ void destroy_quad_list(Quad_list *quad_list)
 
 /* Ajout personnel à discuter avec le grand Natha*/
 
+
 void add_idx_quad(idx_quad *dest, int idx)
 {
-    idx_quad *next = dest->next_idx;
 
-    while (next != NULL)
+    idx_quad *next = dest;
+
+    if(next->idx == -1)
     {
-        next = dest->next_idx;
+        next->idx = idx;
+        return;
     }
 
-    CHECK(next = malloc(sizeof(idx_quad)));
-    next->idx = idx;
-    next->next_idx = NULL;
+
+    while (next->next_idx != NULL)
+    {
+        next = next->next_idx;
+    }
+
+    CHECK(next->next_idx = malloc(sizeof(idx_quad)));
+    next->next_idx->idx = idx;
+    next->next_idx->next_idx = NULL;
 }
 
 void destroy_idx_quad(idx_quad *dest)
@@ -198,13 +207,40 @@ idx_quad *concat(idx_quad *Q1, idx_quad *Q2)
 
 void complete(idx_quad *list, int address)
 {
-    int indice = list->idx;
-    quad_list->data[indice].result.integer_value = address;
+    // On parcourt la liste des quads
+    for (int i = 0; i < quad_list->size; i++)
+   {
+        Quad * quad = &quad_list->data[i];
+        // Si le quad est un goto et que result = empty
+        if (quad->op == OP_GOTO && quad->result.type == EMPTY)
+        {
+            // print_quad(quad);
+            // On parcourt la liste des idx
+            idx_quad *next = list;
+            while (next != NULL)
+            {
+                // Si l'idx correspond à l'idx du quad
+                if (next->idx == quad->idx)
+                {
+                    //On modifie la destination du quad
+                    quad->result.type = INTEGER;
+                    quad->result.integer_value = address;
 
-    idx_quad *next = list->next_idx;
+                    
+                }
+                next = next->next_idx;
+            }
+        }
+    }
+}
+
+/* Affiche une liste quad*/
+void print_idx_quad(idx_quad *list)
+{
+    idx_quad *next = list;
     while (next != NULL)
     {
-        int indice = list->idx;
-        quad_list->data[indice].result.integer_value = address;
+        printf("%d\n", next->idx);
+        next = next->next_idx;
     }
 }

@@ -5,12 +5,9 @@
 #ifndef SRC_INCLUDES_QUAD_H_
 #define SRC_INCLUDES_QUAD_H_
 
-#include <stdlib.h>
-
-#include "./operand.h"
-#include "./utils.h"
-
 #define QUAD_LIST_CAPACITY 100
+
+#include "operand.h"
 
 // Définit un quad
 typedef struct Quad
@@ -76,5 +73,8 @@ idx_quad *creelist(int next);
 idx_quad *concat(idx_quad *Q1, idx_quad *Q2);
 
 void complete(idx_quad *list, int address);
+
+/* Affiche une liste quad*/
+void print_idx_quad(idx_quad *list);
 
 #endif // SRC_INCLUDES_QUAD_H_

@@ -3,9 +3,7 @@
 // depuis la grammaire. Cela aurait pu être directement dans le yacc,
 // mais cela aurait rendu le code difficilement lisible.
 
-#include "includes/intermediate.h"
-#include "includes/symbols.h"
-#include "includes/operand.h"
+#include "includes/imports.h"
 
 /* Renvoie un entier à partir d'une chaine de caractères */
 int to_int(char *str)
@@ -94,14 +92,14 @@ void quad_echo(char *str, enum operand_type type)
 {
     switch (type)
     {
-    case O_VAR:
-        add_quad(OP_ECHO, var(str), empty(), empty());
-        break;
-    case O_ID:
-        add_quad(OP_ECHO, id(str), empty(), empty());
-        break;
-    default:
-        break;
+        case O_VAR:
+            add_quad(OP_ECHO, var(str), empty(), empty());
+            break;
+        case O_ID:
+            add_quad(OP_ECHO, id(str), empty(), empty());
+            break;
+        default:
+            break;
     }
 }
 
@@ -114,43 +112,49 @@ void quad_assign(char *src, char *dest, enum operand_type type)
 
     switch (type)
     {
-    case O_VAR:
-        add_quad(OP_ASSIGN, var(src), empty(), id(dest));
-        break;
-    case O_INT:
-        add_quad(OP_ASSIGN, integer(to_int(src)), empty(), id(dest));
-        break;
-    case O_ID:
-        add_quad(OP_ASSIGN, id(src), empty(), id(dest));
-        break;
-    default:
-        break;
+        case O_VAR:
+            add_quad(OP_ASSIGN, var(src), empty(), id(dest));
+            break;
+        case O_INT:
+            add_quad(OP_ASSIGN, integer(to_int(src)), empty(), id(dest));
+            break;
+        case O_ID:
+            add_quad(OP_ASSIGN, id(src), empty(), id(dest));
+            break;
+        default:
+            break;
     }
 }
 
 /* Crée une quadruplet goto */
 void quad_goto(int idx)
 {
-    add_quad(OP_GOTO, empty(), empty(), integer(idx));
+    if(idx == -1)
+        add_quad(OP_GOTO, empty(),empty(),empty());
+    else
+        add_quad(OP_GOTO, empty(), empty(), integer(idx));
+    
 }
 
-void quad_equal(Operand_y op1, Operand_y op2)
+
+
+void quad_equal(Operand_y op1, Operand_y op2, int go)
 {
     if (op1.type == O_ID && op2.type == O_ID)
     {
-        add_quad(OP_EQUAL, id(op1.str), id(op2.str), empty());
+        add_quad(OP_EQUAL, id(op1.str), id(op2.str), integer(go));
     }
     else if (op1.type == O_INT && op2.type == O_INT)
     {
-        add_quad(OP_EQUAL, integer(to_int(op1.str)), integer(to_int(op2.str)), empty());
+        add_quad(OP_EQUAL, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(go));
     }
     else if (op1.type == O_INT && op2.type == O_ID)
     {
-        add_quad(OP_EQUAL, integer(to_int(op1.str)), id(op2.str), empty());
+        add_quad(OP_EQUAL, integer(to_int(op1.str)), id(op2.str), integer(go));
     }
     else if (op1.type == O_ID && op2.type == O_INT)
     {
-        add_quad(OP_EQUAL, id(op1.str), integer(to_int(op2.str)), empty());
+        add_quad(OP_EQUAL, id(op1.str), integer(to_int(op2.str)), integer(go));
     }
     else
     {
