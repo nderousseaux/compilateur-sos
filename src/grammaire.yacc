@@ -43,6 +43,11 @@
 %token TEST
 
 %token EQUAL_COMP
+%token NEQUAL_COMP
+%token STSUP_COMP
+%token SUPEQ_COMP
+%token STINF_COMP
+%token INFEQ_COMP
 
 %token <operand> IDENTIFIER
 %token <operand> MOT
@@ -102,7 +107,7 @@ test-instruction	: operande operateur2 operande						{
                                                                             $$.next = creelist(-1);
                                                                             switch($2.type){
                                                                                 case O_EQUAL:
-                                                                                    quad_if($1, $3, nextquad+2); //TODO renommer quad if en quad equal
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_NEQUAL:
                                                                                     break;
@@ -124,11 +129,11 @@ operateur1			: '-' 'n'												{ $$.type = O_NOTEMPTY; }
 					| '-' 'z'												{ $$.type = O_EMPTY; }
 
 operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }
-					| '-' 'n' 'e'											{ $$.type = O_NEQUAL;}
-					| '-' 'l' 't'											{ $$.type = O_STSUP; }
-					| '-' 'l' 'e'											{ $$.type = O_SUPEQ; }
-					| '-' 'g' 't'											{ $$.type = O_STINF; }
-					| '-' 'g' 'e'											{ $$.type = O_INFEQ; }
+					| NEQUAL_COMP											{ $$.type = O_NEQUAL;}
+					| STSUP_COMP											{ $$.type = O_STSUP; }
+					| SUPEQ_COMP											{ $$.type = O_SUPEQ; }
+					| STINF_COMP											{ $$.type = O_STINF; }
+					| INFEQ_COMP											{ $$.type = O_INFEQ; }
 
 M                   : /*Empty*/                                             { $$ = nextquad;}
 %%
