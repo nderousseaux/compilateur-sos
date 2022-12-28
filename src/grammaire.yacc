@@ -107,14 +107,19 @@ test-instruction	: operande operateur2 operande						{
                                                                                     quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_NEQUAL:
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_STSUP:
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_SUPEQ:
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_STINF:
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 case O_INFEQ:
+                                                                                    quad_equal($1, $3, nextquad+2);
                                                                                     break;
                                                                                 default:
                                                                                     break;

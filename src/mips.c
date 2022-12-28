@@ -78,6 +78,21 @@ void gen_code()
         case OP_EQUAL:
             gen_equal(quad);
             break;
+        case OP_NEQUAL:
+            gen_nequal(quad);
+            break;
+        case OP_STSUP:
+            gen_stsup(quad);
+            break;
+        case OP_SUPEQ:
+            gen_supeq(quad);
+            break;
+        case OP_STINF:
+            gen_stinf(quad);
+            break;
+        case OP_INFEQ:
+            gen_infeq(quad);
+            break;
         case OP_GOTO:
             gen_goto(quad);
             break;
@@ -93,14 +108,13 @@ void gen_code()
     }
 }
 
-
-char * gen_flag_quad(int idx_quad){
-    char * flag ;
-    CHECK (flag= calloc(sizeof(char), 10));
+char *gen_flag_quad(int idx_quad)
+{
+    char *flag;
+    CHECK(flag = calloc(sizeof(char), 10));
     sprintf(flag, "quad_%d", idx_quad);
-    return(flag);
+    return (flag);
 }
-
 
 /* Génère la pile */
 void gen_stack()
@@ -177,7 +191,7 @@ void gen_equal(Quad quad)
     int pos_arg1;
     int pos_arg2;
 
-    //TODO: gérer 
+    // TODO: gérer le commentaire
     fprintf(f, "\n");
     // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
     switch (quad.operand1.type)
@@ -206,6 +220,186 @@ void gen_equal(Quad quad)
     }
 
     fprintf(f, "\tbeq\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
+}
+
+void gen_nequal(Quad quad)
+{
+    int pos_arg1;
+    int pos_arg2;
+
+    // TODO: gérer le commentaire
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
+    }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tbne\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
+}
+
+void gen_stsup(Quad quad)
+{
+    int pos_arg1;
+    int pos_arg2;
+
+    // TODO: gérer le commentaire
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
+    }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tbgt\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
+}
+
+void gen_supeq(Quad quad)
+{
+    int pos_arg1;
+    int pos_arg2;
+
+    // TODO: gérer le commentaire
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
+    }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tbge\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
+}
+
+void gen_stinf(Quad quad)
+{
+    int pos_arg1;
+    int pos_arg2;
+
+    // TODO: gérer le commentaire
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
+    }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tblt\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
+}
+
+void gen_infeq(Quad quad)
+{
+    int pos_arg1;
+    int pos_arg2;
+
+    // TODO: gérer le commentaire
+    fprintf(f, "\n");
+    // fprintf(f, "\n\t# On compare %s et %s\n", quad.operand1.value, quad.operand2.value);
+    switch (quad.operand1.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t0,\t%d\n", quad.operand1.integer_value);
+        break;
+    case ID:
+        pos_arg1 = get_address(quad.operand1.value);
+        fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_arg1);
+        break;
+    default:
+        break;
+    }
+    switch (quad.operand2.type)
+    {
+    case INTEGER:
+        fprintf(f, "\tli\t$t1,\t%d\n", quad.operand2.integer_value);
+        break;
+    case ID:
+        pos_arg2 = get_address(quad.operand2.value);
+        fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_arg2);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(f, "\tble\t$t0,\t$t1,\t%s\n", gen_flag_quad(quad.result.integer_value));
 }
 
 /* On génère le code de terminaison */
