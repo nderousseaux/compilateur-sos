@@ -52,6 +52,12 @@ void quad_assign(char *src, char *dest, enum operand_type type);
 /* Crée une quadruplet echo */
 void quad_echo(char *str, enum operand_type type);
 
+/* Crée une quadruplet goto */
+void quad_goto(int idx);
+
+/* Crée un quadruplet if */
+void quad_if(Operand_y op1, Operand_y op2, int go);
+
 /* Ajoute une operande à la liste chainée */
 Operand_y *add_operand(Operand_y *list, Operand_y *op);
 

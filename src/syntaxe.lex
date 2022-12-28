@@ -71,6 +71,8 @@ expr			        {}
 \&\&			        {}
 \|\|			        {}
 
+-eq                     { return EQUAL_COMP;}
+
 
 {com}			        {  } // Commentaires
 

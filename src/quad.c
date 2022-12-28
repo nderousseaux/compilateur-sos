@@ -53,6 +53,7 @@ void print_quad_list(Quad_list *quad_list)
 /* Affiche un quad */
 void print_quad(Quad quad)
 {
+    printf("| idx: %d\n", quad.idx);
     printf("| OPERATEUR\t");
     switch (quad.op)
     {
@@ -85,6 +86,9 @@ void print_quad(Quad quad)
         break;
     case OP_INFEQ:
         printf("INFEQ ");
+        break;
+    case OP_IF:
+        printf("IF ");
         break;
     default:
         printf("\nOpérateur inconnu (pensez à l'ajouter dans print_quad...)\n");
@@ -138,12 +142,12 @@ void add_idx_quad(idx_quad *dest, int idx)
 
     while (next != NULL)
     {
-        idx_quad *next = dest->next_idx;
+        next = dest->next_idx;
     }
 
-    idx_quad *new_quad = malloc(sizeof(idx_quad));
-
-    CHECK(new_quad);
+    CHECK(next = malloc(sizeof(idx_quad)));
+    next->idx = idx;
+    next->next_idx = NULL;
 }
 
 void destroy_idx_quad(idx_quad *dest)
@@ -158,38 +162,36 @@ void destroy_idx_quad(idx_quad *dest)
     free(dest);
 }
 
-idx_quad *creelist(Quad *Quad)
+idx_quad *creelist(int value)
 {
 
     idx_quad *list;
     CHECK(list = malloc(sizeof(idx_quad)));
 
-    if (Quad != NULL)
-        add_idx_quad(list, Quad->idx);
-
+    list->idx = value;
     return list;
 }
 
 idx_quad *concat(idx_quad *Q1, idx_quad *Q2)
 {
 
-    Quad_list *Q3 = creelist(NULL);
+    idx_quad *Q3 = creelist(-1);
 
     idx_quad *next = Q1;
     while (next != NULL)
     {
-        add_idx_quad(Q3, next);
+        add_idx_quad(Q3, next->idx);
         next = next->next_idx;
     }
-    idx_quad *next = Q2;
+    next = Q2;
     while (next != NULL)
     {
-        add_idx_quad(Q3, next);
+        add_idx_quad(Q3, next->idx);
         next = next->next_idx;
     }
 
-    destroy_quad_list(Q1);
-    destroy_quad_list(Q2);
+    destroy_idx_quad(Q1);
+    destroy_idx_quad(Q2);
 
     return Q3;
 }

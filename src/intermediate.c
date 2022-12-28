@@ -128,6 +128,12 @@ void quad_assign(char *src, char *dest, enum operand_type type)
     }
 }
 
+/* Crée une quadruplet goto */
+void quad_goto(int idx)
+{
+    add_quad(OP_GOTO, empty(), empty(), integer(idx));
+}
+
 void quad_equal(Operand_y op1, Operand_y op2)
 {
     if (op1.type == O_ID && op2.type == O_ID)
@@ -169,6 +175,31 @@ void quad_nequal(Operand_y op1, Operand_y op2)
     else if (op1.type == O_ID && op2.type == O_INT)
     {
         add_quad(OP_NEQUAL, id(op1.str), integer(to_int(op2.str)), empty());
+    }
+    else
+    {
+        fprintf(stderr, "Erreur quad_nequal, operand assignation\n");
+    }
+}
+
+/* Crée un quadruplet if */
+void quad_if(Operand_y op1, Operand_y op2, int go)
+{
+    if (op1.type == O_ID && op2.type == O_ID)
+    {
+        add_quad(OP_IF, id(op1.str), id(op2.str), integer(go));
+    }
+    else if (op1.type == O_INT && op2.type == O_INT)
+    {
+        add_quad(OP_IF, integer(to_int(op1.str)), integer(to_int(op2.str)), integer(go));
+    }
+    else if (op1.type == O_INT && op2.type == O_ID)
+    {
+        add_quad(OP_IF, integer(to_int(op1.str)), id(op2.str), integer(go));
+    }
+    else if (op1.type == O_ID && op2.type == O_INT)
+    {
+        add_quad(OP_IF, id(op1.str), integer(to_int(op2.str)), integer(go));
     }
     else
     {
