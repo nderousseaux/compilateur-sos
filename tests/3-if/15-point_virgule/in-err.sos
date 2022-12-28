@@ -2,3 +2,4 @@ i = 5 ;
 if test ${i} -ge 0 then
     echo "je suis pas sur qu'il y ait de point virgule juste après cette phrase" ;
 fi ;
+exit

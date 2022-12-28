@@ -6,3 +6,4 @@ elif test ${i} -eq 5 then
 else
     echo "fin"
 fi ;
+exit

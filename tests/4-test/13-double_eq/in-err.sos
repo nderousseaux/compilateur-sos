@@ -3,3 +3,4 @@ mot2 = "jamy" ;
 if test ${mot1} == ${mot2} then
     echo "Reel 11"
 fi ;
+exit

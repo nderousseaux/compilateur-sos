@@ -1,4 +1,4 @@
 i = 5 ;
 if test ${i} -ge 0 then
-    echo "Reel 4" ;
-exit
+    echo "Reel 1" 
+fi ;

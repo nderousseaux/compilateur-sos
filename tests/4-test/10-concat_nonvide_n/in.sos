@@ -2,3 +2,4 @@ mot2 = "" ;
 if test -n ${mot2} then
     echo "Reel 10"
 fi ;
+exit

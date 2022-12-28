@@ -2,3 +2,4 @@ i = 321 ;
 if test ${i} -le 321 then
     echo "Reel 2" 
 fi ;
+exit

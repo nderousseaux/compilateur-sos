@@ -4,3 +4,4 @@ if test ${i} -lt 0 -a ${i} -lt 10 then
 elif
     echo "Perfect one" ;
 fi ;
+exit
