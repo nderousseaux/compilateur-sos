@@ -1,10 +1,7 @@
 // Module de base du programme
 // Contient la boucle principale qui appelera les autres modules
 
-#include "includes/SoS.h"
-#include "includes/mips.h"
-#include "includes/quad.h"
-#include "includes/symbols.h"
+#include "includes/imports.h"
 
 extern int yyparse();
 extern int yylval;

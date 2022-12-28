@@ -1,0 +1,4 @@
+i = 321 ;
+if test ${i} -lt 322 then
+    echo "Reel 3" 
+fi ;

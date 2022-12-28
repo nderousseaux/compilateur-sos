@@ -4,9 +4,7 @@
 #ifndef SRC_INCLUDES_SOS_H_
 #define SRC_INCLUDES_SOS_H_
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+#define OUTPUT_FILE "out.asm"
 
 /* Initialise les structures de mémoire */
 void init();

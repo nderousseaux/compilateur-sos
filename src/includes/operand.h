@@ -17,7 +17,8 @@ typedef enum Operator
     OP_STSUP,
     OP_SUPEQ,
     OP_STINF,
-    OP_INFEQ
+    OP_INFEQ,
+    OP_IF
 } Operator;
 
 // Définit le type d'une operande
@@ -36,13 +37,6 @@ typedef struct Operand
     char *value;       // Valeur de l'operande (si c'est une variable)
     int integer_value; // Valeur de l'operande (si c'est une constante)
 } Operand;
-
-typedef struct Bool
-{
-    int *tru;  // Liste des quads incomplets à exécuter si Vrai
-    int *fals; // Liste des quads incomplets à exécuter si faux
-    int *next; // Liste des positions de tous les quads incomplets pour la suite du code
-} Bool;
 
 /* Crée une opérande de type var */
 Operand var(char *value);

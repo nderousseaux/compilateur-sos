@@ -1,1 +1,7 @@
-test 1 -eq 1
+if test 0 -eq 1 then
+    echo "Bonjour";
+    echo "Comment vas-tu ?";
+    echo "Au revoir";
+    echo "A bientôt"
+fi ;
+echo "sex"

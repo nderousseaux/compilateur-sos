@@ -1,0 +1,6 @@
+i = 5 ;
+if test ${i} -lt 0 -a ${i} -lt 10 then
+    echo "Reel" ;
+elif
+    echo "Perfect one" ;
+fi ;

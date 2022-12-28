@@ -1,0 +1,5 @@
+mot1 = 'cacatoes' ;
+mot2 = "pelican" ;
+if test ${mot1} != ${mot2} then
+    echo "Reel 12"
+fi ;

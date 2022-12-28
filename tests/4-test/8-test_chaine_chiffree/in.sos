@@ -1,0 +1,5 @@
+i = "75" ;
+j = "88" ;
+if test ${i} -lt ${j} then
+    echo "Minus" 
+fi ;

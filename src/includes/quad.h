@@ -5,12 +5,9 @@
 #ifndef SRC_INCLUDES_QUAD_H_
 #define SRC_INCLUDES_QUAD_H_
 
-#include <stdlib.h>
-
-#include "./operand.h"
-#include "./utils.h"
-
 #define QUAD_LIST_CAPACITY 100
+
+#include "operand.h"
 
 // Définit un quad
 typedef struct Quad
@@ -34,8 +31,15 @@ typedef struct Quad_list
 typedef struct idx_quad
 {
     int idx;
-    idx_quad *next_idx;
+    struct idx_quad *next_idx;
 } idx_quad;
+
+typedef struct Bool
+{
+    idx_quad *tru;  // Liste des quads incomplets à exécuter si Vrai
+    idx_quad *fals; // Liste des quads incomplets à exécuter si faux
+    idx_quad *next; // Liste des positions de tous les quads incomplets pour la suite du code
+} Bool;
 
 extern Quad_list *quad_list; // Liste des quadruplets
 
@@ -64,10 +68,13 @@ void add_idx_quad(idx_quad *dest, int idx);
 
 void destroy_idx_quad(idx_quad *dest);
 
-idx_quad *creelist(Quad Quad);
+idx_quad *creelist(int next);
 
 idx_quad *concat(idx_quad *Q1, idx_quad *Q2);
 
 void complete(idx_quad *list, int address);
+
+/* Affiche une liste quad*/
+void print_idx_quad(idx_quad *list);
 
 #endif // SRC_INCLUDES_QUAD_H_

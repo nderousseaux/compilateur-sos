@@ -5,13 +5,6 @@
 #ifndef SRC_INCLUDES_SYMBOLS_H_
 #define SRC_INCLUDES_SYMBOLS_H_
 
-#include "./operand.h"
-#include "./utils.h"
-
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define SYMBOLS_LIST_CAPACITY 100
 

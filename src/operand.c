@@ -2,8 +2,7 @@
 // et aux operateurs. On pourra aussi trouver des fonctions
 // pour créer des operandes courrantes (variable, constante, vide, etc...)
 
-#include "includes/operand.h"
-#include "includes/symbols.h"
+#include "includes/imports.h"
 
 /* Crée une opérande de type var */
 Operand var(char *value)

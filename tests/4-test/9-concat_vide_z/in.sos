@@ -1,0 +1,4 @@
+mot2 = "";
+if test -z ${mot2} then
+    echo "Reel 9"
+fi ;

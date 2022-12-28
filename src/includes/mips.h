@@ -3,9 +3,6 @@
 #ifndef SRC_INCLUDES_MIPS_H_
 #define SRC_INCLUDES_MIPS_H_
 
-#include <stdio.h>
-#include "./quad.h"
-
 /* Récupère l'index de la variable dans la pile */
 int get_address(char *name);
 
@@ -29,6 +26,10 @@ void gen_equal(Quad quad);
 
 /* On génère le code de terminaison */
 void gen_end(int exit_code);
+
+void gen_goto(Quad quad);
+
+char * gen_flag_quad(int idx_quad);
 
 /* Génére code assembleur final dans le .asm */
 void gen_mips(FILE *output, char debug);
