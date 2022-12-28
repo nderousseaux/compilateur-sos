@@ -2,3 +2,4 @@ i = 5 ;
 if test ${i} -lt 0 -o ! ${i} -ne 1  then
     echo "OK 17" 
 fi ;
+exit

@@ -3,3 +3,4 @@ mot2 = "Quoi"
 if test mot1 = mot2 then
     echo "SAMEBRO" 
 fi ;
+exit

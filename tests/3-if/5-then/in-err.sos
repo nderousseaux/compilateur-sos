@@ -2,3 +2,4 @@ i = 5 ;
 if test ${i} -ge 0
     echo "Reel 5"
 fi ;
+exit

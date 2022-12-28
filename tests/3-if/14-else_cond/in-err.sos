@@ -4,3 +4,4 @@ if test ${i} -le 0 then
 else test ${i} -ge 0 then
     echo "Non\n" 
 fi ;
+exit

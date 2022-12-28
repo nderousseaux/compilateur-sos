@@ -3,3 +3,4 @@ mot2 = "Feur" ;
 if test mot1 != mot2 then
     echo "Coiffeur" ;
 fi ;
+exit

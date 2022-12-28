@@ -4,3 +4,4 @@ if test ${i} -gt 5 then
 else
     echo "Cornichon" 
 fi ;
+exit
