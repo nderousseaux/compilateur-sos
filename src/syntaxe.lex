@@ -72,6 +72,11 @@ expr			        {}
 \|\|			        {}
 
 -eq                     { return EQUAL_COMP;}
+-ne                     { return NEQUAL_COMP;}
+-lt                     { return STSUP_COMP;}
+-le                     { return SUPEQ_COMP;}
+-gt                     { return STINF_COMP;}
+-ge                     { return INFEQ_COMP;}
 
 
 {com}			        {  } // Commentaires
