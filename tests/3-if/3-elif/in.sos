@@ -1,0 +1,8 @@
+i = 5 ;
+if test ${i} -lt 0 then
+    echo "Reel" 
+elif test ${i} -eq 5 then
+    echo "Bingo\n" 
+else
+    echo "fin"
+fi ;

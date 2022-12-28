@@ -1,0 +1,5 @@
+i = 5 ;
+mot1 = "cinq"
+if test ${i} -eq ${mot1} then
+    echo "Reel"
+fi ;
