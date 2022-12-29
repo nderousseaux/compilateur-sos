@@ -42,7 +42,7 @@
 %token FOIS
 %token DIVISION
 %token MODULO
-%token IF
+%token UMOINS%token IF
 %token FI
 %token ELSE
 %token THEN
@@ -78,8 +78,7 @@
 %type <operand> liste-operandes
 %type <operand> somme-entiere
 %type <operand> produit-entier
-%type <integer> operande-entier
-
+%type <operand> operande-entier
 %type <operator> plus-ou-moins
 %type <operator> fois-div-mod
 %type <operateur> operateur2
@@ -97,9 +96,10 @@
 
 
 //Priorités
-
-%left FOIS DIVISION MODULO
 %left PLUS MOINS
+%left FOIS DIVISION MODULO
+%left UMOINS
+%left OPAR CPAR
 %%
 
 programme           : liste-instructions                                { }
@@ -108,10 +108,10 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
                                                                           $3.next = creelist(-1);}
                     | instruction										{ $$.next = creelist(-1) ; }
                     
-instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type); }
+instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type);}
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
-					| EXIT operande-entier                              { quad_exit($2); }
+					| EXIT operande-entier                              { quad_exit($2.str); }
                     | error   // Si il y a une erreur, yacc reprend quand même
                     | IF test-block THEN M liste-instructions N else-part FI        {
                                                                             $6.next = concat($7.next,$6.next);
@@ -155,20 +155,39 @@ operande            : MOT                                               { $$.str
                     | DOLLAR OPAR EXPR somme-entiere CPAR               { $$ = $4;}
 
 
-operande-entier     : MOT                                               { $$ = $1.str;}
-                    | plus-ou-moins MOT                                 { }
-                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$ = $3.str;}
+operande-entier     : MOT                                               { check_int($1.str);
+                                                                            $$.str = $1.str;
+                                                                            $$.type=O_INT;
+                                                                        
+                                                                        }
+                    | plus-ou-moins MOT   %prec UMOINS                  { check_int($2.str); printf("%s\n", "ok");
+                                                                            if($1.type==O_PLUS){
+                                                                                $$.str=$2.str; $$.type=O_INT;
+                                                                            }    
+                                                                            else{  
+                                                                                $$.str=newtemp(); $$.type=O_TEMP;
+                                                                                $2.type=O_INT;
+                                                                                quad_unaire($2,$$.str);
+
+                                                                            }
+                                                                        }  
+                                                                       
+                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type=O_INT;}
+                    | OPAR somme-entiere CPAR                           { $$=$2;}
 
                                                                     
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier		{  
                                                                             $$.str=newtemp(); $$.type=O_TEMP;
-                                                                            quad_operation($1,$3,$2.type,$$.str);
+                                                                            quad_operation($2.type,$1,$3,$$.str);
                                                                         }
 					| produit-entier									{$$=$1;}
 
-produit-entier		: produit-entier fois-div-mod operande-entier		{ }
-					| operande-entier									{$$.str=$1; $$.type=O_INT; }
+produit-entier		: produit-entier fois-div-mod operande-entier		{   //TODO limite multiplication
+                                                                            $$.str=newtemp(); $$.type=O_TEMP;
+                                                                            quad_operation($2.type,$1,$3,$$.str);
+                                                                        }
+					| operande-entier									{$$=$1;}
 
 
 plus-ou-moins		: PLUS				    							{$$.type=O_PLUS;}

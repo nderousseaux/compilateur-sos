@@ -4,6 +4,15 @@
 
 FILE *f; // Fichier de sortie
 
+
+// On calcule le numéro du temporaire modulo 2
+int ind(char * s1){
+    int taille=strlen(s1);
+    int modulo=s1[taille-1]%2;
+    return modulo;
+}
+
+
 /* Récupère l'index de la variable dans la pile */
 int get_address(char *name)
 {
@@ -80,6 +89,18 @@ void gen_code()
             case OP_PLUS:
                 gen_plus(quad);
                 break;
+            case OP_MOINS:
+                if(quad.operand2.type==EMPTY){
+                    gen_unaire(quad);
+                }
+                else{
+                    gen_moins(quad);
+                }
+                break;
+
+            case OP_FOIS:
+                gen_fois(quad);
+                break;
         case OP_EQUAL:
             gen_equal(quad);
             break;
@@ -139,6 +160,7 @@ void gen_assign(Quad quad)
     //On récupère la variable dans la pile
     int pos_arg1 = get_address(quad.operand1.value);
     int pos_res = get_address(quad.result.value);
+    int ind_arg1=ind(quad.operand1.value);
 
     // On teste le type du premier opérande
     switch (quad.operand1.type)
@@ -161,8 +183,7 @@ void gen_assign(Quad quad)
             break;
 
         case TEMP:
-            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
-            fprintf(f,"\tsw\t$t3,\t%d($fp)\n", pos_res);
+            fprintf(f,"\tsw\t$t%i,\t%d($fp)\n", ind_arg1,pos_res);
             break;
         default:
             break;
@@ -427,37 +448,101 @@ void gen_end(char * exit_code)
 void gen_plus(Quad quad) {
     /* On génère le code de somme */
 
-    fprintf(f, "\n\t# On génère le code de somme\n");
-    int pos_res = get_address(quad.result.value);
-    int pos_arg1;
-    int pos_arg2;
-    switch(quad.operand1.type){
-        case INTEGER:
-            fprintf(f, "\tli\t$t2,\t%s\n", quad.operand1.value);
-            break;
-        case TEMP:
-            pos_arg1 = get_address(quad.operand1.value);
-            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
-            break;
-        default:
-            break;
-    }
+    fprintf(f, "\n\t# On génère le code de somme");
+    fprintf(f,"\n\t# On fait %s = %s + %s\n",quad.result.value, quad.operand1.value, quad.operand2.value);
+    int ind_res=ind(quad.result.value);
+    int ind_op1=ind(quad.operand1.value); 
+    int ind_op2=ind(quad.operand2.value);
 
-    switch(quad.operand2.type){
-        case INTEGER:
-            fprintf(f, "\taddi\t$t2,\t$t2,\t%s\n", quad.operand2.value);
-            break;
-        case TEMP:
-            pos_arg2 = get_address(quad.operand2.value);
-            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg2);
-            fprintf(f,"\tadd\t$t2,\t$t2,\t$t3");
-            break;
-        default:
-            break;
+    if(quad.operand1.type==INTEGER && quad.operand2.type==INTEGER){
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res,quad.operand1.value);
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t%s\n", ind_res, ind_res, quad.operand2.value);
     }
-    fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
+    else if(quad.operand1.type==INTEGER && quad.operand2.type==TEMP){
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t%s\n", ind_res, ind_op2, quad.operand1.value);
+    }
+    else if(quad.operand1.type==TEMP && quad.operand2.type==INTEGER){
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t%s\n", ind_res, ind_op1, quad.operand2.value);
+    }
+    else{
+        fprintf(f, "\tadd\t$t%i,\t$t%i,\t$t%i\n", ind_res, ind_op1, ind_op2);
+    }
 }
 
+
+
+void gen_moins(Quad quad) {
+    /* On génère le code de la soustraction */
+
+    fprintf(f, "\n\t# On génère le code de la soustraction");
+    fprintf(f,"\n\t# On fait %s = %s - %s\n",quad.result.value, quad.operand1.value, quad.operand2.value);
+    int ind_res=ind(quad.result.value);
+    int ind_op1=ind(quad.operand1.value); 
+    int ind_op2=ind(quad.operand2.value);
+
+    if(quad.operand1.type==INTEGER && quad.operand2.type==INTEGER){
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res,quad.operand1.value);
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t-%s\n", ind_res, ind_res, quad.operand2.value);
+    }
+    else if(quad.operand1.type==INTEGER && quad.operand2.type==TEMP){
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t-%s\n", ind_res, ind_op2, quad.operand1.value);
+    }
+    else if(quad.operand1.type==TEMP && quad.operand2.type==INTEGER){
+        fprintf(f, "\taddi\t$t%i,\t$t%i,\t-%s\n", ind_res, ind_op1, quad.operand2.value);
+    }
+    else{
+        fprintf(f, "\tsub\t$t%i,\t$t%i,\t$t%i\n", ind_res, ind_op1, ind_op2);
+    }
+}
+
+void gen_unaire(Quad quad) {
+    /* On génère le code de l'opération unaire */
+
+    fprintf(f, "\n\t# On génère le code de l'opération unaire\n");
+    int ind_res=ind(quad.result.value);
+    int ind_op1=ind(quad.operand1.value); 
+    switch(quad.operand1.type){
+        case INTEGER:
+            fprintf(f, "\tli\t$t%i,\t-%s\n", ind_res,quad.operand1.value);
+            break;
+        case TEMP:
+            fprintf(f,"\tsubu\t$t%i,\t$zero,\t$t%i\n", ind_res,ind_op1);
+            break;
+        default:
+            break;
+    }
+}
+
+void gen_fois(Quad quad) {
+    /* On génère le code de somme */
+
+    fprintf(f, "\n\t# On génère le code de la multiplication");
+    fprintf(f,"\n\t# On fait %s = %s * %s\n",quad.result.value, quad.operand1.value, quad.operand2.value);
+    int ind_res=ind(quad.result.value);
+    int ind_op1=ind(quad.operand1.value); 
+    int ind_op2=ind(quad.operand2.value);
+
+    if(quad.operand1.type==INTEGER && quad.operand2.type==INTEGER){
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res,quad.operand1.value);
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res+2,quad.operand1.value);
+        fprintf(f, "\tmult\t$t%i,\t$t%i\n", ind_res, ind_res+2);
+        fprintf(f, "\tmflo\t$t%i\n", ind_res);
+    }
+    else if(quad.operand1.type==INTEGER && quad.operand2.type==TEMP){
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res,quad.operand1.value);
+        fprintf(f, "\tmult\t$t%i,\t$t%i\n", ind_res, ind_op2);
+        fprintf(f, "\tmflo\t$t%i\n", ind_res);
+    }
+    else if(quad.operand1.type==TEMP && quad.operand2.type==INTEGER){
+        fprintf(f, "\tli\t$t%i,\t%s\n", ind_res,quad.operand2.value);
+        fprintf(f, "\tmult\t$t%i,\t$t%i\n", ind_res, ind_op1);
+        fprintf(f, "\tmflo\t$t%i\n", ind_res);
+    }
+    else{
+        fprintf(f, "\tmult\t$t%i,\t$t%i\n", ind_op2, ind_op1);
+        fprintf(f, "\tmflo\t$t%i\n", ind_res);
+    }
+}
 /* Génére code assembleur final dans le .asm */
 void gen_mips(FILE *output, char debug)
 {

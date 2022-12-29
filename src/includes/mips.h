@@ -2,6 +2,8 @@
 
 #ifndef SRC_INCLUDES_MIPS_H_
 #define SRC_INCLUDES_MIPS_H_
+// Calcule le numéro du temporaire modulo 2
+int ind(char * s1);
 
 /* Récupère l'index de la variable dans la pile */
 int get_address(char *name);
@@ -22,7 +24,12 @@ void gen_assign(Quad quad);
 void gen_echo(Quad quad);
 
 void gen_plus(Quad quad);
-void gen_plus2(Quad quad);
+
+void gen_unaire(Quad quad);
+
+void gen_moins(Quad quad);
+void gen_fois(Quad quad);
+
 
 /* Génére le code pour un test d'égalité*/
 void gen_equal(Quad quad);

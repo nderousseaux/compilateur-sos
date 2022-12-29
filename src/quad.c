@@ -73,6 +73,18 @@ void print_quad(Quad quad)
     case OP_PLUS:
         printf("PLUS ");
         break;
+    case OP_MOINS:
+        printf("MOINS");
+        break;
+    case OP_FOIS:
+        printf("FOIS");
+        break;
+    case OP_DIVISION:
+        printf("DIVISION");
+        break;
+    case OP_MODULO:
+        printf("MODULO");
+        break;
     case OP_EQUAL:
         printf("EQUAL ");
         break;

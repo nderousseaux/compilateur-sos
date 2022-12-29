@@ -43,7 +43,32 @@ int to_int(char *str)
     return res;
 }
 
+/* Vérifie qu'une chaîne de caractère est un entier */
+void check_int(char * str) {
+    long res;
+    int i = 0;
 
+    // On teste les autres caractères
+    for (; i < strlen(str); i++)
+    {
+        if (str[i] < '0' || str[i] > '9')
+        {
+            fprintf(stderr, "Erreur: %s n'est pas un entier\n", str);
+            break;
+        }
+    }
+
+    if (neg)
+        res = -atoi(str);
+    else
+        res = atoi(str);
+
+    // On vérifie que res soit bien dans l'intervalle [-2^31, 2^31-1]
+    if (res < -2147483648 || res > 2147483647)
+    {
+        fprintf(stderr, "Erreur: %s n'est pas un entier sur 32 bits\n", str);
+    }
+}
 
 /* Ajoute une operande à la liste chainée */
 Operand_y *add_operand(Operand_y *list, Operand_y *op)
@@ -143,19 +168,33 @@ Operand to_operand(Operand_y op){
     return empty();
 }
 
-void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type, char * res) {
-
-    /* On crée l'identifiant dans la table des symboles */
-
+void quad_operation(enum operator_type type, Operand_y op1, Operand_y op2, char * res) {
 
     switch (type)
     {
     case O_PLUS:
         add_quad(OP_PLUS, to_operand(op1), to_operand(op2), temp(res));
         break;
+    case O_MOINS:
+        add_quad(OP_MOINS, to_operand(op1), to_operand(op2), temp(res));
+        break;
+    case O_FOIS:
+        add_quad(OP_FOIS, to_operand(op1), to_operand(op2), temp(res));
+        break;
+    case O_DIVISION:
+        add_quad(OP_DIVISION, to_operand(op1), to_operand(op2), temp(res));
+        break;
+    case O_MODULO:
+        add_quad(OP_MODULO, to_operand(op1), to_operand(op2), temp(res));
+        break;
     default:
         break;
     }
+}
+
+void quad_unaire(Operand_y op, char * res) {
+  
+    add_quad(OP_MOINS, to_operand(op), empty(), temp(res));    
 }
 
 /* Crée une quadruplet goto */
