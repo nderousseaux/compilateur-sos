@@ -10,9 +10,9 @@ main:
 	quad_0:
 	li	$t0,	0
 	li	$t1,	0
-	beq	$t0,	$t1,	quad_2
+	beq	$t0,	$t1,	quad_4
 	quad_1:
-	j quad_4
+	j quad_2
 	quad_2:
 	# On affiche string_0
 	la	$a0,	string_0

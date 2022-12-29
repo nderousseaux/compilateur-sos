@@ -27,7 +27,7 @@ for				        {}
 do				        {return DO;}
 done			        {return DONE;}
 in				        {}
-until			        {}
+until			        {return UNTIL;}
 while			        {return WHILE;}
 case			        {}
 esac			        {}

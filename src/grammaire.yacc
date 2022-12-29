@@ -44,6 +44,7 @@
 %token DONE
 %token WHILE
 %token DO
+%token UNTIL
 
 %token EQUAL_COMP
 %token NEQUAL_COMP
@@ -98,10 +99,14 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                                                                         }
                     | WHILE M test-block DO M liste-instructions DONE   { quad_goto($2);
                                                                           complete($3.tru,$5);
-                                                                          complete($6.next,$2);
                                                                           complete($3.fals,nextquad);
                                                                           $$.next = $3.fals;
                                                                         }
+                    | UNTIL M test-block DO M liste-instructions DONE   { quad_goto($2);
+                                                                          complete($3.fals,$5);
+                                                                          complete($3.tru,nextquad);
+                                                                          $$.next = $3.tru;                                                      
+                                                                          }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
 
 else-part           : ELIF test-block THEN M liste-instructions N else-part         {

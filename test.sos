@@ -1,4 +1,4 @@
-while test 0 -eq 0 do
+until test 0 -eq 0 do
     echo "if"
 done ;
 exit
