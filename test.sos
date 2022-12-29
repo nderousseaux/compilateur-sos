@@ -1,4 +1,4 @@
-until test 0 -eq 0 do
-    echo "if"
-done ;
+if test 0 -ge 4 then
+    echo "Oui 1"
+fi;
 exit

@@ -119,7 +119,7 @@ else-part           : ELIF test-block THEN M liste-instructions N else-part     
 					| ELSE liste-instructions                                       {
                                                                                     $$.next = creelist(-1);
                                                                                     }
-                    |
+                    |                                                               {$$.next = creelist(-1);}
 
 liste-operandes     : liste-operandes operande                          { $$ = *add_operand(&$1, &$2); }
                     | operande                                          { $$ = $1; }
