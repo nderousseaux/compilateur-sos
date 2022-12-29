@@ -41,6 +41,9 @@
 %token OPARA
 %token CPARA
 %token EXCLA
+%token DONE
+%token WHILE
+%token DO
 
 %token EQUAL_COMP
 %token NEQUAL_COMP
@@ -90,10 +93,13 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                                                                             $6.next = concat($7.next,$6.next);
                                                                             complete($6.next,nextquad);
                                                                             complete($2.fals, $6.idx);
-                                                                            complete($2.tru, $4);
-                                                                            
-                                                                            
+                                                                            complete($2.tru, $4);                                                                            
 
+                                                                        }
+                    | WHILE M test-block DO M liste-instructions DONE   { complete($$.tru,$5);
+                                                                          quad_goto($2);
+                                                                          complete($6.next,$2);
+                                                                          $$.next = $3.fals;
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
 
@@ -125,10 +131,14 @@ test-block		    : TEST test-expr                                    { $$ = $2;}
 
 test-expr			: test-expr OR_COMP M test-expr2                    { complete($1.fals,$3);
                                                                           $$.fals = $4.fals;
+                                                                          $$.tru = concat($1.tru,$4.tru);
                                                                         }
                     | test-expr2                                        { $$ = $1;}
 
-test-expr2          : test-expr2 AND_COMP M test-expr3
+test-expr2          : test-expr2 AND_COMP M test-expr3                  { complete($1.tru,$3);
+                                                                          $$.fals = concat($1.fals,$4.fals);
+                                                                          $$.tru = $4.tru;
+                                                                        }
                     | test-expr3                                        { $$ = $1;}
                 
 test-expr3          : OPARA test-expr3 CPARA                            { $$=$2;}

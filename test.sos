@@ -1,8 +1,4 @@
-if test 0 -eq 1 then
+while test 0 -eq 0 do
     echo "if"
-elif test 0 -eq 0 then
-    echo "elif"
-else
-    echo "else"
-fi ;
+done ;
 exit

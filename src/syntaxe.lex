@@ -24,11 +24,11 @@ id              [a-zA-Z_][a-zA-Z0-9_]*
 if				        {return IF;} // Mots reservés
 then			        {return THEN;}
 for				        {}
-do				        {}
-done			        {}
+do				        {return DO;}
+done			        {return DONE;}
 in				        {}
 until			        {}
-while			        {}
+while			        {return WHILE;}
 case			        {}
 esac			        {}
 echo			        { return ECHO_T; }
