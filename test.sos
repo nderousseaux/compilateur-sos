@@ -1,4 +1,5 @@
-if test 0 -ge 4 then
-    echo "Oui 1"
-fi;
+i = 5 ;
+if test ${i} -ge 0 then
+    echo "Reel 1" 
+fi ;
 exit

@@ -73,10 +73,10 @@ expr			        {}
 
 -eq                     { return EQUAL_COMP;}
 -ne                     { return NEQUAL_COMP;}
--lt                     { return STSUP_COMP;}
--le                     { return SUPEQ_COMP;}
--gt                     { return STINF_COMP;}
--ge                     { return INFEQ_COMP;}
+-lt                     { return STINF_COMP;}
+-le                     { return INFEQ_COMP;}
+-gt                     { return STSUP_COMP;}
+-ge                     { return SUPEQ_COMP;}
 -n                      { return NOEMPTY_COMP;}
 -z                      { return EMPTY_COMP;}
 -o                      { return OR_COMP;}
