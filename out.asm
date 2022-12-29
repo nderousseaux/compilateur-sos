@@ -4,27 +4,29 @@
 main:
 
 	# On alloue la mémoire pour la pile
-	addiu	$sp,	$sp,	-8
-	sw		$fp,	4($sp)
+	addiu	$sp,	$sp,	-4
+	sw		$fp,	0($sp)
 	move	$fp,	$sp
 	quad_0:
-	# On met 5 dans i
-	li	$t2,	5
-	sw	$t2,	0($fp)
-	quad_1:
-	lw	$t0,	0($fp)
+	li	$t0,	1
 	li	$t1,	0
-	bge	$t0,	$t1,	quad_3
+	beq	$t0,	$t1,	quad_4
+	quad_1:
+	j quad_2
 	quad_2:
-	j quad_5
+	li	$t0,	0
+	li	$t1,	0
+	beq	$t0,	$t1,	quad_4
 	quad_3:
+	j quad_6
+	quad_4:
 	# On affiche string_0
 	la	$a0,	string_0
 	li	$v0,	4
 	syscall
-	quad_4:
-	j quad_5
 	quad_5:
+	j quad_6
+	quad_6:
 	# On génère le code de terminaison
 	li	$a0,	0
 	li	$v0,	17

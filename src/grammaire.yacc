@@ -185,6 +185,7 @@ test-instruction	: operande operateur2 operande						{
                                                                             quad_goto(-1);
                                                                             add_idx_quad($$.fals, nextquad-1);
                                                                         }
+                    | operateur1 concatenation                          {}
 
 operateur1			: NOEMPTY_COMP											{ $$.type = O_NOTEMPTY; }
 					| EMPTY_COMP											{ $$.type = O_EMPTY; }
