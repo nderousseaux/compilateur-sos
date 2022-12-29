@@ -96,9 +96,10 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                                                                             complete($2.tru, $4);                                                                            
 
                                                                         }
-                    | WHILE M test-block DO M liste-instructions DONE   { complete($$.tru,$5);
-                                                                          quad_goto($2);
+                    | WHILE M test-block DO M liste-instructions DONE   { quad_goto($2);
+                                                                          complete($3.tru,$5);
                                                                           complete($6.next,$2);
+                                                                          complete($3.fals,nextquad);
                                                                           $$.next = $3.fals;
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
