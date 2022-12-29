@@ -1,7 +1,7 @@
 .data
-	string_2: .asciiz	"sex"
-	string_1: .asciiz	"A bientôt"
-	string_0: .asciiz	"Bonjour"
+	string_2: .asciiz	"else"
+	string_1: .asciiz	"elif"
+	string_0: .asciiz	"if"
 .text
 main:
 

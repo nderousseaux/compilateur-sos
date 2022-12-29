@@ -49,11 +49,11 @@ expr			        {}
 \{				        { return OBRACE; }
 \}				        { return CBRACE;}
 \|				        {}
-\(				        {}
-\)				        {}
+\(				        { return OPARA;}
+\)				        { return CPARA;}
 =				        { return EQUAL; }
 !=				        {}
-!				        {}
+!				        { return EXCLA;}
 &				        {}
 \*				        {}
 \"				        { return DQUOTE; }
@@ -79,6 +79,8 @@ expr			        {}
 -ge                     { return INFEQ_COMP;}
 -n                      { return NOEMPTY_COMP;}
 -z                      { return EMPTY_COMP;}
+-o                      { return OR_COMP;}
+-a                      { return AND_COMP;}
 
 {com}			        {  } // Commentaires
 

@@ -1,8 +1,8 @@
 if test 0 -eq 1 then
-    echo "Bonjour"
+    echo "if"
 elif test 0 -eq 0 then
-    echo "A bientôt"
+    echo "elif"
 else
-    echo "sex"
+    echo "else"
 fi ;
 exit

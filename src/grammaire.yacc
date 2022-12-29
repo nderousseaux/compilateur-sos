@@ -38,6 +38,9 @@
 %token THEN
 %token TEST
 %token ELIF
+%token OPARA
+%token CPARA
+%token EXCLA
 
 %token EQUAL_COMP
 %token NEQUAL_COMP
@@ -47,6 +50,8 @@
 %token INFEQ_COMP
 %token NOEMPTY_COMP
 %token EMPTY_COMP
+%token OR_COMP
+%token AND_COMP
 
 %token <operand> IDENTIFIER
 %token <operand> MOT
@@ -64,6 +69,8 @@
 %type <integer> M
 %type <booleen> N
 %type <booleen> test-expr
+%type <booleen> test-expr2
+%type <booleen> test-expr3
 %type <booleen> test-block
 %type <booleen> instruction
 %type <booleen> liste-instructions
@@ -84,6 +91,8 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.
                                                                             complete($6.next,nextquad);
                                                                             complete($2.fals, $6.idx);
                                                                             complete($2.tru, $4);
+                                                                            
+                                                                            
 
                                                                         }
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
@@ -114,30 +123,45 @@ operande-entier     : MOT                                               { $$ = t
 
 test-block		    : TEST test-expr                                    { $$ = $2;}
 
-test-expr			: test-instruction                                  { $$ = $1;}
+test-expr			: test-expr OR_COMP M test-expr2                    { complete($1.fals,$3);
+                                                                          $$.fals = $4.fals;
+                                                                        }
+                    | test-expr2                                        { $$ = $1;}
+
+test-expr2          : test-expr2 AND_COMP M test-expr3
+                    | test-expr3                                        { $$ = $1;}
+                
+test-expr3          : OPARA test-expr3 CPARA                            { $$=$2;}
+                    | EXCLA OPARA test-expr3 CPARA                      { $$.tru = $3.fals;
+                                                                          $$.fals = $3.tru;}
+                    | test-instruction                                  { $$ = $1;}
+                    | EXCLA test-instruction                            { $$.tru = $2.fals;
+                                                                          $$.fals = $2.tru;
+                                                                          }
 
 test-instruction	: operande operateur2 operande						{
                                                                             $$.tru = creelist(-1);
                                                                             $$.fals = creelist(-1);
                                                                             $$.next = creelist(-1);
+                                                                            add_idx_quad($$.tru, nextquad);
                                                                             switch($2.type){
                                                                                 case O_EQUAL:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_equal($1, $3, -1);
                                                                                     break;
                                                                                 case O_NEQUAL:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_nequal($1, $3, -1);
                                                                                     break;
                                                                                 case O_STSUP:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_stsup($1, $3, -1);
                                                                                     break;
                                                                                 case O_SUPEQ:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_supeq($1, $3, -1);
                                                                                     break;
                                                                                 case O_STINF:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_stinf($1, $3, -1);
                                                                                     break;
                                                                                 case O_INFEQ:
-                                                                                    quad_equal($1, $3, nextquad+2);
+                                                                                    quad_infeq($1, $3, -1);
                                                                                     break;
                                                                                 default:
                                                                                     break;

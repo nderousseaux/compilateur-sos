@@ -134,20 +134,17 @@ void destroy_quad_list(Quad_list *quad_list)
     free(quad_list);
 }
 
-/* Ajout personnel à discuter avec le grand Natha*/
-
-
+// Ajoute un index de quad dans une liste d'index de quad
 void add_idx_quad(idx_quad *dest, int idx)
 {
 
-    idx_quad *next = dest;
-
-    if(next->idx == -1)
+    if (dest->idx == -1)
     {
-        next->idx = idx;
+        dest->idx = idx;
         return;
     }
 
+    idx_quad *next = dest;
 
     while (next->next_idx != NULL)
     {
@@ -207,30 +204,24 @@ idx_quad *concat(idx_quad *Q1, idx_quad *Q2)
 
 void complete(idx_quad *list, int address)
 {
-    // On parcourt la liste des quads
-    for (int i = 0; i < quad_list->size; i++)
-   {
-        Quad * quad = &quad_list->data[i];
-        // Si le quad est un goto et que result = empty
-        if (quad->op == OP_GOTO && quad->result.type == EMPTY)
-        {
-            // print_quad(quad);
-            // On parcourt la liste des idx
-            idx_quad *next = list;
-            while (next != NULL)
-            {
-                // Si l'idx correspond à l'idx du quad
-                if (next->idx == quad->idx)
-                {
-                    //On modifie la destination du quad
-                    quad->result.type = INTEGER;
-                    quad->result.integer_value = address;
+    if (list->idx == -1)
+    {
+        printf("Tu essaies de completer une liste de quad vide...\n");
+        return;
+    }
 
-                    
-                }
-                next = next->next_idx;
-            }
-        }
+    idx_quad *next = list;
+
+    while (next != NULL)
+    {
+        int idx = next->idx;
+
+        Quad *quad = &quad_list->data[idx];
+
+        quad->result.type = INTEGER;
+        quad->result.integer_value = address;
+
+        next = next->next_idx;
     }
 }
 
