@@ -5,12 +5,19 @@
 #ifndef SRC_INCLUDES_SYMBOLS_H_
 #define SRC_INCLUDES_SYMBOLS_H_
 
+#include "./utils.h"
+
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define SYMBOLS_LIST_CAPACITY 100
 
 typedef struct Symbol{
     char* data;
-    int position; // Position dans la pile, -1 si une constante
+    int position; // Position dans la pile, -1 si une constante ou temporaire
+    char is_temp;
 } Symbol;
 
 typedef struct St_element{
@@ -24,6 +31,7 @@ typedef struct St{
     int size_total; // Taille totale de la table
     int last_pos; // Dernière position utilisée dans la pile
     int last_const; // Dernière constante utilisée
+    int last_temp; // Dernière temp utilisée
     int capacity;
     St_element** data;
 } St;
@@ -39,7 +47,9 @@ void create_symbol(char* id);
 /* Crée un symbole (constante) */
 char * create_const(char * data);
 
-Symbol * newtemp(char * id);
+/* Crée un symbole */
+char * newtemp();
+
 
 /* Ajoute une donnée dans la hashtable*/
 void add_st(St* ht, char* key, Symbol* data);
@@ -64,5 +74,8 @@ int hash(char* key);
 
 /* Renvoie le nom de la prochaine constante (et l'incrémente) */
 char * next_const();
+
+/* Renvoie le nom de la prochaine temporaire (et l'incrémente) */
+char * next_temp();
 
 #endif  // SRC_INCLUDES_SYMBOLS_H_

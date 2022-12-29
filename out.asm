@@ -8,20 +8,29 @@ main:
 	move	$fp,	$sp
 
 	# On génère le code de somme
-	addi $a0, $a0, 1
-	addi $a0, $a0, 2
-	li	$v0,	1
-	syscall
+	li	$t2,	1
+	addi	$t2,	$t2,	1
+	sw	$t2,	-4($fp)
 
 	# On génère le code de somme
-	addi $a0, $a0, 1
-	addi $a0, $a0, 3
-	li	$v0,	1
-	syscall
-	li	$t3,	1
+	lw	$t3,	-4($fp)
+	addi	$t2,	$t2,	2
+	sw	$t2,	-4($fp)
+
+	# On fait une affectation
+	lw	$t3,	-4($fp)
+	sw	$t3,	0($fp)
+
+	# On génère le code de somme
+	li	$t2,	10
+	addi	$t2,	$t2,	10
+	sw	$t2,	-4($fp)
+
+	# On fait une affectation
+	lw	$t3,	-4($fp)
 	sw	$t3,	4($fp)
 
-	# On affiche i
+	# On affiche j
 	lw	$a0,	4($fp)
 	li	$v0,	1
 	syscall

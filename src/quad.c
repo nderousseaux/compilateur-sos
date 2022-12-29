@@ -121,10 +121,10 @@ void print_operand(Operand operand)
         printf("VAR\t%s", operand.value);
         break;
     case INTEGER:
-        printf("INTEGER\t%d", operand.integer_value);
+        printf("INTEGER\t%s", operand.value);
         break;
     case TEMP:
-        printf("TEMP\t");
+        printf("TEMP\t%s", operand.value);
         break;
     case EMPTY:
         printf("EMPTY");

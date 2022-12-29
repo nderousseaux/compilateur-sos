@@ -43,7 +43,7 @@ void gen_stinf(Quad quad);
 void gen_infeq(Quad quad);
 
 /* On génère le code de terminaison */
-void gen_end(int exit_code);
+void gen_end(char * exit_code);
 
 void gen_goto(Quad quad);
 

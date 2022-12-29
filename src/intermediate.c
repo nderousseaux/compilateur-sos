@@ -25,6 +25,7 @@ int to_int(char *str)
         if (str[i] < '0' || str[i] > '9')
         {
             fprintf(stderr, "Erreur: %s n'est pas un entier\n", str);
+            break;
         }
     }
 
@@ -41,6 +42,8 @@ int to_int(char *str)
 
     return res;
 }
+
+
 
 /* Ajoute une operande à la liste chainée */
 Operand_y *add_operand(Operand_y *list, Operand_y *op)
@@ -82,9 +85,8 @@ void op_all_operand(Operand_y *list, Operator op)
 }
 
 /* Crée un quadruplet exit */
-void quad_exit(int status)
-{
-    add_quad(OP_EXIT, integer(status), empty(), empty());
+void quad_exit(char * value) {
+    add_quad(OP_EXIT, integer(value), empty(), empty());
 }
 
 /* Crée une quadruplet echo */
@@ -116,19 +118,32 @@ void quad_assign(char *src, char *dest, enum operand_type type)
         add_quad(OP_ASSIGN, var(src), empty(), id(dest));
         break;
     case O_INT:
-        add_quad(OP_ASSIGN, integer(to_int(src)), empty(), id(dest));
+        add_quad(OP_ASSIGN, temp(src), empty(), id(dest));
         break;
     case O_ID:
         add_quad(OP_ASSIGN, id(src), empty(), id(dest));
+        break;
+    case O_TEMP:
+        add_quad(OP_ASSIGN, temp(src), empty(), id(dest));
         break;
     default:
         break;
     }
 }
 
+Operand to_operand(Operand_y op){
+    switch(op.type){
+        case O_INT:
+            return integer(op.str);
+        case O_TEMP:
+            return temp(op.str);
+        default: 
+            break;
+    }
+    return empty();
+}
 
-
-void quad_operation(char * op1, char * op2, enum operator_type type, Operand_y res) {
+void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type, char * res) {
 
     /* On crée l'identifiant dans la table des symboles */
 
@@ -136,7 +151,7 @@ void quad_operation(char * op1, char * op2, enum operator_type type, Operand_y r
     switch (type)
     {
     case O_PLUS:
-        add_quad(OP_PLUS, integer(to_int(op1)), integer(to_int(op2)), temp(res));
+        add_quad(OP_PLUS, to_operand(op1), to_operand(op2), temp(res));
         break;
     default:
         break;

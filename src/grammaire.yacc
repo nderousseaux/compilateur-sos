@@ -13,7 +13,7 @@
 // Type des noeuds
 %union {
     Operand_y operand;
-    int integer;
+    char * integer;
     Operator_y operator;
     Operateur_y operateur;
     Bool booleen;
@@ -95,6 +95,11 @@
 %type <booleen> liste-instructions
 %type <booleen> else-part
 
+
+//Priorités
+
+%left FOIS DIVISION MODULO
+%left PLUS MOINS
 %%
 
 programme           : liste-instructions                                { }
@@ -144,26 +149,26 @@ liste-operandes     : liste-operandes operande                          { $$ = *
 
 concatenation		: operande						        			{ $$ = $1;}
 
-operande            : MOT                                               { $$.val = to_int($1.str); $$.type = O_INT;}
+operande            : MOT                                               { $$.str=$1.str; $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
                     | DOLLAR OPAR EXPR somme-entiere CPAR               { $$ = $4;}
 
 
-operande-entier     : MOT                                               { $$ = to_int($1.str); }
+operande-entier     : MOT                                               { $$ = $1.str;}
                     | plus-ou-moins MOT                                 { }
-                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$ = $3.val;}
+                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$ = $3.str;}
 
                                                                     
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier		{  
-                                                                            $$=;
-                                                                            quad_operation($1.str,$3.str,$2.type); 
+                                                                            $$.str=newtemp(); $$.type=O_TEMP;
+                                                                            quad_operation($1,$3,$2.type,$$.str);
                                                                         }
 					| produit-entier									{$$=$1;}
 
 produit-entier		: produit-entier fois-div-mod operande-entier		{ }
-					| operande-entier									{$$.val=$1; $$.type=O_INT;}
+					| operande-entier									{$$.str=$1; $$.type=O_INT; }
 
 
 plus-ou-moins		: PLUS				    							{$$.type=O_PLUS;}

@@ -14,6 +14,7 @@ St* init_st(){
     ht->size_total = 0;
     ht->last_pos = 0;
     ht->last_const = 0;
+    ht->last_temp = 0;
     ht->capacity = SYMBOLS_LIST_CAPACITY;
 
     CHECK(ht->data = calloc(SYMBOLS_LIST_CAPACITY, sizeof(St_element*)));
@@ -35,18 +36,18 @@ void create_symbol(char* id)
     add_st(symbols_table, id, s);
 }
 
-Symbol * newtemp(char * id){
-    //Si il existe déjà
-    if(get_st(symbols_table, id) != NULL)
-        return get_st(symbols_table, id);
-
+/* Crée un symbole */
+char * newtemp()
+{
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
+    char * key = next_temp();    
     s->data = NULL;
-    s->position = symbols_table->last_pos;
-    symbols_table->last_pos++;
-    add_st(symbols_table, id, s);
-    return s;
+    s->position = -1;
+    s->is_temp = 1;
+    add_st(symbols_table, key, s);
+
+    return key;
 }
 
 /* Crée un symbole (constante) */
@@ -216,5 +217,16 @@ char * next_const() {
     sprintf(key, "string_%d", symbols_table->last_const);
 
     symbols_table->last_const++;
+    return key;
+}
+
+/* Renvoie le nom de la prochaine temporaire (et l'incrémente) */
+char * next_temp() {
+    char * key;
+    CHECK(key = calloc(10, sizeof(char)));
+
+    sprintf(key, "temp_%d", symbols_table->last_temp);
+
+    symbols_table->last_temp++;
     return key;
 }

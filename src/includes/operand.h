@@ -5,6 +5,7 @@
 #ifndef SRC_INCLUDES_OPERAND_H_
 #define SRC_INCLUDES_OPERAND_H_
 
+
 // Définit le type d'un operateur
 typedef enum Operator
 {
@@ -48,13 +49,13 @@ typedef struct Operand
 Operand var(char *value);
 
 /* Crée une opérande de type int */
-Operand integer(int value);
+Operand integer(char * value);
 
 /* Crée une opérande de type id */
 Operand id(char *name);
 
 /* Crée une opérande de type temp */
-Operand temp();
+Operand temp(char * name);
 
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty();

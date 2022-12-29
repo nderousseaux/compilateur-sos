@@ -35,6 +35,7 @@ void gen_data()
         {
             if (element->data->position == -1)
                 fprintf(f, "\t%s: .asciiz\t%s\n", element->key, element->data->data);
+            }
 
             element = element->next;
         }
@@ -135,8 +136,8 @@ void gen_stack()
 /* Génère le code d'affectation */
 void gen_assign(Quad quad)
 {
-    // On récupère la variable dans la pile
-    //  int pos_arg1 = get_address(quad.operand1.value);
+    //On récupère la variable dans la pile
+    int pos_arg1 = get_address(quad.operand1.value);
     int pos_res = get_address(quad.result.value);
 
     // On teste le type du premier opérande
@@ -154,11 +155,17 @@ void gen_assign(Quad quad)
         fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
         break;
 
-    case ID:
-        // TOOD -> $1
-        break;
-    default:
-        break;
+        case ID:
+            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
+            fprintf(f,"\tsw\t$t3,\t%d($fp)\n", pos_res);
+            break;
+
+        case TEMP:
+            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
+            fprintf(f,"\tsw\t$t3,\t%d($fp)\n", pos_res);
+            break;
+        default:
+            break;
     }
 }
 
@@ -409,37 +416,46 @@ void gen_infeq(Quad quad)
 }
 
 /* On génère le code de terminaison */
-void gen_end(int exit_code)
+void gen_end(char * exit_code)
 {
     fprintf(f, "\n\t# On génère le code de terminaison\n");
-    fprintf(f, "\tli\t$a0,\t%d\n", exit_code);
+    fprintf(f, "\tli\t$a0,\t%s\n", exit_code);
     fprintf(f, "\tli\t$v0,\t17\n");
     fprintf(f, "\tsyscall\n");
 }
 
 void gen_plus(Quad quad) {
+    /* On génère le code de somme */
+
     fprintf(f, "\n\t# On génère le code de somme\n");
-    fprintf(f, "\taddi $a0, $a0, %i\n", quad.operand1.integer_value);
-    fprintf(f, "\taddi $a0, $a0, %i\n", quad.operand2.integer_value);
-    fprintf(f,"\tli\t$v0,\t1\n");
-    fprintf(f,"\tsyscall\n");
-}
-
-void gen_plus2(Quad quad)
-{
-    //On récupère la variable dans la pile
-    // int pos_arg1 = get_address(quad.operand1.value);
     int pos_res = get_address(quad.result.value);
+    int pos_arg1;
+    int pos_arg2;
+    switch(quad.operand1.type){
+        case INTEGER:
+            fprintf(f, "\tli\t$t2,\t%s\n", quad.operand1.value);
+            break;
+        case TEMP:
+            pos_arg1 = get_address(quad.operand1.value);
+            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
+            break;
+        default:
+            break;
+    }
 
-
-    //On teste le type du premier opérande
-   
-    fprintf(f,"\n\t# On met %d dans %s\n", quad.operand1.integer_value, quad.result.value);
-    fprintf(f,"\tli\t$t2,\t%d\n", quad.operand1.integer_value);
-    fprintf(f,"\tsw\t$t2,\t%d($fp)\n", pos_res);
-         
-
-      
+    switch(quad.operand2.type){
+        case INTEGER:
+            fprintf(f, "\taddi\t$t2,\t$t2,\t%s\n", quad.operand2.value);
+            break;
+        case TEMP:
+            pos_arg2 = get_address(quad.operand2.value);
+            fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg2);
+            fprintf(f,"\tadd\t$t2,\t$t2,\t$t3");
+            break;
+        default:
+            break;
+    }
+    fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
 }
 
 /* Génére code assembleur final dans le .asm */

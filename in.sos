@@ -1,1 +1,4 @@
-i=$(expr 1+2+3); echo ${i};
+i = $(expr 1+1+2);
+j = $(expr 10+10);
+echo ${j};
+exit 0

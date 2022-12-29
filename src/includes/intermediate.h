@@ -42,7 +42,6 @@ typedef struct
     enum operand_type type;
     char *str;
     int val;
-    Symbol * s;
     struct Operand_y *next;
      
 } Operand_y;
@@ -63,7 +62,7 @@ typedef struct
 } Operateur_y;
 
 /* Crée un quadruplet exit */
-void quad_exit(int status);
+void quad_exit(char * value);
 
 /* Crée un quad d'assignation */
 void quad_assign(char *src, char *dest, enum operand_type type);
@@ -88,10 +87,12 @@ void quad_supeq(Operand_y op1, Operand_y op2, int go);
 
 void quad_stinf(Operand_y op1, Operand_y op2, int go);
 
-void quad_infeq(Operand_y op1, Operand_y op2, int go);
+void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type, char * res);
 
 /* Ajoute une operande à la liste chainée */
-Operand_y *add_operand(Operand_y *list, Operand_y *op);
+Operand_y * add_operand(Operand_y * list, Operand_y * op);
+
+Operand to_operand(Operand_y op);
 
 /* Fait une opération sur toutes les opérandes de la liste */
 void op_all_operand(Operand_y *list, Operator op);

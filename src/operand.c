@@ -12,9 +12,8 @@ Operand var(char *value)
 }
 
 /* Crée une opérande de type int */
-Operand integer(int value)
-{
-    Operand o = {INTEGER, 0, value};
+Operand integer(char * value) {
+    Operand o = { INTEGER, value, 0};
     return o;
 }
 
@@ -26,10 +25,11 @@ Operand id(char *name)
     return o;
 }
 
-Operand temp() {
-    Operand o = { TEMP, NULL, 0};
+Operand temp(char * name) {
+    Operand o = { TEMP, name, 0};
     return o;
 }
+
 
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty()
