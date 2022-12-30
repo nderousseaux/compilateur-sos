@@ -67,6 +67,7 @@
 %token OR_COMP
 %token AND_COMP
 
+%token PARENTHESE
 %token <operand> IDENTIFIER
 %token <operand> MOT
 %token <operand> CHAINE
@@ -99,7 +100,7 @@
 %left PLUS MOINS
 %left FOIS DIVISION MODULO
 %left UMOINS
-%left OPAR CPAR
+%left PARENTHESE
 %%
 
 programme           : liste-instructions                                { }
@@ -160,7 +161,7 @@ operande-entier     : MOT                                               { check_
                                                                             $$.type=O_INT;
                                                                         
                                                                         }
-                    | plus-ou-moins MOT   %prec UMOINS                  { check_int($2.str); printf("%s\n", "ok");
+                    | plus-ou-moins MOT   %prec UMOINS                  { check_int($2.str);
                                                                             if($1.type==O_PLUS){
                                                                                 $$.str=$2.str; $$.type=O_INT;
                                                                             }    
@@ -173,7 +174,7 @@ operande-entier     : MOT                                               { check_
                                                                         }  
                                                                        
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type=O_INT;}
-                    | OPAR somme-entiere CPAR                           { $$=$2;}
+                    | OPAR somme-entiere CPAR       %prec PARENTHESE    { $$=$2;}
 
                                                                     
 
