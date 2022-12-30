@@ -24,11 +24,11 @@ id              [a-zA-Z_][a-zA-Z0-9_]*
 if				        {return IF;} // Mots reservés
 then			        {return THEN;}
 for				        {}
-do				        {}
-done			        {}
+do				        {return DO;}
+done			        {return DONE;}
 in				        {}
-until			        {}
-while			        {}
+until			        {return UNTIL;}
+while			        {return WHILE;}
 case			        {}
 esac			        {}
 echo			        { return ECHO_T; }
@@ -49,11 +49,11 @@ expr			        {}
 \{				        { return OBRACE; }
 \}				        { return CBRACE;}
 \|				        {}
-\(				        {}
-\)				        {}
+\(				        { return OPARA;}
+\)				        { return CPARA;}
 =				        { return EQUAL; }
 !=				        {}
-!				        {}
+!				        { return EXCLA;}
 &				        {}
 \*				        {}
 \"				        { return DQUOTE; }
@@ -73,12 +73,14 @@ expr			        {}
 
 -eq                     { return EQUAL_COMP;}
 -ne                     { return NEQUAL_COMP;}
--lt                     { return STSUP_COMP;}
--le                     { return SUPEQ_COMP;}
--gt                     { return STINF_COMP;}
--ge                     { return INFEQ_COMP;}
+-lt                     { return STINF_COMP;}
+-le                     { return INFEQ_COMP;}
+-gt                     { return STSUP_COMP;}
+-ge                     { return SUPEQ_COMP;}
 -n                      { return NOEMPTY_COMP;}
 -z                      { return EMPTY_COMP;}
+-o                      { return OR_COMP;}
+-a                      { return AND_COMP;}
 
 {com}			        {  } // Commentaires
 

@@ -55,6 +55,16 @@ void quad_goto(int idx);
 /* Crée un quadruplet equal */
 void quad_equal(Operand_y op1, Operand_y op2, int go);
 
+void quad_nequal(Operand_y op1, Operand_y op2, int go);
+
+void quad_stsup(Operand_y op1, Operand_y op2, int go);
+
+void quad_supeq(Operand_y op1, Operand_y op2, int go);
+
+void quad_stinf(Operand_y op1, Operand_y op2, int go);
+
+void quad_infeq(Operand_y op1, Operand_y op2, int go);
+
 /* Ajoute une operande à la liste chainée */
 Operand_y *add_operand(Operand_y *list, Operand_y *op);
 
