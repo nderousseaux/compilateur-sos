@@ -174,7 +174,7 @@ operande-entier     : MOT                                               { check_
                                                                         }  
                                                                        
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type=O_INT;}
-                    | OPAR somme-entiere CPAR       %prec PARENTHESE    { $$=$2;}
+                    | OPAR somme-entiere CPAR                           { $$=$2;}
 
                                                                     
 

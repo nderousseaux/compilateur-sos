@@ -60,4 +60,5 @@ Operand temp(char * name);
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty();
 
+char operator_to_string(Operator op);
 #endif // SRC_INCLUDES_OPERAND_H_

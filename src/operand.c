@@ -37,3 +37,22 @@ Operand empty()
     Operand o = {EMPTY, 0, 0};
     return o;
 }
+
+
+char operator_to_string(Operator op){
+    switch(op){
+        case OP_PLUS:
+            return '+';
+        case OP_MOINS:
+            return '-';
+        case OP_FOIS:
+            return '*';
+        case OP_DIVISION:
+            return '/';
+        case OP_MODULO:
+            return '%';
+        default:
+            break;
+    }
+    return '?';
+}

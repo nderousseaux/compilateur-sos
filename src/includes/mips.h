@@ -24,6 +24,7 @@ void gen_assign(Quad quad);
 void gen_echo(Quad quad);
 
 void gen_plus(Quad quad);
+void gen_operation(Quad quad);
 
 void gen_unaire(Quad quad);
 

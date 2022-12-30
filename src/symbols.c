@@ -43,7 +43,8 @@ char * newtemp()
     CHECK(s = malloc(sizeof(Symbol)));
     char * key = next_temp();    
     s->data = NULL;
-    s->position = -1;
+    s->position = symbols_table->last_pos;
+    symbols_table->last_pos++;
     s->is_temp = 1;
     add_st(symbols_table, key, s);
 
