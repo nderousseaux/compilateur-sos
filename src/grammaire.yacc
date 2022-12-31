@@ -13,8 +13,7 @@
 // Type des noeuds
 %union {
     Operand_y operand;
-    char * integer;
-    Operator_y operator;
+    int integer;
     Operateur_y operateur;
     Bool booleen;
 }
@@ -31,8 +30,6 @@
 %token SEMICOLON
 %token OBRACE
 %token CBRACE
-%token OPAR 
-%token CPAR
 %token EQUAL
 %token DQUOTE
 %token QUOTE
@@ -42,7 +39,8 @@
 %token FOIS
 %token DIVISION
 %token MODULO
-%token UMOINS%token IF
+%token UMOINS
+%token IF
 %token FI
 %token ELSE
 %token THEN
@@ -67,7 +65,6 @@
 %token OR_COMP
 %token AND_COMP
 
-%token PARENTHESE
 %token <operand> IDENTIFIER
 %token <operand> MOT
 %token <operand> CHAINE
@@ -80,8 +77,8 @@
 %type <operand> somme-entiere
 %type <operand> produit-entier
 %type <operand> operande-entier
-%type <operator> plus-ou-moins
-%type <operator> fois-div-mod
+%type <operateur> plus-ou-moins
+%type <operateur> fois-div-mod
 %type <operateur> operateur2
 %type <operateur> operateur1
 %type <booleen> test-instruction
@@ -100,7 +97,6 @@
 %left PLUS MOINS
 %left FOIS DIVISION MODULO
 %left UMOINS
-%left PARENTHESE
 %%
 
 programme           : liste-instructions                                { }
@@ -111,9 +107,9 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
                     
 instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3, $1.str);}
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
-                    | EXIT                                              { quad_exit(0); }
+                    | EXIT                                              { quad_exit("0"); }
 					| EXIT operande-entier                              { quad_exit($2.str); }
-                    | error   // Si il y a une erreur, yacc reprend quand même
+                    
                     | IF test-block THEN M liste-instructions N else-part FI        {
                                                                             $6.next = concat($7.next,$6.next);
                                                                             complete($6.next,nextquad);
@@ -129,9 +125,9 @@ instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3,
                     | UNTIL M test-block DO M liste-instructions DONE   { quad_goto($2);
                                                                           complete($3.fals,$5);
                                                                           complete($3.tru,nextquad);
-                                                                          $$.next = $3.tru;                                                      
-                                                                          }
-                    | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
+                                                                          $$.next = $3.tru;      
+                                                                        }                                                
+                    //| error   // Si il y a une erreur, yacc reprend quand même                                                      
 
 else-part           : ELIF test-block THEN M liste-instructions N else-part         {
                                                                             $$.next = creelist(-1);
@@ -153,7 +149,7 @@ concatenation		: operande						        			{ $$ = $1;}
 operande            : MOT                                               { $$.str=$1.str; $$.type = O_INT;}
                     | CHAINE                                            { $$.str = create_const($1.str); $$.type = O_VAR; }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type = O_ID; }
-                    | DOLLAR OPAR EXPR somme-entiere CPAR               { $$ = $4;}
+                    | DOLLAR OPARA EXPR somme-entiere CPARA               { $$ = $4;}
 
 
 operande-entier     : MOT                                               { check_int($1.str);
@@ -185,7 +181,7 @@ operande-entier     : MOT                                               { check_
                                                                                 quad_unaire($4,$$.str);
                                                                             }
                                                                         }
-                    | OPAR somme-entiere CPAR                           { $$=$2;}
+                    | OPARA somme-entiere CPARA                           { $$=$2;}
 
                                                                     
 
@@ -263,7 +259,7 @@ test-instruction	: operande operateur2 operande						{
                                                                         }
                     | operateur1 concatenation                          {}
 
-operateur1			: NOEMPTY_COMP											{ $$.type = O_NOTEMPTY; }
+operateur1			: NOEMPTY_COMP											{ $$.type = O_NOEMPTY; }
 					| EMPTY_COMP											{ $$.type = O_EMPTY; }
 
 operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }

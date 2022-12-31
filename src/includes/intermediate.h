@@ -7,6 +7,7 @@
 #define SRC_INCLUDES_INTERMEDIATE_H_
 
 #include "quad.h"
+#include "./symbols.h"
 
 enum operateur_type
 {
@@ -17,16 +18,12 @@ enum operateur_type
     O_STINF,  //<
     O_INFEQ,  // <=
     O_NOEMPTY,
-    O_EMPTY
-};
-#include "./symbols.h"
-
-enum operator_type{
+    O_EMPTY,
     O_PLUS,
     O_MOINS, 
     O_FOIS,
     O_DIVISION,
-    O_MODULO,
+    O_MODULO
 };
 
 enum operand_type
@@ -48,16 +45,6 @@ typedef struct
 
 typedef struct
 {
-    enum operator_type type;
-} Operator_y;
-
-typedef struct
-{
-    enum operator_type type;
-} Operator_y;
-
-typedef struct
-{
     enum operateur_type type;
 } Operateur_y;
 
@@ -69,9 +56,6 @@ void quad_assign(Operand_y src, char * dest);
 
 /* Crée une quadruplet echo */
 void quad_echo(char *str, enum operand_type type);
-
-
-void quad_operation(Operand_y op1, Operand_y op2, enum operator_type type);
 
 /* Crée une quadruplet goto */
 void quad_goto(int idx);
@@ -87,12 +71,15 @@ void quad_supeq(Operand_y op1, Operand_y op2, int go);
 
 void quad_stinf(Operand_y op1, Operand_y op2, int go);
 
+void quad_infeq(Operand_y op1, Operand_y op2, int go);
+
+
+
 /* Crée une quadruplet d'operation */
-void quad_operation(enum operator_type type, Operand_y op1, Operand_y op2, char * res);
+void quad_operation(enum operateur_type type, Operand_y op1, Operand_y op2, char * res);
 
 /* Crée une quadruplet moins unaire */
-void quad_unaire(Ope
-rand_y op, char * res);
+void quad_unaire(Operand_y op, char * res);
 
 /* Ajoute une operande à la liste chainée */
 Operand_y * add_operand(Operand_y * list, Operand_y * op);
@@ -108,6 +95,9 @@ int to_int(char *str);
 /* Vérifie qu'une chaîne de caractère est un entier */
 void check_int(char * str);
 
+int is_int(char * str);
+
 
 void quad_equal(Operand_y op1, Operand_y op2, int go);
 #endif // SRC_INCLUDES_INTERMEDIATE_H_
+

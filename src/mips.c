@@ -44,11 +44,10 @@ void gen_data()
         {
             if (element->data->position == -1)
                 fprintf(f, "\t%s: .asciiz\t%s\n", element->key, element->data->data);
-            }
-
             element = element->next;
         }
     }
+    fprintf(f, "\tfin_de_fichier: .asciiz\t%s\n", "\"\\n\"");
 }
 
 /* Génère le code */
@@ -68,7 +67,7 @@ void gen_code()
     for (int i = 0; i < quad_list->size; i++)
     {
         quad = quad_list->data[i];
-        fprintf(f, "\n\t#%i", i);
+        fprintf(f, "\n");
         fprintf(f, "\t%s:", gen_flag_quad(i));
 
         switch (quad.op)
@@ -83,7 +82,7 @@ void gen_code()
             break;
         case OP_EXIT:
             // On génère le code de terminaison
-            gen_end(quad.operand1.integer_value);
+            gen_end(quad.operand1.value);
             exit = 1;
             break;
 
@@ -101,8 +100,6 @@ void gen_code()
                 }
                 break;
             case OP_FOIS:
-                
-                
                 // On génère le code de la multiplication
                 gen_operation(quad);
                 break;
@@ -111,8 +108,7 @@ void gen_code()
                 gen_operation(quad);
                 break;
             case OP_MODULO:
-                // On génère le code du r
-                este
+                // On génère le code du reste
                 gen_operation(quad);
                 break;
         case OP_EQUAL:
@@ -140,6 +136,7 @@ void gen_code()
             break;
         }
     }
+
 
     // Si on n'a pas trouvé d'instruction de sortie, on génère le code de terminaison
     if (!exit)
@@ -172,7 +169,7 @@ void gen_stack()
 void gen_assign(Quad quad)
 {
     //On récupère la variable dans la pile
-    
+
     int pos_arg1 = get_address(quad.operand1.value);
     int pos_res = get_address(quad.result.value);
 
@@ -180,23 +177,21 @@ void gen_assign(Quad quad)
     //On teste le type du premier opérande
     switch(quad.operand1.type){
         case INTEGER:
-            //fprintf(f,"\n\t# On met %d dans %s\n", quad.operand1.integer_value, quad.result.value);
             fprintf(f,"\tli\t$t2,\t%s\n", quad.operand1.value);
             fprintf(f,"\tsw\t$t2,\t%d($fp)\n", pos_res);
             break;
-
-    case VAR:
-        fprintf(f, "\n\t# On met %s dans %s\n", quad.operand1.value, quad.result.value);
-        fprintf(f, "\tla\t$t2,\t%s\n", quad.operand1.value);
-        fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
-        break;
-
+        case VAR:
+            fprintf(f, "\n\t# On met %s dans %s\n", quad.operand1.value, quad.result.value);
+            fprintf(f, "\tla\t$t2,\t%s\n", quad.operand1.value);
+            fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
+            break;
         case ID:
+            pos_arg1 = get_address(quad.operand1.value);
             fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
             fprintf(f,"\tsw\t$t3,\t%d($fp)\n", pos_res);
             break;
-
         case TEMP:
+            pos_arg1 = get_address(quad.operand1.value);
             fprintf(f,"\tlw\t$t3,\t%d($fp)\n", pos_arg1);
             fprintf(f,"\tsw\t$t3,\t%d($fp)\n", pos_res);
             break;
@@ -222,7 +217,7 @@ void gen_echo(Quad quad)
 
     case ID:
         fprintf(f, "\tlw\t$a0,\t%d($fp)\n", pos_arg1);
-        fprintf(f, "\tli\t$v0,\t1\n");
+        fprintf(f, "\tli\t$v0,\t4\n");
         fprintf(f, "\tsyscall\n");
 
     default:
@@ -454,6 +449,11 @@ void gen_infeq(Quad quad)
 /* On génère le code de terminaison */
 void gen_end(char * exit_code)
 {
+    /*fprintf(f, "\n\tla $a0, fin_de_fichier");
+    fprintf(f, "\n\tli $v0, 4\n");
+    fprintf(f, "\tsyscall\n");
+    */
+
     fprintf(f, "\n\t# On génère le code de terminaison\n");
     fprintf(f, "\tli\t$a0,\t%s\n", exit_code);
     fprintf(f, "\tli\t$v0,\t17\n");
@@ -675,6 +675,7 @@ void gen_mips(FILE *output, char debug)
 
     // On intègre le code
     gen_code();
+
 }
 
 

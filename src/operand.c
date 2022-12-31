@@ -11,9 +11,14 @@ Operand var(char *value)
     return o;
 }
 
-/* Crée une opérande de type int */
-Operand integer(char * value) {
+/* Crée une opérande de type int à partir d'un string */
+Operand integer_str(char * value) {
     Operand o = { INTEGER, value, 0};
+    return o;
+}
+
+Operand integer(int value) {
+    Operand o = { INTEGER, 0, value};
     return o;
 }
 

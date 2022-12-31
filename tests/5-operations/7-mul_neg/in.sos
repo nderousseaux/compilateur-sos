@@ -1,0 +1,3 @@
+id = $(expr 3 * -67) ;
+echo ${id};
+exit

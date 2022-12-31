@@ -19,7 +19,7 @@ typedef enum Operator
     OP_SUPEQ,
     OP_STINF,
     OP_INFEQ,
-    OP_IF
+    OP_IF,
     OP_PLUS,
     OP_MOINS,
     OP_FOIS,
@@ -49,7 +49,10 @@ typedef struct Operand
 Operand var(char *value);
 
 /* Crée une opérande de type int */
-Operand integer(char * value);
+Operand integer(int value);
+
+/* Crée une opérande de type int */
+Operand integer_str(char * value);
 
 /* Crée une opérande de type id */
 Operand id(char *name);
