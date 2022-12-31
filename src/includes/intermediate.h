@@ -65,8 +65,7 @@ typedef struct
 void quad_exit(char * value);
 
 /* Crée un quad d'assignation */
-void quad_assign(char *src, char *dest, enum operand_type type);
-void quad_assign(char * src, char * dest, enum operand_type type);
+void quad_assign(Operand_y src, char * dest);
 
 /* Crée une quadruplet echo */
 void quad_echo(char *str, enum operand_type type);

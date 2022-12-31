@@ -70,6 +70,22 @@ void check_int(char * str) {
     }
 }
 
+Operand to_operand(Operand_y op){
+    switch(op.type){
+        case O_INT:
+            return integer(op.str);
+        case O_TEMP:
+            return temp(op.str);
+        case O_ID:
+            return id(op.str);
+        case O_VAR:
+            return var(op.str);
+        default: 
+            break;
+    }
+    return empty();
+}
+
 /* Ajoute une operande à la liste chainée */
 Operand_y *add_operand(Operand_y *list, Operand_y *op)
 {
@@ -131,42 +147,14 @@ void quad_echo(char *str, enum operand_type type)
 }
 
 /* Crée un quad d'assignation */
-void quad_assign(char *src, char *dest, enum operand_type type)
-{
+void quad_assign(Operand_y src, char * dest) {
 
     /* On crée l'identifiant dans la table des symboles */
     create_symbol(dest);
-
-    switch (type)
-    {
-    case O_VAR:
-        add_quad(OP_ASSIGN, var(src), empty(), id(dest));
-        break;
-    case O_INT:
-        add_quad(OP_ASSIGN, temp(src), empty(), id(dest));
-        break;
-    case O_ID:
-        add_quad(OP_ASSIGN, id(src), empty(), id(dest));
-        break;
-    case O_TEMP:
-        add_quad(OP_ASSIGN, temp(src), empty(), id(dest));
-        break;
-    default:
-        break;
-    }
+    add_quad(OP_ASSIGN, to_operand(src), empty(), id(dest));
+    
 }
 
-Operand to_operand(Operand_y op){
-    switch(op.type){
-        case O_INT:
-            return integer(op.str);
-        case O_TEMP:
-            return temp(op.str);
-        default: 
-            break;
-    }
-    return empty();
-}
 
 void quad_operation(enum operator_type type, Operand_y op1, Operand_y op2, char * res) {
 

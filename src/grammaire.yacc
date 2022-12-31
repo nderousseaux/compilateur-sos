@@ -109,7 +109,7 @@ liste-instructions  : liste-instructions SEMICOLON instruction          { $$.nex
                                                                           $3.next = creelist(-1);}
                     | instruction										{ $$.next = creelist(-1) ; }
                     
-instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3.str, $1.str, $3.type);}
+instruction         : IDENTIFIER EQUAL concatenation        			{ quad_assign($3, $1.str);}
                     | ECHO_T liste-operandes                            { op_all_operand(&$2, OP_ECHO); }
                     | EXIT                                              { quad_exit(0); }
 					| EXIT operande-entier                              { quad_exit($2.str); }
@@ -171,9 +171,20 @@ operande-entier     : MOT                                               { check_
                                                                                 quad_unaire($2,$$.str);
 
                                                                             }
-                                                                        }  
+                                                                        }
                                                                        
-                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type=O_INT;}
+                    | DOLLAR OBRACE IDENTIFIER CBRACE                   { $$.str = $3.str; $$.type=O_TEMP;}
+
+                    | plus-ou-moins DOLLAR OBRACE IDENTIFIER CBRACE %prec UMOINS  
+                                                                        {   if($1.type==O_PLUS){
+                                                                                $$.str=$4.str; $$.type=O_TEMP;
+                                                                            }    
+                                                                            else{  
+                                                                                $$.str=newtemp(); $$.type=O_TEMP;
+                                                                                $4.type=O_ID;
+                                                                                quad_unaire($4,$$.str);
+                                                                            }
+                                                                        }
                     | OPAR somme-entiere CPAR                           { $$=$2;}
 
                                                                     

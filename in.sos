@@ -1,4 +1,4 @@
-i = $(expr 4/2);
-j = $(expr -10/5);
+i = 2;
+j = $(expr -${i});
 echo ${j};
 exit 0

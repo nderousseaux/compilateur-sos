@@ -176,14 +176,14 @@ void gen_assign(Quad quad)
     int pos_arg1 = get_address(quad.operand1.value);
     int pos_res = get_address(quad.result.value);
 
-    // On teste le type du premier opérande
-    switch (quad.operand1.type)
-    {
-    case INTEGER:
-        fprintf(f, "\n\t# On met %d dans %s\n", quad.operand1.integer_value, quad.result.value);
-        fprintf(f, "\tli\t$t2,\t%d\n", quad.operand1.integer_value);
-        fprintf(f, "\tsw\t$t2,\t%d($fp)\n", pos_res);
-        break;
+    fprintf(f, "\n\t# On fait l'affectation %s := %s\n",quad.result.value,quad.operand1.value);
+    //On teste le type du premier opérande
+    switch(quad.operand1.type){
+        case INTEGER:
+            //fprintf(f,"\n\t# On met %d dans %s\n", quad.operand1.integer_value, quad.result.value);
+            fprintf(f,"\tli\t$t2,\t%s\n", quad.operand1.value);
+            fprintf(f,"\tsw\t$t2,\t%d($fp)\n", pos_res);
+            break;
 
     case VAR:
         fprintf(f, "\n\t# On met %s dans %s\n", quad.operand1.value, quad.result.value);
@@ -465,7 +465,7 @@ void gen_plus(Quad quad) {
 
     fprintf(f, "\n\t# On génère le code de somme");
     
-    fprintf(f,"\n\t# On fait %s = %s + %s\n",quad.result.value, quad.operand1.value, quad.operand2.value);
+    fprintf(f,"\n\t# On fait %s := %s + %s\n",quad.result.value, quad.operand1.value, quad.operand2.value);
     int ind_res=ind(quad.result.value);
     int ind_op1=ind(quad.operand1.value); 
     int ind_op2=ind(quad.operand2.value);
@@ -489,7 +489,7 @@ void gen_operation(Quad quad) {
     /* On génère le code de l'opération */
     char op=operator_to_string(quad.op);
     fprintf(f, "\n\t# On génère le code de l'opération");
-    fprintf(f,"\n\t# On fait %s = %s %c %s\n",quad.result.value, quad.operand1.value, op, quad.operand2.value);
+    fprintf(f,"\n\t# On fait %s := %s %c %s\n",quad.result.value, quad.operand1.value, op, quad.operand2.value);
 
     int pos_op1;
     int pos_op2;
@@ -502,6 +502,11 @@ void gen_operation(Quad quad) {
         case(TEMP):
             pos_op1 = get_address(quad.operand1.value);
             fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_op1);
+            break;
+        case(ID):
+            pos_op1 = get_address(quad.operand1.value);
+            fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_op1);
+            break;
         default:
             break;
     }
@@ -511,6 +516,10 @@ void gen_operation(Quad quad) {
             fprintf(f, "\tli\t$t1,\t%s\n", quad.operand2.value);
             break;
         case(TEMP):
+            pos_op2 = get_address(quad.operand2.value);
+            fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_op2);
+            break;
+        case(ID):
             pos_op2 = get_address(quad.operand2.value);
             fprintf(f, "\tlw\t$t1,\t%d($fp)\n", pos_op2);
             break;
@@ -587,12 +596,18 @@ void gen_unaire(Quad quad) {
     int pos_res = get_address(quad.result.value);
 
 
-    fprintf(f, "\n\t# On génère le code de l'opération unaire\n");
+    fprintf(f,"\n\t# On fait %s := - %s\n",quad.result.value, quad.operand1.value);
+
     switch(quad.operand1.type){
         case INTEGER:
             fprintf(f, "\tli\t$t0,\t-%s\n",quad.operand1.value);
             break;
         case TEMP:
+            pos_op1 = get_address(quad.operand1.value);
+            fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_op1);
+            fprintf(f,"\tsubu\t$t0,\t$zero,\t$t0\n");
+            break;
+        case ID:
             pos_op1 = get_address(quad.operand1.value);
             fprintf(f, "\tlw\t$t0,\t%d($fp)\n", pos_op1);
             fprintf(f,"\tsubu\t$t0,\t$zero,\t$t0\n");
