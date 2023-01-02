@@ -18,7 +18,7 @@ main:
 
 	quad_1:
 	# On affiche id
-	la	$a0,	id
+	lw	$a0,	0($fp)
 	li	$v0,	4
 	syscall
 
