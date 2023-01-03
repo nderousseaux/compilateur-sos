@@ -9,8 +9,8 @@ extern FILE * yyin;
 
 /* Initialise les structures de mémoire */
 void init() {
-    quad_list = init_quad_list();
     symbols_table = init_st();
+    quad_list = init_quad_list();
 }
 
 /* Supprime les structure de mémoire */
@@ -28,15 +28,21 @@ int SoS(FILE * input, FILE * output, char debug) {
     // On initialise les structures de mémoire
     init();
 
-    // On parse le fichier
+    // On parse le fichier (on remplit la liste des quadruplets)
     int ret = yyparse();
     if (ret != 0)
         return ret;
 
-    // On génère le code assembleur
-    gen_mips(output, debug);
+    if (debug) {
+        // On affiche la liste des quadruplets et la table des symboles
+        print_quad_list(quad_list);
+        print_st(symbols_table);
+    }
 
-    //On supprime les structures de mémoire
+    // On génère le code assembleur
+    gen_mips(output);
+
+    // On supprime les structures de mémoire
     destroy();
 
     return 0;

@@ -1,7 +1,7 @@
 /* Importe tout les .h */
 
-#ifndef SRC_INCLUDES_IMPORT_H_
-#define SRC_INCLUDES_IMPORT_H_
+#ifndef SRC_INCLUDES_IMPORTS_H_
+#define SRC_INCLUDES_IMPORTS_H_
 
 // On inclut les .h de la librairie standard
 #include <string.h>
@@ -11,12 +11,16 @@
 #include <errno.h>
 
 // On inclut les .h de notre application
-#include "SoS.h"
-#include "intermediate.h"
-#include "mips.h"
-#include "operand.h"
-#include "quad.h"
-#include "symbols.h"
-#include "utils.h"
+#include "./SoS.h"
+#include "./intermediate/actions.h"
+#include "./intermediate/operands.h"
+#include "./intermediate/operators.h"
+#include "./intermediate/quads.h"
+#include "./intermediate/symbols.h"
+#include "./mips/code.h"
+#include "./mips/code_quads.h"
+#include "./mips/data.h"
+#include "./mips/mips.h"
+#include "./utils.h"
 
-#endif  // SRC_INCLUDES_IMPORT_H_
+#endif  // SRC_INCLUDES_IMPORTS_H_

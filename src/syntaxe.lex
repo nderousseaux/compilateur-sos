@@ -9,7 +9,7 @@
     void assign_string(char *s) {
         char *t = calloc(255, sizeof(char));
         strcpy(t, s);
-        yylval.operand.str=t;
+        yylval.str=t;
     }
 %}
 
@@ -21,57 +21,57 @@ id              [a-zA-Z_][a-zA-Z0-9_]*
 %%
 
 
-if				        {return IF;} // Mots reservés
-then			        {return THEN;}
-for				        {}
-do				        {return DO;}
-done			        {return DONE;}
-in				        {}
-until			        {return UNTIL;}
-while			        {return WHILE;}
-case			        {}
-esac			        {}
+if				        { return IF; } // Mots reservés
+then			        { return THEN; }
+for				        { return FOR; }
+do				        { return DO; }
+done			        { return DONE; }
+in				        { return IN; }
+until			        { return UNTIL; }
+while			        { return WHILE;}
+case			        { return CASE; }
+esac			        { return ESAC; }
 echo			        { return ECHO_T; }
-read			        {}
-return			        {}
+read			        { return READ; }
+return			        { return RETURN; }
 exit			        { return EXIT; }
-local			        {}
-elif			        {return ELIF;}
-else			        {return ELSE;}
-fi				        {return FI;}
-declare			        {}
-test			        {return TEST;}
-expr			        {}
+local			        { return LOCAL; }
+elif			        { return ELIF; }
+else			        { return ELSE; }
+fi				        { return FI; }
+declare			        { return DECLARE; }
+test			        { return TEST; }
+expr			        { return EXPR; }
 
 ;				        { return SEMICOLON; } //Caractères spéciaux
-\[				        {}
-\]				        {}
+\[				        { return OSQUARE; }
+\]				        { return CSQUARE; }
 \{				        { return OBRACE; }
 \}				        { return CBRACE;}
-\|				        {}
+\|				        { return PIPE; }
 \(				        { return OPARA;}
 \)				        { return CPARA;}
 =				        { return EQUAL; }
-!=				        {}
+!=				        { return NEQUAL; }
 !				        { return EXCLA;}
-&				        {}
-\*				        {}
+&				        { return AND; }
+\*				        { return STAR; }
 \"				        { return DQUOTE; }
 '				        { return QUOTE; }
 \$				        { return DOLLAR; }
 
-\+				        {} // Opérateurs
-\-				        {}
-\/				        {}
-\%				        {}
-\<				        {}
-\>				        {}
-\<=				        {}
-\>=				        {}
-\&\&			        {}
-\|\|			        {}
+\+				        { return PLUS; } // Opérateurs
+\-				        { return MINUS; }
+\/				        { return SLASH; }
+\%				        { return PERCENT; }
+\<				        { return INF; }
+\>				        { return SUP; }
+\<=				        { return INFEQ; }
+\>=				        { return SUPEQ; }
+\&\&			        { return ANDAND; }
+\|\|			        { return PIPEPIPE; }
 
--eq                     { return EQUAL_COMP;}
+-eq                     { return EQUAL_COMP;} // Comparateurs
 -ne                     { return NEQUAL_COMP;}
 -lt                     { return STINF_COMP;}
 -le                     { return INFEQ_COMP;}
