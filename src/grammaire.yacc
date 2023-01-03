@@ -185,7 +185,7 @@ test-instruction	: operande operateur2 operande						{
                                                                             quad_goto(-1);
                                                                             add_idx_quad($$.fals, nextquad-1);
                                                                         }
-                    | operateur1 concatenation                          {}
+                    | operateur1 concatenation                              { }
 
 operateur1			: NOEMPTY_COMP											{ $$.type = O_NOTEMPTY; }
 					| EMPTY_COMP											{ $$.type = O_EMPTY; }
@@ -199,7 +199,8 @@ operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }
 
 M                   : /*Empty*/                                             { $$ = nextquad;}
 
-N                   : /*Empty*/                                             { $$.next = creelist(nextquad);
+N                   : /*Empty*/                                             { 
+                                                                              $$.next = creelist(nextquad);
                                                                               quad_goto(-1);
                                                                               $$.idx = nextquad;
                                                                             }
