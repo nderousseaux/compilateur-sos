@@ -112,6 +112,7 @@ liste-operandes     : operande                                                  
 concatenation       : operande                                                          { $$ = $1; }
 
 operande            : MOT                                                               { to_operand_int($$, $1); }
+                    | CHAINE                                                            { to_operand_const($$, $1); }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                                   { to_operand_id($$, $3); }
 
 operande-entier     : MOT                                                               { $$ = to_int($1); }

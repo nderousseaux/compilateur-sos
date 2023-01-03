@@ -16,6 +16,7 @@
 typedef struct Symbol {
     enum {CONST, VAR, TEMP} type;  // Type du symbole
     char *name;  // Nom du symbole
+    char *data;  // Donnée associée au symbole
 	int position;  // Position dans la pile (-1 si constante)
 } Symbol;
 
@@ -44,7 +45,7 @@ St* init_st();
 void add_var_st(char * name);
 
 /* Ajoute une constante à la table des symboles */
-void add_const_st();
+Symbol * add_const_st(char * data);
 
 /* Ajoute une temporaire à la table des symboles */
 void add_temp_st();

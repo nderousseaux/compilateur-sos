@@ -46,6 +46,12 @@ void to_operand_id(Operand *op, char *value) {
 	op->type = ID_T;
 }
 
+/* Transforme une chaine de caractère en operande constante */
+void to_operand_const(Operand *op, char *value) {
+	op->symbol = add_const_st(value);
+	op->type = CONST_T;
+}
+
 /* Affiche une opérande */
 void print_operand(Operand op) {
 	switch (op.type) {

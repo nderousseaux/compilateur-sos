@@ -40,6 +40,9 @@ void to_operand_int(Operand *op, char *value);
 /* Transforme une chaine de caractère en operande id */
 void to_operand_id(Operand *op, char *value);
 
+/* Transforme une chaine de caractère en operande constante */
+void to_operand_const(Operand *op, char *value);
+
 /* Affiche une opérande */
 void print_operand(Operand op);
 

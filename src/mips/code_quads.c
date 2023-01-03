@@ -52,6 +52,12 @@ void gen_echo(Quad quad) {
         fprintf(f, "\t\tli\t$v0,\t1\n");
         fprintf(f, "\t\tsyscall\n");
         break;
+    case CONST_T:
+        fprintf(f, "\t\t# On affiche %s\n", quad.result.symbol->name);
+        fprintf(f, "\t\tla\t$a0,\t%s\n", quad.result.symbol->name);
+        fprintf(f, "\t\tli\t$v0,\t4\n");
+        fprintf(f, "\t\tsyscall\n");
+        break;
     default:
         break;
     }

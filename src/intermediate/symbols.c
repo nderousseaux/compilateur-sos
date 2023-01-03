@@ -33,17 +33,21 @@ void add_var_st(char * name) {
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = VAR;
     s->name = name;
+    s->data = NULL;
     s->position = symbols_table->last_pos;
     symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
     add_st(symbols_table, name, s);
 }
 
 /* Ajoute une constante à la table des symboles */
-void add_const_st() {
+Symbol * add_const_st(char * data) {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = CONST;
     s->position = -1;
+    CHECK(s->data = calloc(strlen(data)+1, sizeof(char)));
+    snprintf(s->data, sizeof(s->data), "%s", data);
+
 
     char* name;
     CHECK(name = calloc(10, sizeof(char)));
@@ -52,6 +56,7 @@ void add_const_st() {
     symbols_table->last_const++;
     s->name = name;
     add_st(symbols_table, name, s);
+    return s;
 }
 
 /* Ajoute une temporaire à la table des symboles */
