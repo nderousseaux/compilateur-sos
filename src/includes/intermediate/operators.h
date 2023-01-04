@@ -8,7 +8,8 @@
 typedef enum Operator {
 	OP_EXIT,
 	OP_ASSIGN,
-	OP_ECHO
+	OP_ECHO,
+	OP_UNKNOWN
 } Operator;
 
 

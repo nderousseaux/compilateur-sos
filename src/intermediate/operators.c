@@ -16,6 +16,9 @@ void print_operator(Operator op) {
 		case OP_ECHO:
 			printf("ECHO");
 			break;
+		case OP_UNKNOWN:
+			printf("UNKNOWN");
+			break;
 		default:
 			printf("\nOpérateur inconnu (pensez à l'ajouter dans print_quad...)\n");
 			break;

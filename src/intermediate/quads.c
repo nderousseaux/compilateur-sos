@@ -6,7 +6,6 @@
 Ql* quad_list;
 
 /* Crée une quad_list
-* Alias : create_list
 */
 Ql *init_quad_list() {
     Ql *ql;
@@ -15,6 +14,13 @@ Ql *init_quad_list() {
     ql->capacity = INIT_QUAD_LIST_CAPACITY;
 
     CHECK(ql->data = calloc(ql->capacity, sizeof(Quad)));
+    return ql;
+}
+
+/* Crée une quad list et l'initialise avec un premier quad */
+Ql *create_list(Quad *quad) {
+    Ql *ql = init_quad_list();
+    add_quad(ql, quad);
     return ql;
 }
 
@@ -72,8 +78,19 @@ int nextquad() {
     return quad_list->size;
 }
 
+/* Concatène deux listes de quads */
+Ql * concat(Ql *ql1, Ql *ql2) {
+    Ql * ql = ql1;
+    for (int i = 0; i < ql2->size; i++) {
+        add_quad(ql, &ql2->data[i]);
+    }
+    destroy_quad_list(ql2);
+
+    return ql;
+}
+
 /* Supprime la quad_list */
-void destroy_quad_list(Ql *quad_list) {
-    free(quad_list->data);
-    free(quad_list);
+void destroy_quad_list(Ql *ql) {
+    free(ql->data);
+    free(ql);
 }

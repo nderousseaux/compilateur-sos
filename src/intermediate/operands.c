@@ -4,9 +4,67 @@
 
 #include "../includes/imports.h"
 
+/* Crée une liste d'opérande */
+Op_list *init_op_list() {
+	Op_list *op_list;
+	CHECK(op_list = malloc(sizeof(Op_list)));
+	op_list->size = 0;
+	op_list->capacity = INIT_OP_LIST_CAPACITY;
+
+	CHECK(op_list->data = calloc(op_list->capacity, sizeof(Operand)));
+	return op_list;
+}
+
+/* Crée une liste d'opérande avec une première opérande */
+Op_list *create_list_op(Operand *op) {
+	Op_list *op_list = init_op_list();
+	add_op(op_list, op);
+	return op_list;
+}
+
+/* Ajoute une opérande dans une liste */
+Op_list * add_op(Op_list *op_list, Operand *op) {
+	if (op_list->size == op_list->capacity) {
+		op_list->capacity *= 2;
+		CHECK(
+			op_list->data = realloc(
+				op_list->data, op_list->capacity * sizeof(Operand)));
+	}
+	op_list->data[op_list->size++] = *op;
+	return op_list;
+}
+
+/* Affiche une liste d'opérande */
+void print_op_list(Op_list *op_list) {
+	printf("\n──────────────── Liste des opérandes ────────────────\n");
+	printf("Nombre d'éléments : %d\n", op_list->size);
+	printf("Taille de la table : %d\n\n", op_list->capacity);
+
+	for (int i = 0; i < op_list->size; i++) {
+		printf("Case n°%d:\n", i);
+		print_operand(op_list->data[i]);
+	}
+}
+
+/* Concatène deux listes d'opérandes */
+Op_list *concat_op(Op_list *op_list1, Op_list *op_list2) {
+	Op_list *op_list = op_list1;
+	for (int i = 0; i < op_list2->size; i++) {
+		add_op(op_list, &op_list2->data[i]);
+	}
+	destroy_op_list(op_list2);
+
+	return op_list;
+}
+
+/* Supprime une liste d'opérandes */
+void destroy_op_list(Op_list *op_list) {
+	free(op_list->data);
+	free(op_list);
+}
+
 /* Crée une opérande de type id */
 Operand id(char *value) {
-
 	// On cherche le symbole dans la table des symboles
 	Symbol *s = get_st(symbols_table, value);
 

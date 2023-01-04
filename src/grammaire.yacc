@@ -15,7 +15,8 @@
 
 // Type des noeuds
 %union {
-    Ql * ql; // Liste de quads
+    Ql * quad_list; // Liste de quads
+    Op_list * op_list; // Liste d'opérandes
     int integer; // Entier
     char * str; // Chaîne de caractères
     Operand * operand; // Opérande
@@ -89,16 +90,18 @@
 %token <str> MOT
 %token <str> CHAINE
 
-%type <ql> liste-instructions instruction; // Les noeuds contiennent des listes de quads
-%type <integer> operande-entier
-%type <operand> operande concatenation liste-operandes
+%type <quad_list> liste-instructions instruction; // Ces noeuds sont des listes de quads
+%type <op_list> liste-operandes concatenation; // Ces noeuds sont des listes d'opérandes
+%type <operand> operande;
+%type <integer> operande-entier;
+
 
 
 %%
 programme           : liste-instructions                                                { }
             
-liste-instructions  : liste-instructions SEMICOLON instruction                          { $$ = create_list(); }
-                    | instruction                                                       { $$ = create_list(); } //FIXME :vraiment necessaire ?
+liste-instructions  : liste-instructions SEMICOLON instruction                          { }
+                    | instruction                                                       { }
 
 instruction         : IDENTIFIER EQUAL concatenation                                    { gencode_assign($1, $3); }
                     | EXIT                                                              { gencode_exit(0); }
@@ -106,10 +109,11 @@ instruction         : IDENTIFIER EQUAL concatenation                            
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
 
 
-liste-operandes     : operande                                                          { $$ = $1; }
+liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
+                    | operande                                                          { $$ = create_list_op($1); }
 
 
-concatenation       : operande                                                          { $$ = $1; }
+concatenation       : operande                                                          { $$ = create_list_op($1); }
 
 operande            : MOT                                                               { to_operand_int($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }

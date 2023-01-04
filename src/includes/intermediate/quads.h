@@ -4,10 +4,14 @@
 #ifndef SRC_INCLUDES_INTERMEDIATE_QUADS_H_
 #define SRC_INCLUDES_INTERMEDIATE_QUADS_H_
 
+#include "./operands.h"
+#include "./operators.h"
+
+
 #define INIT_QUAD_LIST_CAPACITY 100
 
-#define create_list init_quad_list  // Renommage pour correspondre au cours
 #define gencode init_quad           // Renommage pour correspondre au cours
+
 
 // Définit un quad
 typedef struct Quad {
@@ -29,9 +33,12 @@ Ql* quad_list;
 
 
 /* Crée une quad_list
-* Alias : create_list
 */
 Ql *init_quad_list();
+
+/* Crée une quad list et l'initialise avec un premier quad */
+Ql *create_list(Quad *quad);
+
 
 /* Crée un quad et l'ajoute dans la liste principale
 * Alias : gencode
@@ -40,10 +47,10 @@ Quad *init_quad(
     Operator op, Operand operand1, Operand operand2, Operand result);
 
 /* Ajout un quad dans une liste */
-void add_quad(Ql *quad_list, Quad *quad);
+void add_quad(Ql *ql, Quad *quad);
 
 /* On affiche la table des quad */
-void print_quad_list(Ql *quad_list);
+void print_quad_list(Ql *ql);
 
 /* Affiche un quad */
 void print_quad(Quad quad);
@@ -51,8 +58,11 @@ void print_quad(Quad quad);
 /* Renvoie l'index de prochain quad */
 int nextquad();
 
+/* Concatène deux listes de quads */
+Ql * concat(Ql *ql1, Ql *ql2);
+
 /* Supprime la quad_list */
-void destroy_quad_list(Ql *quad_list);
+void destroy_quad_list(Ql *ql);
 
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_QUADS_H_

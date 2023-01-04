@@ -15,7 +15,7 @@ void gen_data() {
         St_element *element = symbols_table->data[i];
         while (element != NULL) {
             if (element->data->type == CONST)
-                fprintf(f, "\t%s: .asciiz\t%s\"\n",
+                fprintf(f, "\t%s: .asciiz\t%s\n",
 					element->key, element->data->data);
 
             element = element->next;

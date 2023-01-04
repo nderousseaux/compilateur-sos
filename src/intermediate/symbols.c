@@ -46,7 +46,7 @@ Symbol * add_const_st(char * data) {
     s->type = CONST;
     s->position = -1;
     CHECK(s->data = calloc(strlen(data)+1, sizeof(char)));
-    snprintf(s->data, sizeof(s->data), "%s", data);
+    sprintf(s->data, "%s", data);
 
 
     char* name;

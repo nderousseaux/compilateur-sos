@@ -8,8 +8,8 @@
     - une pour les temporaires
 */
 
-#ifndef SRC_INCLUDES_SYMBOLS_SYMBOLS_H_
-#define SRC_INCLUDES_SYMBOLS_SYMBOLS_H_
+#ifndef SRC_INCLUDES_INTERMEDIATE_SYMBOLS_H_
+#define SRC_INCLUDES_INTERMEDIATE_SYMBOLS_H_
 
 #define INIT_SYMBOLS_LIST_CAPACITY 100
 
@@ -71,4 +71,4 @@ void extend_st(St* ht);
 /* Calcule le hash d'une chaine de caractère */
 int hash(char* key);
 
-#endif  // SRC_INCLUDES_SYMBOLS_SYMBOLS_H_
+#endif  // SRC_INCLUDES_INTERMEDIATE_SYMBOLS_H_
