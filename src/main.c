@@ -1,8 +1,7 @@
 #include "includes/imports.h"
 
 /* Affiche le message d'aide avec l'option -h */
-void print_usage(char *program_name)
-{
+void print_usage(char *program_name) {
     printf("Usage:\t%s [-o output-file] [-d] <input file>\n", program_name);
     printf("\t%s [-c]\n\n", program_name);
     printf("\t-o\t\tSpecify output file (default: %s)\n", OUTPUT_FILE);
@@ -57,7 +56,6 @@ char parse_args(char **finput, char **foutput, int argc, char **argv) {
     return debug;
 }
 
-
 /* Ouvre un fichier */
 FILE *open_file(char *file_name, char *mode) {
     FILE *file = fopen(file_name, mode);
@@ -67,7 +65,6 @@ FILE *open_file(char *file_name, char *mode) {
     }
     return file;
 }
-
 
 int main(int argc, char *argv[]) {
     char *finput = NULL;

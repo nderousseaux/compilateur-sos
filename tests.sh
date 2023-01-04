@@ -28,7 +28,7 @@ main () {
     do
         entete_categorie $(basename $categorie_tests) $i $nb_categories_tests
         cd $categorie_tests
-        tests=$(find ./* -maxdepth 0 -type d)
+        tests=$(find ./* -maxdepth 0 -type d | sort -V)        
         nb_tests=$(find ./* -maxdepth 0 -type d|wc -l|sed 's/ //g')
         j=1
         for test in $tests

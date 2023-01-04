@@ -15,4 +15,8 @@
     } \
   } while (0)
 
+
+/* Transforme une chaine de caractères en integer */
+int to_int(char *str);
+
 #endif  // SRC_INCLUDES_UTILS_H_

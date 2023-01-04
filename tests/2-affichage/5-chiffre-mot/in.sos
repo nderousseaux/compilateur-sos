@@ -1,4 +1,4 @@
 i = +424242;
 j = -888;
-echo "$i\n";
-echo "$j\n";
+echo ${i}"\n";
+echo ${j}"\n"

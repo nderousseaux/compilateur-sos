@@ -14,8 +14,8 @@ CFLAGS		:= -Wall -Wextra -Wall -Werror $(TEMP_FLAGS) -I$(INCDIR)
 #Files
 SYNTAX		:= syntaxe
 GRAMMAR     := grammaire
-SRCS		:= $(wildcard $(SRCDIR)/*.c)
-OBJS		:= $(OBJDIR)/$(GRAMMAR).tab.o $(OBJDIR)/$(SYNTAX).yy.c $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
+SRCS		:= $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/**/*.c)
+OBJS		:= $(OBJDIR)/$(GRAMMAR).tab.o $(OBJDIR)/$(SYNTAX).yy.c $(patsubst %.c, $(OBJDIR)/%.o, $(notdir $(SRCS)))
 INCLUDES	:= $(wildcard $(INCDIR)/*.h)
 
 
@@ -36,6 +36,9 @@ $(OBJDIR)/$(SYNTAX).yy.c: $(SRCDIR)/$(SYNTAX).lex $(OBJDIR)/$(GRAMMAR).tab.h #On
 	flex -o $@ $<
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c #On construit le reste des .c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/**/%.c #On construit le reste (dans les sous-dossiers)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 copyright: .git logo.ans

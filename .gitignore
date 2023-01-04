@@ -5,3 +5,5 @@ SoS
 *.log
 out/*
 *.dSYM
+temp/*
+*.todo

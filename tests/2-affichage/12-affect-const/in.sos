@@ -1,0 +1,2 @@
+phrase="Salut";
+echo ${phrase} " tout le monde\n"

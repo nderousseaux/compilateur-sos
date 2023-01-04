@@ -1,4 +1,0 @@
-if test 1 -eq 0 -o 0 -eq 0 then
-    echo "Reel 1" 
-fi ;
-exit
