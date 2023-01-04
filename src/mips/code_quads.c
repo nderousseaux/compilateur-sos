@@ -1,64 +1,58 @@
 /* Génère le code mips de chaque quad
 */
 
-// TODO(nderousseaux): tout relire
-
 #include "../includes/imports.h"
 
 FILE *f;  // Fichier de sortie
 
 /* Traitement du quad OP_EXIT */
 void gen_end(Quad quad) {
-	// TODO(nderousseaux): Si le type est une variable ?? Possible ?
-	// (operateur entier dans la grammaire)
     fprintf(f, "\t\t# On génère le code de terminaison\n");
-    fprintf(f, "\t\tli\t$a0,\t%d\n", quad.result.value_int);
-    fprintf(f, "\t\tli\t$v0,\t17\n");
-    fprintf(f, "\t\tsyscall\n");
+    put_int_reg(quad.result.value_int, "a0");
+    syscall_exit();
 }
 
 /* Traitement du quad OP_ASSIGN */
 void gen_assign(Quad quad) {
+    fprintf(
+        f,
+        "\t\t# On met %s dans %s\n",
+        printable_operand(quad.operand1),
+        printable_operand(quad.result));
+
     // On teste le type du premier opérande
     switch (quad.operand1.type) {
     case INTEGER_T:
-        // TODO(nderousseaux): Factoriser ?
-        fprintf(f, "\t\t# On met %d dans %s\n",
-            quad.operand1.value_int,
-            quad.result.symbol->name);
-        fprintf(f, "\t\tli\t$t2,\t%d\n", quad.operand1.value_int);
-        fprintf(f, "\t\tsw\t$t2,\t%d($fp)\n", quad.result.symbol->position);
+        put_int_reg(quad.operand1.value_int, "t2");
         break;
-
-    // TODO(nderousseaux): Gérer les autres cas (const ou id)
+    case CONST_T:
+        put_const_reg(quad.operand1.symbol->name, "t2");
+        break;
     default:
         break;
     }
+    put_reg_var("t2", quad.result.symbol->position);
 }
 
 /* Traitement du quad OP_ECHO */
 void gen_echo(Quad quad) {
-    // On teste le type du premier opérande
+    fprintf(f, "\t\t# On affiche %s\n", printable_operand(quad.result));
     switch (quad.result.type) {
     case INTEGER_T:
-        fprintf(f, "\t\t# On affiche %d\n", quad.result.value_int);
-        fprintf(f, "\t\tli\t$a0,\t%d\n", quad.result.value_int);
-        fprintf(f, "\t\tli\t$v0,\t1\n");
-        fprintf(f, "\t\tsyscall\n");
+        put_int_reg(quad.result.value_int, "a0");
+        syscall_echo(quad.result.type);
         break;
     case ID_T:
-        fprintf(f, "\t\t# On affiche %s\n", quad.result.symbol->name);
-        fprintf(f, "\t\tlw\t$a0,\t%d($fp)\n", quad.result.symbol->position);
-        fprintf(f, "\t\tli\t$v0,\t1\n");
-        fprintf(f, "\t\tsyscall\n");
+        put_var_reg(quad.result.symbol->position, "a0");
+        syscall_echo(quad.result.symbol->type_data);
         break;
     case CONST_T:
-        fprintf(f, "\t\t# On affiche %s\n", quad.result.symbol->name);
-        fprintf(f, "\t\tla\t$a0,\t%s\n", quad.result.symbol->name);
-        fprintf(f, "\t\tli\t$v0,\t4\n");
-        fprintf(f, "\t\tsyscall\n");
+        put_const_reg(quad.result.symbol->name, "a0");
+        syscall_echo(quad.result.type);
         break;
     default:
         break;
     }
+    // TODO(nderousseaux): vérifier la ligne du haut après concaténation
+    // On peut peut être encore factoriser les s
 }

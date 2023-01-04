@@ -13,9 +13,19 @@
 
 #define INIT_SYMBOLS_LIST_CAPACITY 100
 
+// Type des opérandes
+typedef enum Type_operand {
+	ID_T,
+	CONST_T,
+	INTEGER_T,
+	EMPTY_T
+} Type_operand;
+
+
 typedef struct Symbol {
     enum {CONST, VAR, TEMP} type;  // Type du symbole
     char *name;  // Nom du symbole
+    Type_operand type_data;  // Type de la donnée (var ou const)
     char *data;  // Donnée associée au symbole
 	int position;  // Position dans la pile (-1 si constante)
 } Symbol;
@@ -42,7 +52,7 @@ St* symbols_table;
 St* init_st();
 
 /* Ajoute une variable à la table des symboles */
-void add_var_st(char * name);
+void add_var_st(char * name, Type_operand type);
 
 /* Ajoute une constante à la table des symboles */
 Symbol * add_const_st(char * data);

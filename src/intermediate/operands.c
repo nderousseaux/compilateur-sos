@@ -93,7 +93,7 @@ Operand empty() {
 }
 
 /* Transforme une chaine de caractère en operande entier */
-void to_operand_int(Operand *op, char *value) {
+void to_operand_int(Operand *op, char *value) {  // FIXME REDONDANT
 	op->value_int = to_int(value);
 	op->type = INTEGER_T;
 }
@@ -129,5 +129,18 @@ void print_operand(Operand op) {
 			printf("\nType de l'opérande inconnu");
 			printf(" (pensez à l'ajouter dans print_operand...)\n");
 			break;
+	}
+}
+
+/* Renvoie une valeur printable de l'opérande 
+Valeur si entier, nom si autre */
+char *printable_operand(Operand op) {
+	if (op.type == INTEGER_T) {
+		char *str;
+		CHECK(str = calloc(sizeof(char), 10));
+		sprintf(str, "%d", op.value_int);
+		return str;
+	} else {
+		return op.symbol->name;
 	}
 }

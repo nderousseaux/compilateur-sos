@@ -19,6 +19,7 @@
 #include "./intermediate/symbols.h"
 #include "./mips/code.h"
 #include "./mips/code_quads.h"
+#include "./mips/code_utils.h"
 #include "./mips/data.h"
 #include "./mips/mips.h"
 #include "./utils.h"

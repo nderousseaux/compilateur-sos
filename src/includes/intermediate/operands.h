@@ -5,17 +5,9 @@
 #ifndef SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_
 #define SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_
 
-#include "./symbols.h"
-
 #define INIT_OP_LIST_CAPACITY 10
 
-// Type des opérandes
-typedef enum Type_operand {
-	ID_T,
-	CONST_T,
-	INTEGER_T,
-	EMPTY_T
-} Type_operand;
+#include "./symbols.h"
 
 // Opérande
 typedef struct Operand {
@@ -72,5 +64,9 @@ void to_operand_const(Operand *op, char *value);
 
 /* Affiche une opérande */
 void print_operand(Operand op);
+
+/* Renvoie une valeur printable de l'opérande 
+Valeur si entier, nom si autre */
+char *printable_operand(Operand op);
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_

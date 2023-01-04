@@ -5,8 +5,7 @@
 
 Ql* quad_list;
 
-/* Crée une quad_list
-*/
+/* Crée une quad_list */
 Ql *init_quad_list() {
     Ql *ql;
     CHECK(ql = malloc(sizeof(Ql)));

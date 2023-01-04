@@ -28,10 +28,11 @@ St* init_st() {
 }
 
 /* Ajoute une variable à la table des symboles */
-void add_var_st(char * name) {
+void add_var_st(char * name, Type_operand type) {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = VAR;
+    s->type_data = type;
     s->name = name;
     s->data = NULL;
     s->position = symbols_table->last_pos;

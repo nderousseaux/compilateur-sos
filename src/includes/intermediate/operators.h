@@ -12,7 +12,6 @@ typedef enum Operator {
 	OP_UNKNOWN
 } Operator;
 
-
 /* Affiche un opérateur */
 void print_operator(Operator op);
 

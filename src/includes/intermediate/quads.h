@@ -4,14 +4,12 @@
 #ifndef SRC_INCLUDES_INTERMEDIATE_QUADS_H_
 #define SRC_INCLUDES_INTERMEDIATE_QUADS_H_
 
-#include "./operands.h"
-#include "./operators.h"
-
 
 #define INIT_QUAD_LIST_CAPACITY 100
 
 #define gencode init_quad           // Renommage pour correspondre au cours
 
+#include "./operators.h"
 
 // Définit un quad
 typedef struct Quad {
@@ -32,8 +30,7 @@ typedef struct Ql {
 Ql* quad_list;
 
 
-/* Crée une quad_list
-*/
+/* Crée une quad_list */
 Ql *init_quad_list();
 
 /* Crée une quad list et l'initialise avec un premier quad */
