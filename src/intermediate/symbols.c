@@ -10,7 +10,7 @@
 
 #include "../includes/imports.h"
 
-St* symbols_table;
+extern St* symbols_table;
 
 /* Crée une hashtable de taille définie */
 St* init_st() {
@@ -53,7 +53,7 @@ Symbol * add_const_st(char * data) {
     char* name;
     CHECK(name = calloc(10, sizeof(char)));
 
-    snprintf(name, sizeof(name), "const_%d", symbols_table->last_const);
+    snprintf(name, 10, "const_%d", symbols_table->last_const);
     symbols_table->last_const++;
     s->name = name;
     add_st(symbols_table, name, s);
@@ -71,7 +71,7 @@ Symbol * add_temp_st() {
 
     char * name;
     CHECK(name = calloc(10, sizeof(char)));
-    snprintf(name, sizeof(name), "temp_%d", symbols_table->last_temp);
+    snprintf(name, 10, "temp_%d", symbols_table->last_temp);
     symbols_table->last_temp++;
     s->name = name;
     add_st(symbols_table, name, s);

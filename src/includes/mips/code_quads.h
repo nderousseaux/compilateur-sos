@@ -4,8 +4,6 @@
 #ifndef SRC_INCLUDES_MIPS_CODE_QUADS_H_
 #define SRC_INCLUDES_MIPS_CODE_QUADS_H_
 
-FILE *f;  // Fichier de sortie
-
 /* Traitement du quad OP_EXIT */
 void gen_end(Quad * quad);
 

@@ -7,8 +7,6 @@
 
 #include "../intermediate/symbols.h"
 
-FILE *f;  // Fichier de sortie
-
 /* Met une opérande dans un registre */
 void put_op_reg(Operand * op, char * reg);
 

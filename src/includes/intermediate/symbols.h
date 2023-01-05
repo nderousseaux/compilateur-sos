@@ -47,7 +47,7 @@ typedef struct St {
     St_element** data;
 } St;
 
-St* symbols_table;
+extern St* symbols_table;
 
 /* Crée une hashtable de taille définie */
 St* init_st();

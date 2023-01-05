@@ -4,7 +4,7 @@
 
 #include "../includes/imports.h"
 
-FILE *f;  // Fichier de sortie
+extern FILE *f;  // Fichier de sortie
 
 /* Génére les constantes au début du code */
 void gen_data() {
