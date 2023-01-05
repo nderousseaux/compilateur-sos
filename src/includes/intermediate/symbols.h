@@ -18,6 +18,7 @@ typedef enum Type_operand {
 	ID_T,
 	CONST_T,
 	INTEGER_T,
+    TEMP_T,
 	EMPTY_T
 } Type_operand;
 
@@ -58,7 +59,7 @@ void add_var_st(char * name, Type_operand type);
 Symbol * add_const_st(char * data);
 
 /* Ajoute une temporaire à la table des symboles */
-void add_temp_st();
+Symbol * add_temp_st();
 
 /* Ajoute une donnée dans la hashtable*/
 void add_st(St* ht, char* key, Symbol* data);

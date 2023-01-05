@@ -3,8 +3,11 @@
 #include "../includes/imports.h"
 
 /* Génère le quad exit */
-void gencode_exit(int exit_code) {
-	gencode(OP_EXIT, empty(), empty(), integer(exit_code));
+void gencode_exit(Operand *op) {
+	if (op == NULL)
+		gencode(OP_EXIT, empty(), empty(), integer(0));
+	else
+		gencode(OP_EXIT, empty(), empty(), *op);
 }
 
 /* Génère le quad d'association */
@@ -15,8 +18,6 @@ void gencode_assign(char * dst, Op_list * src) {
 		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande");
 		exit(EXIT_FAILURE);
 	}
-
-	// On crée l'identifiant dans la table des symboles
 	add_var_st(dst, src->data[0].type);
 
 	// On génère le quad
@@ -29,4 +30,17 @@ void gencode_echo(Op_list *op_list) {
 	for (int i = 0; i < op_list->size; i++) {
 		gencode(OP_ECHO, empty(), empty(), op_list->data[i]);
 	}
+}
+
+/* Génère le code relatif à une opération */
+Operand * gencode_operation(
+	Operator operator, Operand * op1, Operand * op2) {
+
+		Operand *res = malloc(sizeof(Operand));
+		to_operand_temp(res);
+
+		// On génère le quad
+		gencode(operator, *op1, *op2, *res);
+
+		return res;
 }

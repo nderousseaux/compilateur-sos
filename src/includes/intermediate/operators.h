@@ -9,7 +9,11 @@ typedef enum Operator {
 	OP_EXIT,
 	OP_ASSIGN,
 	OP_ECHO,
-	OP_UNKNOWN
+	OP_ADD,
+	OP_MINUS,
+	OP_MULT,
+	OP_DIV,
+	OP_MOD,
 } Operator;
 
 /* Affiche un opérateur */

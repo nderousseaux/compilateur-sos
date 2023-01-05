@@ -61,10 +61,11 @@ Symbol * add_const_st(char * data) {
 }
 
 /* Ajoute une temporaire à la table des symboles */
-void add_temp_st() {
+Symbol * add_temp_st() {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = TEMP;
+    s->type_data = INTEGER_T;
     s->position = symbols_table->last_pos;
     symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
 
@@ -74,6 +75,8 @@ void add_temp_st() {
     symbols_table->last_temp++;
     s->name = name;
     add_st(symbols_table, name, s);
+
+    return s;
 }
 
 /* Ajoute une donnée dans la hashtable*/
