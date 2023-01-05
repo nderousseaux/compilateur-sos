@@ -28,9 +28,14 @@ Ql *create_list(Quad *quad) {
 */
 Quad *init_quad(
     Operator op, Operand operand1, Operand operand2, Operand result) {
-    Quad quad = {op, operand1, operand2, result, nextquad(quad_list)};
-    add_quad(quad_list, &quad);
-    return &quad_list->data[quad_list->size - 1];
+    Quad * quad;
+    CHECK(quad = malloc(sizeof(Quad)));
+    quad->op = op;
+    quad->operand1 = operand1;
+    quad->operand2 = operand2;
+    quad->result = result;
+    add_quad(quad_list,quad);
+    return quad;
 }
 
 /* Ajout un quad dans une liste */
@@ -41,7 +46,7 @@ void add_quad(Ql *ql, Quad *quad) {
             ql->data = realloc(
                 ql->data, ql->capacity * sizeof(Quad)));
     }
-    ql->data[ql->size++] = *quad;
+    ql->data[ql->size++] = quad;
 }
 
 /* On affiche la table des quad */
@@ -57,18 +62,18 @@ void print_quad_list(Ql *ql) {
 }
 
 /* Affiche un quad */
-void print_quad(Quad quad) {
-    printf("| idx: %d\n", quad.idx);
+void print_quad(Quad * quad) {
+    printf("| idx: %d\n", quad->idx);
     printf("| OPERATEUR\t");
-    print_operator(quad.op);
+    print_operator(quad->op);
     printf("\n| OPERANDE 1\t");
-    print_operand(quad.operand1);
+    print_operand(quad->operand1);
     printf("\n");
     printf("| OPERANDE 2\t");
-    print_operand(quad.operand2);
+    print_operand(quad->operand2);
     printf("\n");
     printf("| RESULTAT\t");
-    print_operand(quad.result);
+    print_operand(quad->result);
     printf("\n");
 }
 
@@ -81,7 +86,7 @@ int nextquad() {
 Ql * concat(Ql *ql1, Ql *ql2) {
     Ql * ql = ql1;
     for (int i = 0; i < ql2->size; i++) {
-        add_quad(ql, &ql2->data[i]);
+        add_quad(ql, ql2->data[i]);
     }
     destroy_quad_list(ql2);
 

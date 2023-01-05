@@ -22,7 +22,7 @@ typedef struct Quad {
 
 // Liste de quads
 typedef struct Ql {
-    Quad *data;
+    Quad **data;
     int size;
     int capacity;
 } Ql;
@@ -50,7 +50,7 @@ void add_quad(Ql *ql, Quad *quad);
 void print_quad_list(Ql *ql);
 
 /* Affiche un quad */
-void print_quad(Quad quad);
+void print_quad(Quad * quad);
 
 /* Renvoie l'index de prochain quad */
 int nextquad();

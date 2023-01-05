@@ -110,10 +110,8 @@ instruction         : IDENTIFIER EQUAL concatenation                            
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
 
-
 liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
                     | operande                                                          { $$ = create_list_op($1); }
-
 
 concatenation       : operande                                                          { $$ = create_list_op($1); }
 
@@ -131,55 +129,12 @@ somme-entiere		: somme-entiere plus-ou-moins produit-entier                     
 produit-entier      : produit-entier fois-div-mod operande-entier                       { $$ = gencode_operation($2, $1, $3); }
                     | operande-entier                                                   { $$ = $1; }
 
-test-instruction	: operande operateur2 operande						{
-                                                                            $$.tru = creelist(-1);
-                                                                            $$.fals = creelist(-1);
-                                                                            $$.next = creelist(-1);
-                                                                            add_idx_quad($$.tru, nextquad);
-                                                                            switch($2.type){
-                                                                                case O_EQUAL:
-                                                                                    quad_equal($1, $3, -1);
-                                                                                    break;
-                                                                                case O_NEQUAL:
-                                                                                    quad_nequal($1, $3, -1);
-                                                                                    break;
-                                                                                case O_STSUP:
-                                                                                    quad_stsup($1, $3, -1);
-                                                                                    break;
-                                                                                case O_SUPEQ:
-                                                                                    quad_supeq($1, $3, -1);
-                                                                                    break;
-                                                                                case O_STINF:
-                                                                                    quad_stinf($1, $3, -1);
-                                                                                    break;
-                                                                                case O_INFEQ:
-                                                                                    quad_infeq($1, $3, -1);
-                                                                                    break;
-                                                                                default:
-                                                                                    break;
-                                                                            }
-                                                                            quad_goto(-1);
-                                                                            add_idx_quad($$.fals, nextquad-1);
-                                                                        }
-                    | operateur1 concatenation                              { }
+plus-ou-moins       : PLUS                                                              { $$ = OP_ADD; }
+                    | MINUS                                                             { $$ = OP_MINUS; }
 
-operateur1			: NOEMPTY_COMP											{ $$.type = O_NOTEMPTY; }
-					| EMPTY_COMP											{ $$.type = O_EMPTY; }
-
-operateur2			: EQUAL_COMP     									    { $$.type = O_EQUAL; }
-					| NEQUAL_COMP											{ $$.type = O_NEQUAL;}
-					| STSUP_COMP											{ $$.type = O_STSUP; }
-					| SUPEQ_COMP											{ $$.type = O_SUPEQ; }
-					| STINF_COMP											{ $$.type = O_STINF; }
-					| INFEQ_COMP											{ $$.type = O_INFEQ; }
-
-M                   : /*Empty*/                                             { $$ = nextquad;}
-
-N                   : /*Empty*/                                             { 
-                                                                              $$.next = creelist(nextquad);
-                                                                              quad_goto(-1);
-                                                                              $$.idx = nextquad;
-                                                                            }
+fois-div-mod        : STAR                                                              { $$ = OP_MULT; }
+                    | SLASH                                                             { $$ = OP_DIV; }
+                    | PERCENT                                                           { $$ = OP_MOD; }
 %%
 
 void yyerror(const char * error) {

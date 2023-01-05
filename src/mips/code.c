@@ -26,7 +26,7 @@ void gen_code() {
 	gen_stack();
 
 	// Pour chaque quad
-	Quad quad;
+	Quad * quad;
 	for (int i = 0; i < quad_list->size; i++) {
 		quad = quad_list->data[i];
 
@@ -34,7 +34,7 @@ void gen_code() {
 		fprintf(f, "\n\tquad_%d:\n", i);
 
 		// On génère le code du quad
-		switch (quad.op) {
+		switch (quad->op) {
 			case OP_EXIT:
 				gen_end(quad);
 				exit = 1;
@@ -71,6 +71,6 @@ void gen_code() {
     if (!exit) {
 		fprintf(f, "\n\tquad_%d:\n", quad_list->size);
 		Quad quad = {OP_EXIT, empty(), empty(), integer(0), quad_list->size};
-        gen_end(quad);
+        gen_end(&quad);
     }
 }
