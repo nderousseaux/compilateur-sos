@@ -15,4 +15,19 @@ void gen_assign(Quad quad);
 /* Traitement du quad OP_ECHO */
 void gen_echo(Quad quad);
 
+/* Traitement du quad OP_ADD */
+void gen_add(Quad quad);
+
+/* Traitement du quad OP_SUB */
+void gen_sub(Quad quad);
+
+/* Traitement du quad OP_MUL */
+void gen_mul(Quad quad);
+
+/* Traitement du quad OP_DIV */
+void gen_div(Quad quad);
+
+/* Traitement du quad OP_MOD */
+void gen_mod(Quad quad);
+
 #endif  // SRC_INCLUDES_MIPS_CODE_QUAD_H_

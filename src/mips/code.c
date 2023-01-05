@@ -45,6 +45,21 @@ void gen_code() {
 			case OP_ECHO:
 				gen_echo(quad);
 				break;
+			case OP_ADD:
+				gen_add(quad);
+				break;
+			case OP_MINUS:
+				gen_sub(quad);
+				break;
+			case OP_MULT:
+				gen_mul(quad);
+				break;
+			case OP_DIV:
+				gen_div(quad);
+				break;
+			case OP_MOD:
+				gen_mod(quad);
+				break;
 			default:
 				printf("Opérateur inconnu (pensez à l'ajouter dans gen_code...)\n");
 				break;

@@ -26,7 +26,7 @@ typedef struct Op_list {
 /* Crée une liste d'opérande */
 Op_list *init_op_list();
 
-/* Crée une l	iste d'opérande avec une première opérande */
+/* Crée une liste d'opérande avec une première opérande */
 Op_list *create_list_op(Operand *op);
 
 /* Ajoute une opérande dans une liste */
@@ -61,6 +61,9 @@ void to_operand_id(Operand *op, char *value);
 
 /* Transforme une chaine de caractère en operande constante */
 void to_operand_const(Operand *op, char *value);
+
+/* Crée operande de type variable temporaire */
+void to_operand_temp(Operand *op);
 
 /* Affiche une opérande */
 void print_operand(Operand op);

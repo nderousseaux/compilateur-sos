@@ -110,6 +110,12 @@ void to_operand_const(Operand *op, char *value) {
 	op->type = CONST_T;
 }
 
+/* Crée operande de type variable temporaire */
+void to_operand_temp(Operand *op) {
+	op->symbol = add_temp_st();
+	op->type = TEMP_T;
+}
+
 /* Affiche une opérande */
 void print_operand(Operand op) {
 	switch (op.type) {
@@ -124,6 +130,9 @@ void print_operand(Operand op) {
 			break;
 		case EMPTY_T:
 			printf("EMPTY");
+			break;
+		case TEMP_T:
+			printf("TEMP\t%s", op.symbol->name);
 			break;
 		default:
 			printf("\nType de l'opérande inconnu");
