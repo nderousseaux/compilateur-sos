@@ -148,5 +148,4 @@ void gen_mod(Quad quad) {
 
     // On charge t0 dans la variable
     put_reg_var("t0", quad.result.symbol->position);
-
 }

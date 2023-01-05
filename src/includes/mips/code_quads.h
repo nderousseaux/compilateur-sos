@@ -1,8 +1,8 @@
 /* Génère le code mips de chaque quad
 */
 
-#ifndef SRC_INCLUDES_MIPS_CODE_QUAD_H_
-#define SRC_INCLUDES_MIPS_CODE_QUAD_H_
+#ifndef SRC_INCLUDES_MIPS_CODE_QUADS_H_
+#define SRC_INCLUDES_MIPS_CODE_QUADS_H_
 
 FILE *f;  // Fichier de sortie
 
@@ -30,4 +30,4 @@ void gen_div(Quad quad);
 /* Traitement du quad OP_MOD */
 void gen_mod(Quad quad);
 
-#endif  // SRC_INCLUDES_MIPS_CODE_QUAD_H_
+#endif  // SRC_INCLUDES_MIPS_CODE_QUADS_H_

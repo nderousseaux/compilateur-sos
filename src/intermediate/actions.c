@@ -33,14 +33,12 @@ void gencode_echo(Op_list *op_list) {
 }
 
 /* Génère le code relatif à une opération */
-Operand * gencode_operation(
-	Operator operator, Operand * op1, Operand * op2) {
+Operand * gencode_operation(Operator operator, Operand * op1, Operand * op2) {
+	Operand *res = malloc(sizeof(Operand));
+	to_operand_temp(res);
 
-		Operand *res = malloc(sizeof(Operand));
-		to_operand_temp(res);
+	// On génère le quad
+	gencode(operator, *op1, *op2, *res);
 
-		// On génère le quad
-		gencode(operator, *op1, *op2, *res);
-
-		return res;
+	return res;
 }

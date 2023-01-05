@@ -8,4 +8,4 @@
 /* Génére les constantes au début du code */
 void gen_data();
 
-#endif // SRC_INCLUDES_MIPS_DATA_H_
+#endif  // SRC_INCLUDES_MIPS_DATA_H_
