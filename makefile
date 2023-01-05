@@ -8,14 +8,14 @@ OBJDIR		:= out
 TARGETDIR	:= .
 
 #Flags
-TEMP_FLAGS  := -Wno-unneeded-internal-declaration -Wno-sign-compare -Wno-unused-function #FIXME: supprimer ces flags
+TEMP_FLAGS  := -Wno-unneeded-internal-declaration -Wno-sign-compare -Wno-unused-function -Wno-type-limits#FIXME: supprimer ces flags
 CFLAGS		:= -Wall -Wextra -Wall -Werror $(TEMP_FLAGS) -I$(INCDIR)
 
 #Files
 SYNTAX		:= syntaxe
 GRAMMAR     := grammaire
 SRCS		:= $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/**/*.c)
-OBJS		:= $(OBJDIR)/$(GRAMMAR).tab.o $(OBJDIR)/$(SYNTAX).yy.c $(patsubst %.c, $(OBJDIR)/%.o, $(notdir $(SRCS)))
+OBJS		:= $(patsubst %.c, $(OBJDIR)/%.o, $(notdir $(SRCS))) $(OBJDIR)/$(GRAMMAR).tab.o $(OBJDIR)/$(SYNTAX).yy.c
 INCLUDES	:= $(wildcard $(INCDIR)/*.h)
 
 

@@ -4,7 +4,6 @@
 
 FILE *f;  // Fichier de sortie
 
-
 /* Génére code assembleur final dans le .asm */
 void gen_mips(FILE *output) {
     f = output;

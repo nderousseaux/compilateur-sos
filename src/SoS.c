@@ -6,6 +6,8 @@
 extern int yyparse();
 extern int yylval;
 extern FILE * yyin;
+St * symbols_table;
+Ql * quad_list;
 
 /* Initialise les structures de mémoire */
 void init() {

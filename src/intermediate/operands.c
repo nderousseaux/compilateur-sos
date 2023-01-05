@@ -4,6 +4,8 @@
 
 #include "../includes/imports.h"
 
+extern St * symbols_table;
+
 /* Crée une liste d'opérande */
 Op_list *init_op_list() {
 	Op_list *op_list;

@@ -3,7 +3,7 @@
 
 #include "../includes/imports.h"
 
-FILE *f;  // Fichier de sortie
+extern FILE *f;  // Fichier de sortie
 
 /* Traitement du quad OP_EXIT */
 void gen_end(Quad * quad) {

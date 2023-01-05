@@ -27,7 +27,7 @@ typedef struct Ql {
     int capacity;
 } Ql;
 
-Ql* quad_list;
+extern Ql* quad_list;
 
 
 /* Crée une quad_list */

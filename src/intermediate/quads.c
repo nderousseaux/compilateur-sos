@@ -3,7 +3,7 @@
 
 #include "../includes/imports.h"
 
-Ql* quad_list;
+extern Ql* quad_list;
 
 /* Crée une quad_list */
 Ql *init_quad_list() {
