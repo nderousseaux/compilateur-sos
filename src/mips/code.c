@@ -60,6 +60,12 @@ void gen_code() {
 			case OP_MOD:
 				gen_mod(quad);
 				break;
+			case OP_SUPEQ:
+				gen_supeq(quad);
+				break;
+			case OP_GOTO:
+				gen_goto(quad);
+				break;
 			default:
 				printf("Opérateur inconnu (pensez à l'ajouter dans gen_code...)\n");
 				break;

@@ -37,6 +37,12 @@ void divi(char *res, char *reg1, char *reg2);
 /* Fait un modulo */
 void mod(char *res, char *reg1, char *reg2);
 
+/* Jump vers un quad */
+void jump(int quad);
+
+/* Jump si supérieur ou égal */
+void jge(int quad, char *reg1, char *reg2);
+
 /* Appelle la primitive EXIT 
 * La valeur de sortie doit être définie dans $a0
 */

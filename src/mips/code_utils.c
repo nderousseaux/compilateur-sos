@@ -73,6 +73,16 @@ void mod(char *res, char *reg1, char *reg2) {
     fprintf(f, "\tmfhi\t$%s\n", res);
 }
 
+/* Jump vers un quad */
+void jump(int quad) {
+    fprintf(f, "\t\tj\tquad_%d\n", quad);
+}
+
+/* Jump si supérieur ou égal */
+void jge(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tbge\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
 
 /* Appelle la primitive EXIT 
 * La valeur de sortie doit être définie dans $a0

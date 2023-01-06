@@ -36,7 +36,6 @@ Ql *init_quad_list();
 /* Crée une quad list et l'initialise avec un premier quad */
 Ql *create_list(Quad *quad);
 
-
 /* Crée un quad et l'ajoute dans la liste principale
 * Alias : gencode
 */
@@ -57,6 +56,9 @@ int nextquad();
 
 /* Concatène deux listes de quads */
 Ql * concat(Ql *ql1, Ql *ql2);
+
+/* Complète une liste de quad avec l'index passé en paramètres */
+void complete(Ql *ql, int idx);
 
 /* Supprime la quad_list */
 void destroy_quad_list(Ql *ql);

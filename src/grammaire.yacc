@@ -16,10 +16,12 @@
 // Type des noeuds
 %union {
     Ql * quad_list; // Liste de quads
+    Ctrl_ql * ctrl_ql; // Liste de quads de contrôle
     Op_list * op_list; // Liste d'opérandes
     char * str; // Chaîne de caractères
     Operand * operand; // Opérande
     Operator operator; // Type d'opérateur
+    int integer; // Entier
 }
 
 %start programme
@@ -91,9 +93,11 @@
 %token <str> CHAINE
 
 %type <quad_list> liste-instructions instruction; // Ces noeuds sont des listes de quads
-%type <op_list> liste-operandes concatenation; // Ces noeuds sont des listes d'opérandes
+%type <ctrl_ql> test-instruction test-expr test-expr2 test-expr3 test-block; // Ces noeuds sont des listes de quads de contrôle
+%type <op_list> liste-operandes concatenation N; // Ces noeuds sont des listes d'opérandes
 %type <operand> operande operande-entier somme-entiere produit-entier; // Ces noeuds sont des opérandes
-%type <operator> fois-div-mod plus-ou-moins // Ces noeuds sont des opérations
+%type <operator> fois-div-mod plus-ou-moins operateur2// Ces noeuds sont des opérations
+%type <integer> M; // Ces noeuds sont des entiers
 
 // Priorités
 %left PLUS MINUS
@@ -109,6 +113,10 @@ instruction         : IDENTIFIER EQUAL concatenation                            
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
+                    | IF test-block THEN M liste-instructions FI                        { gencode_if($2, $4); }
+
+else-part           : ELSE liste-instructions                                           { }
+                    | /* empty */                                                       { }
 
 liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
                     | operande                                                          { $$ = create_list_op($1); }
@@ -135,6 +143,28 @@ plus-ou-moins       : PLUS                                                      
 fois-div-mod        : STAR                                                              { $$ = OP_MULT; }
                     | SLASH                                                             { $$ = OP_DIV; }
                     | PERCENT                                                           { $$ = OP_MOD; }
+
+test-block		    : TEST test-expr                                                    { $$ = $2;}
+
+test-expr			: test-expr2                                                        { $$ = $1;}
+
+test-expr2          :  test-expr3                                                       { $$ = $1;}
+                
+test-expr3          : test-instruction                                                  { $$ = $1;}
+
+test-instruction	: operande operateur2 operande						                { gencode_test($2, $1, $3, $$); }
+
+operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
+					| NEQUAL_COMP											            { $$ = OP_NEQUAL; }
+					| STSUP_COMP											            { $$ = OP_STSUP; }
+					| SUPEQ_COMP											            { $$ = OP_SUPEQ; }
+					| STINF_COMP											            { $$ = OP_STINF; }
+					| INFEQ_COMP											            { $$ = OP_INFEQ; }
+
+M                   : /*Empty*/                                                         { $$ = nextquad(); }
+
+N                   : /*Empty*/                                                         { create_list(gencode(OP_GOTO, empty(), empty(), empty())); }
+
 %%
 
 void yyerror(const char * error) {

@@ -42,3 +42,22 @@ Operand * gencode_operation(Operator operator, Operand * op1, Operand * op2) {
 
 	return res;
 }
+
+/* Génère le code relatif à une instruction if */
+// TODO(nderousseaux) : changer l'ordre des paramètres
+void gencode_if(Ctrl_ql * test_block, int first_true) {
+	complete(test_block->tru, first_true);
+	complete(test_block->fal, nextquad());
+}
+
+/* Génère le code relatif à un test */
+void gencode_test(
+	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res) {
+	// On génère le quad, la destination (result) sera déterminée plus tard
+	Quad * t = gencode(operator, *op1, *op2, empty());
+	res->tru = create_list(t);
+
+	// On génère le quad faux, la destination sera déterminée plus tard
+	Quad * f = gencode(OP_GOTO, empty(), empty(), empty());
+	res->fal = create_list(f);
+}

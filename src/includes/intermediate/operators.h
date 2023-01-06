@@ -14,6 +14,15 @@ typedef enum Operator {
 	OP_MULT,
 	OP_DIV,
 	OP_MOD,
+	OP_NOTEMPTY,
+	OP_EMPTY,
+	OP_EQUAL,
+	OP_NEQUAL,
+	OP_STSUP,
+	OP_SUPEQ,
+	OP_STINF,
+	OP_INFEQ,
+	OP_GOTO
 } Operator;
 
 /* Affiche un opérateur */

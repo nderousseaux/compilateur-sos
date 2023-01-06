@@ -34,7 +34,7 @@ Quad *init_quad(
     quad->operand1 = operand1;
     quad->operand2 = operand2;
     quad->result = result;
-    add_quad(quad_list,quad);
+    add_quad(quad_list, quad);
     return quad;
 }
 
@@ -91,6 +91,15 @@ Ql * concat(Ql *ql1, Ql *ql2) {
     destroy_quad_list(ql2);
 
     return ql;
+}
+
+/* Complète une liste de quad avec l'index passé en paramètres */
+void complete(Ql *ql, int idx) {
+    for (int i = 0; i < ql->size; i++) {
+        Quad *quad = ql->data[i];
+        quad->result.type = INTEGER_T;
+        quad->result.value_int = idx;
+    }
 }
 
 /* Supprime la quad_list */

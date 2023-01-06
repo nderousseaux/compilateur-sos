@@ -28,4 +28,10 @@ void gen_div(Quad * quad);
 /* Traitement du quad OP_MOD */
 void gen_mod(Quad * quad);
 
+/* Traitement du quad OP_SUPEQ */
+void gen_supeq(Quad * quad);
+
+/* Traitement du quad OP_GOTO */
+void gen_goto(Quad * quad);
+
 #endif  // SRC_INCLUDES_MIPS_CODE_QUADS_H_
