@@ -11,7 +11,6 @@ Ql *init_quad_list() {
     CHECK(ql = malloc(sizeof(Ql)));
     ql->size = 0;
     ql->capacity = INIT_QUAD_LIST_CAPACITY;
-
     CHECK(ql->data = calloc(ql->capacity, sizeof(Quad)));
     return ql;
 }
@@ -34,8 +33,14 @@ Quad *init_quad(
     quad->operand1 = operand1;
     quad->operand2 = operand2;
     quad->result = result;
-    add_quad(quad_list,quad);
+    quad->idx = nextquad();
+    add_quad(quad_list, quad);
     return quad;
+}
+
+/* Génère une liste avec un goto indéterminé */
+Ql *init_goto() {
+    return create_list(gencode(OP_GOTO, empty(), empty(), empty()));
 }
 
 /* Ajout un quad dans une liste */
@@ -88,9 +93,23 @@ Ql * concat(Ql *ql1, Ql *ql2) {
     for (int i = 0; i < ql2->size; i++) {
         add_quad(ql, ql2->data[i]);
     }
-    destroy_quad_list(ql2);
+    // destroy_quad_list(ql2);
 
     return ql;
+}
+
+/* Complète une liste de quad avec l'index passé en paramètres */
+void complete(Ql *ql, int idx) {
+    for (int i = 0; i < ql->size; i++) {
+        Quad *quad = ql->data[i];
+        quad->result.type = INTEGER_T;
+        quad->result.value_int = idx;
+    }
+}
+
+/* Récupère l'index du dernier quad de la liste */
+int last_quad_idx(Ql *ql) {
+    return ql->data[ql->size - 1]->idx;
 }
 
 /* Supprime la quad_list */

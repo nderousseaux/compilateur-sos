@@ -149,3 +149,135 @@ void gen_mod(Quad * quad) {
     // On charge t0 dans la variable
     put_reg_var("t0", quad->result.symbol->position);
 }
+
+/* Traitement du quad OP_NOTEMPTY */
+void gen_noempty(Quad * quad) {
+    (void) quad;
+}
+
+/* Traitement du quad OP_EMPTY */
+void gen_empty(Quad * quad) {
+    (void) quad;
+}
+
+/* Traitement du quad OP_EQUAL */
+void gen_equal(Quad * quad) {
+    // TODO(nderousseaux) equal vaut aussi pour str ?
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s == %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 == t1, on saute au résultat
+    jeq(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_NEQUAL */
+void gen_nequal(Quad * quad) {
+    // TODO(nderousseaux) nequal vaut aussi pour str ?
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s != %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 != t1, on saute au résultat
+    jne(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_STSUP */
+void gen_stsup(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s > %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 > t1, on saute au résultat
+    jgt(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_SUPEQ */
+void gen_supeq(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s >= %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 >= t1, on saute au résultat
+    jge(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_STINF */
+void gen_stinf(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s < %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 < t1, on saute au résultat
+    jlt(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_INFEQ */
+void gen_infeq(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s <= %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 <= t1, on saute au résultat
+    jle(quad->result.value_int , "t0", "t1");
+}
+
+/* Traitement du quad OP_GOTO */
+void gen_goto(Quad * quad) {
+    fprintf(f, "\t\t# On saute au quad %d\n", quad->result.value_int);
+    jump(quad->result.value_int);
+}

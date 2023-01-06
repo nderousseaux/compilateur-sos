@@ -15,6 +15,7 @@
 #include "./intermediate/actions.h"
 #include "./intermediate/operands.h"
 #include "./intermediate/operators.h"
+#include "./intermediate/ctrl_ql.h"
 #include "./intermediate/quads.h"
 #include "./intermediate/symbols.h"
 #include "./mips/code.h"

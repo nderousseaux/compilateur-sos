@@ -242,7 +242,19 @@ entete_test () {
     #On ne garde qu'après le premier tiret
     TEST=$(echo $TEST | cut -d'-' -f2-)
 
-    printf "Test $TEST\t($NUMERO_TEST/$NB_TEST) ........ "
+    
+    printf "Test $TEST\t"
+    
+    # Si $TEST à moins de 4 caractères, on ajoute une tabulation
+    if [ ${#TEST} -lt 3 ]; then
+      printf "\t"
+    fi
+
+    # Si $TEST à moins de 11 caractères, on ajoute une tabulation
+    if [ ${#TEST} -lt 11 ]; then
+      printf "\t"
+    fi
+    printf "($NUMERO_TEST/$NB_TEST)\t........ "    
     echo "-------------- $TEST --------------" >> $LOG_FILE
 }
 coloredEcho () {

@@ -36,12 +36,14 @@ Ql *init_quad_list();
 /* Crée une quad list et l'initialise avec un premier quad */
 Ql *create_list(Quad *quad);
 
-
 /* Crée un quad et l'ajoute dans la liste principale
 * Alias : gencode
 */
 Quad *init_quad(
     Operator op, Operand operand1, Operand operand2, Operand result);
+
+/* Génère une liste avec un goto indéterminé */
+Ql *init_goto();
 
 /* Ajout un quad dans une liste */
 void add_quad(Ql *ql, Quad *quad);
@@ -57,6 +59,12 @@ int nextquad();
 
 /* Concatène deux listes de quads */
 Ql * concat(Ql *ql1, Ql *ql2);
+
+/* Complète une liste de quad avec l'index passé en paramètres */
+void complete(Ql *ql, int idx);
+
+/* Récupère l'index du dernier quad de la liste */
+int last_quad_idx(Ql *ql);
 
 /* Supprime la quad_list */
 void destroy_quad_list(Ql *ql);

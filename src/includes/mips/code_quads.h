@@ -28,4 +28,31 @@ void gen_div(Quad * quad);
 /* Traitement du quad OP_MOD */
 void gen_mod(Quad * quad);
 
+/* Traitement du quad OP_NOTEMPTY */
+void gen_noempty(Quad * quad);
+
+/* Traitement du quad OP_EMPTY */
+void gen_empty(Quad * quad);
+
+/* Traitement du quad OP_EQUAL */
+void gen_equal(Quad * quad);
+
+/* Traitement du quad OP_NEQUAL */
+void gen_nequal(Quad * quad);
+
+/* Traitement du quad OP_STSUP */
+void gen_stsup(Quad * quad);
+
+/* Traitement du quad OP_SUPEQ */
+void gen_supeq(Quad * quad);
+
+/* Traitement du quad OP_STINF */
+void gen_stinf(Quad * quad);
+
+/* Traitement du quad OP_INFEQ */
+void gen_infeq(Quad * quad);
+
+/* Traitement du quad OP_GOTO */
+void gen_goto(Quad * quad);
+
 #endif  // SRC_INCLUDES_MIPS_CODE_QUADS_H_

@@ -1,5 +1,5 @@
 i = 321 ;
-if test -a ${i} -eq 321 then
+if test ${i} -eq 321 then
     echo "Reel 1" 
 fi ;
 exit
