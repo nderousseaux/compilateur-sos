@@ -102,3 +102,14 @@ void gencode_not(Ctrl_ql * test_expr, Ctrl_ql * res) {
 	res->fal = test_expr->tru;
 	res->tru = test_expr->fal;
 }
+
+/* Génère le code relatif à une instruction while */
+Ql * gencode_while(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_cond,  // index du premier quad de la condition
+	int first_true) {  // Index du premier quad vrai
+	gencode(OP_GOTO, empty(), empty(), integer(first_cond));
+	complete(test_block->fal, nextquad());
+	complete(test_block->tru, first_true);
+	return test_block->fal;
+}
