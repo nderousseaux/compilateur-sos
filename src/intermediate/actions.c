@@ -96,3 +96,9 @@ void gencode_and(
 	res->fal = concat(test_expr->fal, test_expr2->fal);
 	res->tru = test_expr2->tru;
 }
+
+/* Génère le code relatif à une opération NOT */
+void gencode_not(Ctrl_ql * test_expr, Ctrl_ql * res) {
+	res->fal = test_expr->tru;
+	res->tru = test_expr->fal;
+}

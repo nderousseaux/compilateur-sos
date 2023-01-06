@@ -153,7 +153,10 @@ test-expr			: test-expr OR_COMP M test-expr2                                    
 test-expr2          : test-expr2 AND_COMP M test-expr3                                  { gencode_and($1, $4, $3, $$); }
                     | test-expr3                                                        { $$ = $1;}
                 
-test-expr3          : test-instruction                                                  { $$ = $1;}
+test-expr3          : EXCLA test-expr3                                                  { gencode_not($2, $$); }
+                    | EXCLA OPARA test-expr3 CPARA                                      { gencode_not($3, $$); }
+                    | OPARA test-expr3 CPARA                                            { $$ = $2;}
+                    | test-instruction                                                  { $$ = $1;}
 
 test-instruction	: operande operateur2 operande						                { gencode_test($2, $1, $3, $$); }
 
