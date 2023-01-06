@@ -34,8 +34,14 @@ Quad *init_quad(
     quad->operand1 = operand1;
     quad->operand2 = operand2;
     quad->result = result;
+    quad->idx = nextquad();
     add_quad(quad_list, quad);
     return quad;
+}
+
+/* Génère une liste avec un goto indéterminé */
+Ql *init_goto() {
+    return create_list(gencode(OP_GOTO, empty(), empty(), empty()));
 }
 
 /* Ajout un quad dans une liste */

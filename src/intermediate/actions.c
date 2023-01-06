@@ -44,10 +44,15 @@ Operand * gencode_operation(Operator operator, Operand * op1, Operand * op2) {
 }
 
 /* Génère le code relatif à une instruction if */
-// TODO(nderousseaux) : changer l'ordre des paramètres
-void gencode_if(Ctrl_ql * test_block, int first_true) {
+void gencode_if(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_true,  // Index du premier quad vrai
+	Ql * list_false,  // Goto vers le premier quad si faux
+	Ql * else_part) {  // Quads de l'instruction else
+	list_false = concat(else_part, list_false);
+	complete(list_false, nextquad());
+	complete(test_block->fal, list_false->data[0]->idx+1);
 	complete(test_block->tru, first_true);
-	complete(test_block->fal, nextquad());
 }
 
 /* Génère le code relatif à un test */

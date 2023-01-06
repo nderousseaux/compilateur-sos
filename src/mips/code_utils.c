@@ -78,11 +78,25 @@ void jump(int quad) {
     fprintf(f, "\t\tj\tquad_%d\n", quad);
 }
 
+/* Jump si supérieur */
+void jgt(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tbgt\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
 /* Jump si supérieur ou égal */
 void jge(int quad, char *reg1, char *reg2) {
     fprintf(f, "\t\tbge\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
 }
 
+/* Jump si inférieur */
+void jlt(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tblt\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
+/* Jump si inférieur ou égal */
+void jle(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tble\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
 
 /* Appelle la primitive EXIT 
 * La valeur de sortie doit être définie dans $a0

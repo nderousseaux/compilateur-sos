@@ -25,6 +25,7 @@ typedef struct Ql {
     Quad **data;
     int size;
     int capacity;
+    int idx;
 } Ql;
 
 extern Ql* quad_list;
@@ -41,6 +42,9 @@ Ql *create_list(Quad *quad);
 */
 Quad *init_quad(
     Operator op, Operand operand1, Operand operand2, Operand result);
+
+/* Génère une liste avec un goto indéterminé */
+Ql *init_goto();
 
 /* Ajout un quad dans une liste */
 void add_quad(Ql *ql, Quad *quad);
