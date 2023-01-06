@@ -115,6 +115,7 @@ instruction         : IDENTIFIER EQUAL concatenation                            
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
                     | IF test-block THEN M liste-instructions N else-part FI            { gencode_if($2, $4, $6, $7); }
                     | WHILE M test-block DO M liste-instructions DONE                   { $$ = gencode_while($3, $2, $5); }
+                    | UNTIL M test-block DO M liste-instructions DONE                   { $$ = gencode_until($3, $2, $5); }
 
 else-part           : ELIF test-block THEN M liste-instructions N else-part             { $$ = gencode_elif($2, $4, $6, $7); }
                     | ELSE liste-instructions                                           { $$ = init_quad_list(); }

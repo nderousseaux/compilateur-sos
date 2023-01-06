@@ -56,4 +56,10 @@ Ql* gencode_while(
 	int first_cond,  // index du premier quad de la condition
 	int first_true);  // Index du premier quad vrai
 
+/* Génère le code relatif à une instruction until */
+Ql * gencode_until(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_cond,  // index du premier quad de la condition
+	int first_true);  // Index du premier quad vrai
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_
