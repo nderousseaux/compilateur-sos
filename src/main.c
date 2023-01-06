@@ -11,11 +11,8 @@ void print_usage(char *program_name) {
 }
 
 /* Affiche le logo avec l'option -c */
+
 void print_copyright() {
-    char *file = {
-        #include "includes/copyright"
-    };
-    printf("%s", file);
 }
 
 /* Parse les arguments, renvoie 0 si pas debug, 1 si mode debug */
