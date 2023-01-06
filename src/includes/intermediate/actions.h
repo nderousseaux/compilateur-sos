@@ -43,4 +43,8 @@ void gencode_test(
 void gencode_or(
 	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res);
 
+/* Génère le code relatif à une opération AND */
+void gencode_and(
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res);
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

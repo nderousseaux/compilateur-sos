@@ -88,3 +88,11 @@ void gencode_or(
 	res->fal = test_expr2->fal;
 	res->tru = concat(test_expr->tru, test_expr2->tru);
 }
+
+/* Génère le code relatif à une opération AND */
+void gencode_and(
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res) {
+	complete(test_expr->tru, first_true);
+	res->fal = concat(test_expr->fal, test_expr2->fal);
+	res->tru = test_expr2->tru;
+}
