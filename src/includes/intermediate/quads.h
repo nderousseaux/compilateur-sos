@@ -25,7 +25,6 @@ typedef struct Ql {
     Quad **data;
     int size;
     int capacity;
-    int idx;
 } Ql;
 
 extern Ql* quad_list;
@@ -63,6 +62,9 @@ Ql * concat(Ql *ql1, Ql *ql2);
 
 /* Complète une liste de quad avec l'index passé en paramètres */
 void complete(Ql *ql, int idx);
+
+/* Récupère l'index du dernier quad de la liste */
+int last_quad_idx(Ql *ql);
 
 /* Supprime la quad_list */
 void destroy_quad_list(Ql *ql);

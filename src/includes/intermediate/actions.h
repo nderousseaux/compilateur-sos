@@ -28,6 +28,13 @@ void gencode_if(
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part);  // Quads de l'instruction else
 
+/* Génère le code relatif à une instruction elif */
+Ql * gencode_elif(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_true,  // Index du premier quad vrai
+	Ql * list_false,  // Goto vers le premier quad si faux
+	Ql * else_part);  // Quads de l'instruction else
+
 /* Génère le code relatif à un test */
 void gencode_test(
 	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res);

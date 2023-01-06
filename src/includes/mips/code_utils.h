@@ -40,6 +40,12 @@ void mod(char *res, char *reg1, char *reg2);
 /* Jump vers un quad */
 void jump(int quad);
 
+/* Jump si égal */
+void jeq(int quad, char *reg1, char *reg2);
+
+/* Jump si différent */
+void jne(int quad, char *reg1, char *reg2);
+
 /* Jump si supérieur */
 void jgt(int quad, char *reg1, char *reg2);
 

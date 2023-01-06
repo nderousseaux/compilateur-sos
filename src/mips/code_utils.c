@@ -78,6 +78,16 @@ void jump(int quad) {
     fprintf(f, "\t\tj\tquad_%d\n", quad);
 }
 
+/* Jump si égal */
+void jeq(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tbeq\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
+/* Jump si différent */
+void jne(int quad, char *reg1, char *reg2) {
+    fprintf(f, "\t\tbne\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
 /* Jump si supérieur */
 void jgt(int quad, char *reg1, char *reg2) {
     fprintf(f, "\t\tbgt\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);

@@ -162,12 +162,42 @@ void gen_empty(Quad * quad) {
 
 /* Traitement du quad OP_EQUAL */
 void gen_equal(Quad * quad) {
-    (void) quad;
+    // TODO(nderousseaux) equal vaut aussi pour str ?
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s == %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 == t1, on saute au résultat
+    jeq(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_NEQUAL */
 void gen_nequal(Quad * quad) {
-    (void) quad;
+    // TODO(nderousseaux) nequal vaut aussi pour str ?
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s != %s\n",
+        quad->result.value_int,
+        printable_operand(quad->operand1),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // On met l'opérande 2 dans t1
+    put_op_reg(&quad->operand2, "t1");
+
+    // Si t0 != t1, on saute au résultat
+    jne(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_STSUP */

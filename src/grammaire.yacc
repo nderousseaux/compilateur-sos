@@ -92,7 +92,7 @@
 %token <str> MOT
 %token <str> CHAINE
 
-%type <quad_list> liste-instructions instruction N else-part; // Ces noeuds sont des listes de quads
+%type <quad_list> liste-instructions instruction else-part N; // Ces noeuds sont des listes de quads
 %type <ctrl_ql> test-instruction test-expr test-expr2 test-expr3 test-block; // Ces noeuds sont des listes de quads de contrôle
 %type <op_list> liste-operandes concatenation; // Ces noeuds sont des listes d'opérandes
 %type <operand> operande operande-entier somme-entiere produit-entier; // Ces noeuds sont des opérandes
@@ -115,7 +115,8 @@ instruction         : IDENTIFIER EQUAL concatenation                            
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
                     | IF test-block THEN M liste-instructions N else-part FI            { gencode_if($2, $4, $6, $7); }
 
-else-part           : ELSE liste-instructions                                           { $$ = init_quad_list(); }
+else-part           : ELIF test-block THEN M liste-instructions N else-part             { $$ = gencode_elif($2, $4, $6, $7); }
+                    | ELSE liste-instructions                                           { $$ = init_quad_list(); }
                     | /* empty */                                                       { $$ = init_quad_list(); }
 
 liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
@@ -163,7 +164,7 @@ operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
 
 M                   : /*Empty*/                                                         { $$ = nextquad(); }
 
-N                   : /*Empty*/                                                         { $$ = init_goto(); }
+N                   : /*Empty*/                                                         { $$ = init_goto();}
 
 %%
 

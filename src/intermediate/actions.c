@@ -49,11 +49,25 @@ void gencode_if(
 	int first_true,  // Index du premier quad vrai
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part) {  // Quads de l'instruction else
+
 	list_false = concat(else_part, list_false);
 	complete(list_false, nextquad());
-	complete(test_block->fal, list_false->data[0]->idx+1);
+	complete(test_block->fal, last_quad_idx(list_false)+1);
 	complete(test_block->tru, first_true);
 }
+
+/* Génère le code relatif à une instruction elif */
+Ql * gencode_elif(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_true,  // Index du premier quad vrai
+	Ql * list_false,  // Goto vers le premier quad si faux
+	Ql * else_part) {  // Quads de l'instruction else
+	Ql * res = concat(else_part, list_false);
+	complete(test_block->fal, last_quad_idx(list_false)+1);
+	complete(test_block->tru, first_true);
+	return res;
+}
+
 
 /* Génère le code relatif à un test */
 void gencode_test(

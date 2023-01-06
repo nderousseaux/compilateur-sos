@@ -11,7 +11,6 @@ Ql *init_quad_list() {
     CHECK(ql = malloc(sizeof(Ql)));
     ql->size = 0;
     ql->capacity = INIT_QUAD_LIST_CAPACITY;
-
     CHECK(ql->data = calloc(ql->capacity, sizeof(Quad)));
     return ql;
 }
@@ -94,7 +93,7 @@ Ql * concat(Ql *ql1, Ql *ql2) {
     for (int i = 0; i < ql2->size; i++) {
         add_quad(ql, ql2->data[i]);
     }
-    destroy_quad_list(ql2);
+    // destroy_quad_list(ql2);
 
     return ql;
 }
@@ -106,6 +105,11 @@ void complete(Ql *ql, int idx) {
         quad->result.type = INTEGER_T;
         quad->result.value_int = idx;
     }
+}
+
+/* Récupère l'index du dernier quad de la liste */
+int last_quad_idx(Ql *ql) {
+    return ql->data[ql->size - 1]->idx;
 }
 
 /* Supprime la quad_list */
