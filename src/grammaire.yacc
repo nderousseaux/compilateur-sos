@@ -147,7 +147,8 @@ fois-div-mod        : STAR                                                      
 
 test-block		    : TEST test-expr                                                    { $$ = $2;}
 
-test-expr			: test-expr2                                                        { $$ = $1;}
+test-expr			: test-expr OR_COMP M test-expr2                                    { gencode_or($1, $4, $3, $$); }
+                    | test-expr2                                                        { $$ = $1;}
 
 test-expr2          : test-expr3                                                        { $$ = $1;}
                 

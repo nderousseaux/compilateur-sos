@@ -80,3 +80,11 @@ void gencode_test(
 	Quad * f = gencode(OP_GOTO, empty(), empty(), empty());
 	res->fal = create_list(f);
 }
+
+/* Génère le code relatif à une opération OR */
+void gencode_or(
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res) {
+	complete(test_expr->fal, first_true);
+	res->fal = test_expr2->fal;
+	res->tru = concat(test_expr->tru, test_expr2->tru);
+}

@@ -39,4 +39,8 @@ Ql * gencode_elif(
 void gencode_test(
 	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res);
 
+/* Génère le code relatif à une opération OR */
+void gencode_or(
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res);
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_
