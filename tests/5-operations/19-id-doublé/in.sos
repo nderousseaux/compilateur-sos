@@ -1,0 +1,4 @@
+id = $(expr 5 + 5) ;
+reel = $(expr ${id} * 2);
+echo ${reel};
+exit 0

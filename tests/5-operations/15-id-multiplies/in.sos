@@ -1,0 +1,7 @@
+id = $(expr 3 + 67) ;
+echo ${id};
+id2 = $(expr ${id} * ${id});
+echo ${id2};
+id3 = $(expr ${id2} / ${id});
+echo ${id3};
+exit 0
