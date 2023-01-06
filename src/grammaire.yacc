@@ -110,6 +110,7 @@ liste-instructions  : liste-instructions SEMICOLON instruction                  
                     | instruction                                                       { }
 
 instruction         : IDENTIFIER EQUAL concatenation                                    { gencode_assign($1, $3); }
+                    | IDENTIFIER OSQUARE operande-entier CSQUARE EQUAL concatenation    {;}
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
@@ -126,12 +127,14 @@ liste-operandes     : liste-operandes operande                                  
 
 concatenation       : operande                                                          { $$ = create_list_op($1); }
 
-operande            : MOT                                                               { to_operand_int($$, $1); }
+operande            : DOLLAR OBRACE IDENTIFIER OSQUARE operande-entier CSQUARE CBRACE   {;}
+                    | MOT                                                               { to_operand_int($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
                     | DOLLAR OBRACE IDENTIFIER CBRACE                                   { to_operand_id($$, $3); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
 
 operande-entier     : MOT                                                               { to_operand_int($$, $1); }
+                    | plus-ou-moins DOLLAR OBRACE IDENTIFIER OSQUARE operande-entier CSQUARE CBRACE   {;}
                     | OPARA somme-entiere CPARA                                         { $$ = $2; }
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }
