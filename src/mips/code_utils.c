@@ -21,6 +21,8 @@ void put_op_reg(Operand * op, char * reg) {
     case TEMP_T:
         put_var_reg(op->symbol->position, reg);
         break;
+    case TAB_T:
+        put_var_reg(op->symbol->position + op->value_int*4, reg);
     default:
         break;
     }
@@ -116,6 +118,7 @@ void syscall_exit() {
     fprintf(f, "\t\tsyscall\n");
 }
 
+
 /* Appelle la primitive ECHO
 * La valeur à afficher doit être définie dans $a0
 */
@@ -123,6 +126,8 @@ void syscall_echo(Operand *op) {
     if (op->type == CONST_T)
         fprintf(f, "\t\tli\t$v0,\t4\n");
     else if (op->type == ID_T && op->symbol->type_data == CONST_T)
+        fprintf(f, "\t\tli\t$v0,\t4\n");
+    else if (op->type == TAB_T)
         fprintf(f, "\t\tli\t$v0,\t4\n");
     else
         fprintf(f, "\t\tli\t$v0,\t1\n");

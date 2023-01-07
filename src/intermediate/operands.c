@@ -94,6 +94,13 @@ Operand empty() {
 	return o;
 }
 
+/* Transforme une chaine de caractère en opérande tab */
+void to_operand_tab(Operand *op, char *value, Operand *op2 ){
+	op->symbol = get_st(symbols_table, value); // tableau 
+	op->value_int = op2->value_int;	//index
+	op->type = TAB_T;	//type
+}
+
 /* Transforme une chaine de caractère en operande entier */
 void to_operand_int(Operand *op, char *value) {  // FIXME REDONDANT
 	op->value_int = to_int(value);
@@ -136,6 +143,9 @@ void print_operand(Operand op) {
 		case TEMP_T:
 			printf("TEMP\t%s", op.symbol->name);
 			break;
+		case TAB_T:
+			printf("TAB\t%s", op.symbol->name);
+			break;
 		default:
 			printf("\nType de l'opérande inconnu");
 			printf(" (pensez à l'ajouter dans print_operand...)\n");
@@ -151,7 +161,8 @@ char *printable_operand(Operand op) {
 		CHECK(str = calloc(sizeof(char), 10));
 		sprintf(str, "%d", op.value_int);
 		return str;
-	} else {
+	} 
+	else {
 		return op.symbol->name;
 	}
 }

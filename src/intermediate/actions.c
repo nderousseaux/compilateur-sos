@@ -15,7 +15,7 @@ void gencode_assign(char * dst, Op_list * src) {
 	// On vérifie que la liste ne contient qu'une seule opérande
 	if (src->size > 1) {
 		fprintf(stderr,
-		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande");
+		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande\n");
 		exit(EXIT_FAILURE);
 	}
 	add_var_st(dst, src->data[0].type);
@@ -102,6 +102,58 @@ void gencode_not(Ctrl_ql * test_expr, Ctrl_ql * res) {
 	res->fal = test_expr->tru;
 	res->tru = test_expr->fal;
 }
+
+/* Génère le code relatif à la déclaration d'un tableau */
+void gencode_tab(char * dst, char * value){
+	// On vérifie que la value est positif strictement
+	if (to_int(value) < 1) {
+		fprintf(stderr,
+		"Erreur: L'initialisation du tableau se doit d'être faite avec une valeur supérieure à 0\n");
+		exit(EXIT_FAILURE);
+	}
+	int newValue = to_int(value);
+	add_tableau_st(dst,newValue);
+}
+
+/* Génère le code relatif au remplissage d'un tableau */
+void gencode_tab_assign(char * tabName , Operand *op ,Op_list * src){
+	Operand tab = empty();
+	to_operand_id(&tab, tabName);
+	// On vérifie que le symbole d'entrée se doit d'être de type TAB_T, cas n°5 règle sémantique
+	if(tab.symbol->type != TAB){
+		fprintf(stderr,
+		"Erreur: la valeur d'opérande-entier se doit d'être composée uniquement de chiffre sans + ni -\n");
+		exit(EXIT_FAILURE);
+	}
+	// On vérifie que la liste ne contient qu'une seule opérande
+	if (src->size > 1) {
+		fprintf(stderr,
+		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande\n");
+		exit(EXIT_FAILURE);
+	}
+	Operand op2_str = empty();
+	// Forcer l'int a devenir un string pour pouvoir le echo
+	if (src->data[0].type == INTEGER_T) {
+		char * str_int;
+		str_int = calloc(128,sizeof(char));
+		sprintf(str_int, "\"%d\"", src->data[0].value_int);
+		to_operand_const(&op2_str,str_int);
+	}
+	// Sinon on le garde tel quel 
+	else {
+		to_operand_const(&op2_str,src->data[0].symbol->data);
+	}
+	printf("tab.symbol->position+op->value_int donnnnne : %d\n", op->value_int);
+	printf("tab.symbol-> size -1 donne : %d\n", tab.symbol->size-1);
+	if(op->value_int > tab.symbol->size-1){
+		fprintf(stderr,
+		"Erreur : le tableau ne possède pas cette case, erreur de dimension\n");
+		exit(EXIT_FAILURE);
+	}
+	//on génère le quad
+	gencode(OP_ASSIGN_TAB,op2_str, *op ,integer(tab.symbol->position));
+}
+
 
 /* Génère le code relatif à une instruction while */
 Ql * gencode_while(

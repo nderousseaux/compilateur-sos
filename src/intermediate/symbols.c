@@ -28,7 +28,7 @@ St* init_st() {
 }
 
 /* Ajoute une variable à la table des symboles */
-void add_var_st(char * name, Type_operand type) {
+void add_var_st(char * name, Type_operand type) { //FIXME modifier cette fonction pour fixer une size de 4 pour arnaud
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = VAR;
@@ -37,6 +37,20 @@ void add_var_st(char * name, Type_operand type) {
     s->data = NULL;
     s->position = symbols_table->last_pos;
     symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
+    add_st(symbols_table, name, s);
+}
+
+/* Ajoute une variable tableau à la table des symboles */
+void add_tableau_st(char * name, int size) { //TODO REDONDANCE
+    Symbol* s;
+    CHECK(s = malloc(sizeof(Symbol)));
+    s->type = TAB;
+    s->size = size;
+    s->type_data = TAB_T;
+    s->name = name;
+    s->data = NULL;
+    s->position = symbols_table->last_pos;
+    symbols_table->last_pos+=(4*size);  // Le tableau est fixe, sa taille est définie par size
     add_st(symbols_table, name, s);
 }
 

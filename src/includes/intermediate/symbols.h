@@ -19,12 +19,14 @@ typedef enum Type_operand {
 	CONST_T,
 	INTEGER_T,
     TEMP_T,
-	EMPTY_T
+	EMPTY_T,
+    TAB_T
 } Type_operand;
 
 
 typedef struct Symbol {
-    enum {CONST, VAR, TEMP} type;  // Type du symbole
+    enum {CONST, VAR, TEMP, TAB} type;  // Type du symbole
+    int size; // Pour obtenir la taille du tableau
     char *name;  // Nom du symbole
     Type_operand type_data;  // Type de la donnée (var ou const)
     char *data;  // Donnée associée au symbole
@@ -54,6 +56,9 @@ St* init_st();
 
 /* Ajoute une variable à la table des symboles */
 void add_var_st(char * name, Type_operand type);
+
+/* Ajoute une variable tableau à la table des symboles */
+void add_tableau_st(char * name, int size);
 
 /* Ajoute une constante à la table des symboles */
 Symbol * add_const_st(char * data);
