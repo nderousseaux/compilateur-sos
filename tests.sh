@@ -187,6 +187,10 @@ test_execution(){
   EXITCODE=$?
   if [ $EXITCODE -eq 0 ]; then
 
+  # Si le système est unix
+  if [ $(uname) = "Linux" ]; then
+    # On supprime les 4 premières lignes
+    sed -i '1,4d' $OUTPUT
 
   sed -i -e '$a\' $OUTPUT
   fi
