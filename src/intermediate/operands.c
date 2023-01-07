@@ -100,14 +100,29 @@ void to_operand_int(Operand *op, char *value) {  // FIXME REDONDANT
 	op->type = INTEGER_T;
 }
 
-/* Transforme une chaine de caractère en operande id */
-void to_operand_id(Operand *op, char *value) {
+/* Transforme une chaine de caractère en operande id 
+* Si convert_int est 1, on force la tranformation de l'opérande en entier 
+*/
+void to_operand_id(Operand *op, char *value, char convert_int) {
 	op->symbol = get_st(symbols_table, value);
-
-	if(op->symbol == NULL)
-		printf("Symbol %s not found in symbol table\n", value);
-
 	op->type = ID_T;
+
+	if(op->symbol == NULL) {
+		fprintf(stderr, "Erreur : variable %s non déclarée\n", value);
+		exit(EXIT_FAILURE);
+	}
+
+	// Si id est de type const
+	// alors on crée une variable temporaire
+	// et on lui assigne la valeur de id
+	if (convert_int) {
+		if (op->symbol->type_data == CONST_T) {
+			char * name_const = op->symbol->constant->data;
+			int value = to_int(name_const);
+			to_operand_temp(op);
+			gencode(OP_ASSIGN, integer(value), empty(), *op);
+		}
+	}
 }
 
 /* Transforme une chaine de caractère en operande constante */

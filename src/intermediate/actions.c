@@ -18,10 +18,26 @@ void gencode_assign(char * dst, Op_list * src) {
 		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande");
 		exit(EXIT_FAILURE);
 	}
+
+	check_id(dst);
+
 	add_var_st(dst, src->data[0].type);
 
+	Operand id_dst = id(dst);
+
+	// Si l'opérande est une constante, on stocke vers quelle constante pointe l'id
+	if(src->data[0].type == CONST_T) {
+		id_dst.symbol->constant = src->data[0].symbol;
+	}
+
+	// Si c'est un id pointant vers une constante
+	if (src->data[0].type == ID_T && src->data[0].symbol->type_data == CONST_T) {
+		id_dst.symbol->constant = src->data[0].symbol->constant;
+		id_dst.symbol->type_data = CONST_T;
+	}
+
 	// On génère le quad
-	gencode(OP_ASSIGN, src->data[0], empty(), id(dst));
+	gencode(OP_ASSIGN, src->data[0], empty(), id_dst);
 }
 
 /* Génère le quad d'affichage */

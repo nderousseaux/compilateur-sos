@@ -14,7 +14,7 @@ void gen_data() {
     for (int i = 0; i < symbols_table->capacity; i++) {
         St_element *element = symbols_table->data[i];
         while (element != NULL) {
-            if (element->data->type == CONST)
+            if (element->data->type == CONST_S)
                 fprintf(f, "\t%s: .asciiz\t%s\n",
 					element->key, element->data->data);
 

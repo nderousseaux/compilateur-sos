@@ -22,4 +22,7 @@ int to_int(char *str);
 /* Copie une chaine de caractères */
 char * copy_string(char *s);
 
+/* Vérifie que id correspond bien à la regex */
+void check_id(char * dst);
+
 #endif  // SRC_INCLUDES_UTILS_H_
