@@ -111,7 +111,7 @@ programme           : liste-instructions                                        
 liste-instructions  : liste-instructions SEMICOLON instruction                          { }
                     | instruction                                                       { }
 
-id                  : IDENTIFIER                                                        { $$ = copy_string($1); }
+id                  : MOT                                                               { $$ = copy_string($1); }
 
 instruction         : id EQUAL concatenation                                            { gencode_assign($1, $3); }
                     | EXIT                                                              { gencode_exit(0); }

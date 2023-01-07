@@ -8,8 +8,10 @@
 %}
 
 com				#.*\n
-mot				[^ \t\r\n=*/%&|!<>;{}()\[\]\"\'\$]+
-id              [a-zA-Z_][a-zA-Z0-9_]*
+blanc           [ \t\n{com}]
+car             !|[#-&]|[\(-\[]|[\]-~]|(\\[\\'"tn])
+mot             [^ \t\r\n=*/%&|!<>;{}()\[\]\"\'\$]+
+chaine          (\"({car}|{blanc})*\")|(\'({car}|{blanc})*\')
 
 
 %%
@@ -78,26 +80,18 @@ expr			        { return EXPR; }
 
 {com}			        {  } // Commentaires
 
-
-\n                      { } // Retour à la ligne
-
-[{com} \n\t]	        {  } // Blancs
-
-
-(\"[^"]*\")|(\'[^']*\') {   // Chaine
-                            yylval.str = copy_string(yytext);
-                            return CHAINE;
-                        }
-
-{id}        			{   // ID
-                            yylval.str = copy_string(yytext);
-					        return IDENTIFIER;
-                        }
+{blanc}     	        {  } // Blancs
 
 {mot}                   {   // Mot
                             yylval.str = copy_string(yytext);
                             return MOT;
                         }
+
+{chaine}                {   // Chaine
+                            yylval.str = copy_string(yytext);
+                            return CHAINE;
+                        }
+
 
 
 
