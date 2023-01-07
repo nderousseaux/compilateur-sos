@@ -22,6 +22,7 @@
     Operand * operand; // Opérande
     Operator operator; // Type d'opérateur
     int integer; // Entier
+    Ctrl_for * ctrl_for; //Quad pour le for
 }
 
 %start programme
@@ -99,6 +100,7 @@
 %type <operator> fois-div-mod plus-ou-moins operateur2// Ces noeuds sont des opérations
 %type <integer> M; // Ces noeuds sont des entiers
 %type <str> id;
+%type <ctrl_for> start-for;
 
 
 // Priorités
@@ -120,6 +122,9 @@ instruction         : id EQUAL concatenation                                    
                     | IF test-block THEN M liste-instructions N else-part FI            { gencode_if($2, $4, $6, $7); }
                     | WHILE M test-block DO M liste-instructions DONE                   { $$ = gencode_while($3, $2, $5); }
                     | UNTIL M test-block DO M liste-instructions DONE                   { $$ = gencode_until($3, $2, $5); }
+                    | FOR id IN liste-operandes start-for DO M liste-instructions DONE  { gencode_for($2, $4, $5, $7); }
+
+start-for           :                                                                   { $$ = gencode_start_for();}
 
 else-part           : ELIF test-block THEN M liste-instructions N else-part             { $$ = gencode_elif($2, $4, $6, $7); }
                     | ELSE liste-instructions                                           { $$ = init_quad_list(); }

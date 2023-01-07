@@ -24,5 +24,6 @@
 #include "./mips/data.h"
 #include "./mips/mips.h"
 #include "./utils.h"
+#include "./intermediate/for_struct.h"
 
-#endif  // SRC_INCLUDES_IMPORTS_H_
+#endif // SRC_INCLUDES_IMPORTS_H_
