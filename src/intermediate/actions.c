@@ -37,8 +37,11 @@ Operand * gencode_operation(Operator operator, Operand * op1, Operand * op2) {
 	Operand *res = malloc(sizeof(Operand));
 	to_operand_temp(res);
 
-	// On génère le quad
-	gencode(operator, *op1, *op2, *res);
+	// On gère le cas du moins devant un entier
+	if (op1 == NULL && operator == OP_MINUS)
+		gencode(operator,  empty(), *op2, *res);  // On génère le quad
+	else
+		gencode(operator, *op1, *op2, *res);  // On génère le quad
 
 	return res;
 }
@@ -49,7 +52,6 @@ void gencode_if(
 	int first_true,  // Index du premier quad vrai
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part) {  // Quads de l'instruction else
-
 	list_false = concat(else_part, list_false);
 	complete(list_false, nextquad());
 	complete(test_block->fal, last_quad_idx(list_false)+1);

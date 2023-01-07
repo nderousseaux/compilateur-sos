@@ -5,12 +5,6 @@
 %{
     #include "imports.h"
     #include "grammaire.tab.h"
-
-    void assign_string(char *s) {
-        char *t = calloc(255, sizeof(char));
-        strcpy(t, s);
-        yylval.str=t;
-    }
 %}
 
 com				#.*\n
@@ -84,21 +78,24 @@ expr			        { return EXPR; }
 
 {com}			        {  } // Commentaires
 
+
+\n                      { } // Retour à la ligne
+
 [{com} \n\t]	        {  } // Blancs
 
 
 (\"[^"]*\")|(\'[^']*\') {   // Chaine
-                            assign_string(yytext);
+                            yylval.str = copy_string(yytext);
                             return CHAINE;
                         }
 
 {id}        			{   // ID
-                            assign_string(yytext);
+                            yylval.str = copy_string(yytext);
 					        return IDENTIFIER;
                         }
 
 {mot}                   {   // Mot
-                            assign_string(yytext);
+                            yylval.str = copy_string(yytext);
                             return MOT;
                         }
 

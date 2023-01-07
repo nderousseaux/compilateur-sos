@@ -179,28 +179,23 @@ test_execution(){
   in=$1
 
   echo "\n#### Execution" >> $LOG_FILE
-  echo "#### $SIMULATEUR -file $in" >> $LOG_FILE
-  $SIMULATEUR -file $in 2>&1 >> $OUTPUT
+  echo "#### $SIMULATEUR -quiet -file $in" >> $LOG_FILE
+
+  # On stocke la sortie dans une variable
+  $SIMULATEUR -quiet -file $in 2>&1 >> $OUTPUT
+
   EXITCODE=$?
   if [ $EXITCODE -eq 0 ]; then
 
-  # On supprime les lignes une par une, jusqu'à trouver le mot "exception.s"
-
-  #Pour chaque ligne du fichier
-  while read line
-  do
-    #On supprime la ligne
-    sed -i '1d' $OUTPUT
-
-    #Si la ligne contient "exceptions.s"
-    if echo $line | grep -q "exceptions.s"; then
-      break
-    fi
-  done < $OUTPUT
 
   sed -i -e '$a\' $OUTPUT
   fi
   
+  # Si $OUTPUT contient "Exception occured"
+  if grep -q "Exception occured" $OUTPUT; then
+    EXITCODE=1
+  fi
+
   # conserve la sorte dans le log
   cat $OUTPUT >> $LOG_FILE
   echo "==> exitcode: $EXITCODE" >> $LOG_FILE

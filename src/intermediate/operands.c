@@ -103,6 +103,10 @@ void to_operand_int(Operand *op, char *value) {  // FIXME REDONDANT
 /* Transforme une chaine de caractère en operande id */
 void to_operand_id(Operand *op, char *value) {
 	op->symbol = get_st(symbols_table, value);
+
+	if(op->symbol == NULL)
+		printf("Symbol %s not found in symbol table\n", value);
+
 	op->type = ID_T;
 }
 
@@ -151,6 +155,8 @@ char *printable_operand(Operand op) {
 		CHECK(str = calloc(sizeof(char), 10));
 		sprintf(str, "%d", op.value_int);
 		return str;
+	} else if (op.type == EMPTY_T) {
+		return "";
 	} else {
 		return op.symbol->name;
 	}

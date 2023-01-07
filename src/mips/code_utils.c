@@ -21,6 +21,9 @@ void put_op_reg(Operand * op, char * reg) {
     case TEMP_T:
         put_var_reg(op->symbol->position, reg);
         break;
+    case EMPTY_T:
+        put_int_reg(0, reg);
+        break;
     default:
         break;
     }

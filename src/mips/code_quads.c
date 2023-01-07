@@ -67,7 +67,6 @@ void gen_sub(Quad * quad) {
         printable_operand(quad->operand2),
         printable_operand(quad->result));
 
-
     // On met l'opérande 1 dans t0
     put_op_reg(&quad->operand1, "t0");
 

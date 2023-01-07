@@ -32,3 +32,11 @@ int to_int(char *str) {
 
     return res;
 }
+
+/* Copie une chaine de caractères */
+char * copy_string(char *s) {
+    char *t;
+    CHECK(t = calloc(strlen(s) + 255, sizeof(char)));
+    strcpy(t, s);
+    return t;
+}

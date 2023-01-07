@@ -1,7 +1,7 @@
 id = $(expr 3 + 67) ;
-echo ${id};
+echo ${id}"\n";
 id2 = $(expr ${id} * ${id});
-echo ${id2};
+echo ${id2}"\n";
 id3 = $(expr ${id2} / ${id});
-echo ${id3};
+echo ${id3}"\n";
 exit 0

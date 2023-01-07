@@ -98,6 +98,8 @@
 %type <operand> operande operande-entier somme-entiere produit-entier; // Ces noeuds sont des opérandes
 %type <operator> fois-div-mod plus-ou-moins operateur2// Ces noeuds sont des opérations
 %type <integer> M; // Ces noeuds sont des entiers
+%type <str> id;
+
 
 // Priorités
 %left PLUS MINUS
@@ -109,7 +111,9 @@ programme           : liste-instructions                                        
 liste-instructions  : liste-instructions SEMICOLON instruction                          { }
                     | instruction                                                       { }
 
-instruction         : IDENTIFIER EQUAL concatenation                                    { gencode_assign($1, $3); }
+id                  : IDENTIFIER                                                        { $$ = copy_string($1); }
+
+instruction         : id EQUAL concatenation                                            { gencode_assign($1, $3); }
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
@@ -128,11 +132,14 @@ concatenation       : operande                                                  
 
 operande            : MOT                                                               { to_operand_int($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
-                    | DOLLAR OBRACE IDENTIFIER CBRACE                                   { to_operand_id($$, $3); }
+                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
 
 operande-entier     : MOT                                                               { to_operand_int($$, $1); }
                     | OPARA somme-entiere CPARA                                         { $$ = $2; }
+                    | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
+                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3); }
+                                                                                            
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }
                     | produit-entier                                                    { $$ = $1; }
