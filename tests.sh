@@ -190,7 +190,7 @@ test_execution(){
   # Si le système est unix
   if [ $(uname) = "Linux" ]; then
     # On supprime les 4 premières lignes
-    sed -i '1,4d' $OUTPUT
+    sed -i '1,5d' $OUTPUT
   fi
 
   sed -i -e '$a\' $OUTPUT
