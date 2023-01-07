@@ -1,0 +1,4 @@
+i = 5 ;
+while test ${i} -ne 10 do
+done ;
+exit

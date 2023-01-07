@@ -1,0 +1,7 @@
+i=1;
+somme = 0;
+while test ${i} -lt 4 do
+    somme = $( expr ${somme} + ${i} ) ;
+    echo ${somme} "\n" ;
+    i = $( expr ${i} + 1 )
+done ;
