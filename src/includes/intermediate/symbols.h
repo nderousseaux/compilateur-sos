@@ -22,12 +22,19 @@ typedef enum Type_operand {
 	EMPTY_T
 } Type_operand;
 
+typedef enum Type_symbol {
+    CONST_S,
+    VAR_S,
+    TEMP_S
+} Type_symbol;
 
 typedef struct Symbol {
-    enum {CONST, VAR, TEMP} type;  // Type du symbole
+    Type_symbol type;  // Type du symbole
     char *name;  // Nom du symbole
     Type_operand type_data;  // Type de la donnée (var ou const)
-    char *data;  // Donnée associée au symbole
+    char *data;  // Donnée du symbole (constante)
+    // Si l'id stocke une constante, on stocke l'adresse de celle-ci
+    struct Symbol * constant;
 	int position;  // Position dans la pile (-1 si constante)
 } Symbol;
 

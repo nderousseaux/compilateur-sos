@@ -132,13 +132,13 @@ concatenation       : operande                                                  
 
 operande            : MOT                                                               { to_operand_int($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
-                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3); }
+                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
 
 operande-entier     : MOT                                                               { to_operand_int($$, $1); }
                     | OPARA somme-entiere CPARA                                         { $$ = $2; }
                     | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
-                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3); }
+                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }
                                                                                             
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }

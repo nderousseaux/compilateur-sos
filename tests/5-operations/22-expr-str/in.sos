@@ -1,0 +1,4 @@
+id = "-5";
+i = $(expr ${id} + 1);
+echo ${i};
+exit 0

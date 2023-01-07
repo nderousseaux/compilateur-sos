@@ -51,29 +51,29 @@ void put_reg_var(char *reg, int pos) {
 
 /* Fait une addition */
 void add(char *res, char *reg1, char *reg2) {
-    fprintf(f, "\tadd\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
+    fprintf(f, "\t\tadd\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
 }
 
 /* Fait une soustraction */
 void sub(char *res, char *reg1, char *reg2) {
-    fprintf(f, "\tsub\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
+    fprintf(f, "\t\tsub\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
 }
 
 /* Fait une multiplication */
 void mul(char *res, char *reg1, char *reg2) {
-    fprintf(f, "\tmul\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
+    fprintf(f, "\t\tmul\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
 }
 
 /* Fait une division */
 void divi(char *res, char *reg1, char *reg2) {
-    fprintf(f, "\tdiv\t$%s,\t$%s\n", reg1, reg2);
-    fprintf(f, "\tmflo\t$%s\n", res);
+    fprintf(f, "\t\tdiv\t$%s,\t$%s\n", reg1, reg2);
+    fprintf(f, "\t\tmflo\t$%s\n", res);
 }
 
 /* Fait un modulo */
 void mod(char *res, char *reg1, char *reg2) {
-    fprintf(f, "\tdiv\t$%s,\t$%s\n", reg1, reg2);
-    fprintf(f, "\tmfhi\t$%s\n", res);
+    fprintf(f, "\t\tdiv\t$%s,\t$%s\n", reg1, reg2);
+    fprintf(f, "\t\tmfhi\t$%s\n", res);
 }
 
 /* Jump vers un quad */

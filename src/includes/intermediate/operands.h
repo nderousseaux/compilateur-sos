@@ -56,8 +56,10 @@ Operand empty();
 /* Transforme une chaine de caractère en operande entier */
 void to_operand_int(Operand *op, char *value);
 
-/* Transforme une chaine de caractère en operande id */
-void to_operand_id(Operand *op, char *value);
+/* Transforme une chaine de caractère en operande id 
+* Si convert_int est 1, on force la tranformation de l'opérande en entier 
+*/
+void to_operand_id(Operand *op, char *value, char convert_int);
 
 /* Transforme une chaine de caractère en operande constante */
 void to_operand_const(Operand *op, char *value);

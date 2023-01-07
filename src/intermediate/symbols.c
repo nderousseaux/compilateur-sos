@@ -22,7 +22,6 @@ St* init_st() {
     ht->last_const = 0;
     ht->last_temp = 0;
     ht->capacity = INIT_SYMBOLS_LIST_CAPACITY;
-
     CHECK(ht->data = calloc(INIT_SYMBOLS_LIST_CAPACITY, sizeof(St_element*)));
     return ht;
 }
@@ -31,9 +30,10 @@ St* init_st() {
 void add_var_st(char * name, Type_operand type) {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = VAR;
+    s->type = VAR_S;
     s->type_data = type;
     s->name = name;
+    s->constant = NULL;
     s->data = NULL;
     s->position = symbols_table->last_pos;
     symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
@@ -44,7 +44,7 @@ void add_var_st(char * name, Type_operand type) {
 Symbol * add_const_st(char * data) {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = CONST;
+    s->type = CONST_S;
     s->position = -1;
     CHECK(s->data = calloc(strlen(data)+1, sizeof(char)));
     sprintf(s->data, "%s", data);
@@ -64,7 +64,7 @@ Symbol * add_const_st(char * data) {
 Symbol * add_temp_st() {
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = TEMP;
+    s->type = TEMP_S;
     s->type_data = INTEGER_T;
     s->position = symbols_table->last_pos;
     symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
@@ -152,19 +152,32 @@ void print_st(St* ht) {
             do {
                 printf("| '%s'", element->key);
                 switch (element->data->type) {
-                case VAR:
-                    printf(" (var)");
+                case VAR_S:
+                    printf(" (var-");
+                    switch (element->data->type_data) {
+                    case INTEGER_T:
+                        printf("int)");
+                        break;
+                    case CONST_T:
+                        printf("const)");
+                        break;
+                    case TEMP_T:
+                        printf("temp)");
+                        break;
+                    default:
+                        break;
+                    }
                     break;
-                case CONST:
-                    printf(" (const)");
+                case CONST_S:
+                    printf(" (const)\n| %s", element->data->data);
                     break;
-                case TEMP:
+                case TEMP_S:
                     printf(" (temp)");
                     break;
                 default:
                     break;
                 }
-                if (element->data->type != CONST)
+                if (element->data->type != CONST_S)
                     printf(" (pos:%d)\n", element->data->position);
             } while ((element = element->next) != NULL);
             nb_occupe++;

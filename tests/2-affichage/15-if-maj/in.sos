@@ -1,2 +1,2 @@
-IF=34;
-echo ${IF}
+iF=34;
+echo ${iF}
