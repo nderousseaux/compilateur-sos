@@ -1,0 +1,2 @@
+  Exception 12  [Arithmetic overflow]  occurred and ignored
+-2
