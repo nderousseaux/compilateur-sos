@@ -52,7 +52,6 @@ void gencode_if(
 	int first_true,  // Index du premier quad vrai
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part) {  // Quads de l'instruction else
-
 	list_false = concat(else_part, list_false);
 	complete(list_false, nextquad());
 	complete(test_block->fal, last_quad_idx(list_false)+1);
