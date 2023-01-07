@@ -1,0 +1,6 @@
+i = 5 ;
+while test ${i} -ne 2147483648 do
+    echo "J'aime la SoS\n";
+    i = $(expr ${i} * ${i}) 
+done ;
+exit

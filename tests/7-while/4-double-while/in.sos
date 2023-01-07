@@ -1,0 +1,11 @@
+i = 5 ;
+j = 1 ;
+while test ${i} -lt 0  do
+    while test  $(expr ${i} - ${j}) -ne 1 do
+        echo "abaissons i\n";
+        i = $(expr ${i} - 1) 
+    done;
+    echo "i vaut 2 théoriquement\n";
+    i = $(expr ${i} - 1)
+done ;
+exit

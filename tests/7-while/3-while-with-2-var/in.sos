@@ -1,0 +1,7 @@
+i = 10 ;
+j = 10000;
+while test ${i} -lt ${j} do
+    echo "PLUS\n";
+    i = $(expr ${i} * ${i}) 
+done ;
+exit

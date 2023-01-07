@@ -1,0 +1,5 @@
+i = 5 ;
+while test ${i} -ne 0 do
+    echo "J'aime la SoS\n";
+done ;
+exit
