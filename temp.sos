@@ -1,0 +1,3 @@
+for mot in 1 2 3 do
+	echo ${mot}
+done

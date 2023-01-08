@@ -152,7 +152,7 @@ void gencode_tab(char *dst, char *value)
 void gencode_tab_assign(char *tabName, Operand *op, Op_list *src)
 {
 	Operand tab = empty();
-	to_operand_id(&tab, tabName);
+	to_operand_id(&tab, tabName, 0);
 	// On vérifie que le symbole d'entrée se doit d'être de type TAB_T, cas n°5 règle sémantique
 	if (tab.symbol->type != TAB)
 	{
@@ -181,8 +181,7 @@ void gencode_tab_assign(char *tabName, Operand *op, Op_list *src)
 	{
 		to_operand_const(&op2_str, src->data[0].symbol->data);
 	}
-	printf("tab.symbol->position+op->value_int donnnnne : %d\n", op->value_int);
-	printf("tab.symbol-> size -1 donne : %d\n", tab.symbol->size - 1);
+
 	if (op->value_int > tab.symbol->size - 1)
 	{
 		fprintf(stderr,
@@ -217,41 +216,108 @@ Ql *gencode_until(
 	return test_block->tru;
 }
 
-Ctrl_for *gencode_start_for()
+/* génére le code MIPS pour un crée un tableau si on a une liste opérande
+La valeur de retour est le nom du tableau sur lequel ont travail*/
+char *gencode_tab_list_operand(Op_list *op_list)
 {
-	Ctrl_for *package = malloc(sizeof(Ctrl_for)); // Contient l'ensemble de données nécessaire
-	if (package == NULL)
+	if (op_list->name_id != NULL)
 	{
-		return;
+		return op_list->name_id; // On check si on a besoin de créer un tableau
 	}
-	Symbol *index = add_temp_st();
-	package->temp_name = index->name;
-	gencode(OP_ASSIGN, integer(0), empty(), id(index->name));
-	Quad *first_assign = gencode(OP_ASSIGN, empty(), empty(), empty());
-	package->q_index = nextquad;
-	Quad *test_for = gencode(OP_STINF, integer(index->name), empty(), empty());
 
-	package->q_test = create_list(first_assign);
-	add_quad(package->q_test, test_for);
-	return package;
+	int size = op_list->size;
+	Symbol *temp_id = add_temp_st();
+
+	add_tableau_st(temp_id->name, size);
+
+	for (int i = 0; i < size; i++)
+	{
+		Operand op = integer(i);
+		gencode_tab_assign(temp_id->name, &op, create_list_op(&op_list->data[i]));
+	}
+
+	return temp_id->name;
 }
 
-Ctrl_for *gencode_for(
-	char *id_name,	   // Nom de la variable
-	Op_list *list_op,  // Liste d'opérandes
-	Ctrl_for *package, // Toutes les données nécessaires pour le for
-	int first_cond	   // valeur du première marqueur
-)
+Ctrl_for *gencode_start_for(char *id_name, Op_list *op_list)
 {
-	gencode(OP_ADD, id(package->temp_name), integer(1), id(package->temp_name));
-	gencode(OP_ASSIGN, list_op->data)
-		gencode(OP_GOTO, empty(), empty(), integer(package->q_index));
+	Ctrl_for *list = malloc(sizeof(Ctrl_for));
 
-	Quad *first_assign_to_complete = package->q_test->data[0];
-	first_assign_to_complete->operand1 = list_op->data[0];
-	first_assign_to_complete->result = id(id_name);
+	CHECK(list);
 
-	Quad *test_for_to_complete = package->q_test->data[1];
-	test_for_to_complete->operand2 = integer(list_op->size);
-	test_for_to_complete->result = integer(nextquad);
+	// On crée le tableau
+	char *tab = gencode_tab_list_operand(op_list);
+
+	// On crée le compteur
+	list->temp_name = calloc(100, sizeof(char));
+
+	CHECK(list->temp_name);
+
+	Symbol *compteur = add_temp_st();
+
+	Operand compteur_op = id(compteur->name);
+
+	strcpy(list->temp_name, compteur->name);
+
+	gencode(OP_ASSIGN, integer(0), empty(), compteur_op);
+
+	// On crée mot
+	add_var_st(id_name, CONST_T);
+
+	list->q_index = nextquad();
+	Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(op_list->size), empty()); // Dest à compléter
+
+	Ql *need_complete = init_quad_list();
+	add_quad(need_complete, test_for);
+
+	list->q_test = need_complete;
+
+	// On assigne tab[i] à mot ---> mot = tab[i]
+	Operand *op_tab = malloc(sizeof(Operand));
+	to_operand_tab(op_tab, tab, &compteur_op);
+
+	gencode(OP_ASSIGN, *op_tab, empty(), id(id_name));
+
+	// i += 1
+	gencode(OP_ADD, id(list->temp_name), integer(1), id(list->temp_name));
+
+	return list;
 }
+
+void gencode_for(Ctrl_for *list)
+{
+	gencode(OP_GOTO, empty(), empty(), integer(list->q_index));
+	complete(list->q_test, nextquad());
+}
+
+/*
+
+for mot in TAB = (A|B|C) do
+echo mot
+done
+
+
+
+# START FOR
+
+CREER TAB -> FAIT
+
+CREER COMPTEUR I; -> FAIT
+i = 0; -> FAIT
+
+CREER MOT; -> FAIT
+
+if i > 2 jump end 			--> flag_if
+mot = TAB[i] -> FAIT
+i = i + 1 -> FAIT
+
+LISTE INSTRUCTION
+echo mot
+
+
+goto flag_if
+
+end
+
+
+*/

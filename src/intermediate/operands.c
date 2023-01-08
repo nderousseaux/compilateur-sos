@@ -12,6 +12,7 @@ Op_list *init_op_list()
 	Op_list *op_list;
 	CHECK(op_list = malloc(sizeof(Op_list)));
 	op_list->size = 0;
+	op_list->name_id = NULL;
 	op_list->capacity = INIT_OP_LIST_CAPACITY;
 
 	CHECK(op_list->data = calloc(op_list->capacity, sizeof(Operand)));
