@@ -1,6 +1,6 @@
 i = 5 ;
 while test ${i} -ne 10 DO
-    echo "J'aime la SoS\n";
+    echo "Jaime la SoS\n";
     i = $(expr ${i} + 1) 
 done ;
 exit

@@ -19,6 +19,9 @@
 /* Transforme une chaine de caractères en integer */
 int to_int(char *str);
 
+/* Vérifie si une chaine de caractère peut être un string */
+char is_int(char *str);
+
 /* Copie une chaine de caractères */
 char * copy_string(char *s);
 

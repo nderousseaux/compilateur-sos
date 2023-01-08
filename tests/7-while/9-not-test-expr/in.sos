@@ -1,5 +1,5 @@
 i = 5 ;
-while test !(${i} = 4) do
+while test !(${i} -eq 4) do
     echo "SoS\n";
     i = $(expr ${i} - 1) 
 done ;

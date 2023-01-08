@@ -28,6 +28,8 @@ St* init_st() {
 
 /* Ajoute une variable à la table des symboles */
 void add_var_st(char * name, Type_operand type) {
+    if (get_st(symbols_table, name) != NULL)
+        return;
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = VAR_S;

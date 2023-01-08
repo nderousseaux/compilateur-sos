@@ -34,6 +34,38 @@ int to_int(char *str) {
     return res;
 }
 
+/* Vérifie si une chaine de caractère peut être un string */
+char is_int(char *str) {
+    int res;
+    int i = 0;
+    char dec = 0;
+
+    if (str[i] == '"') {
+        i++;
+        dec++;
+    }
+
+    if (str[i] == '+' || str[i] == '-')
+        i++;
+
+    // On teste les autres caractères
+    for (; i < strlen(str); i++) {
+        if (i == strlen(str) - 1 && str[i] == '"')
+            break;
+        if (str[i] < '0' || str[i] > '9') {
+            return 0;
+        }
+    }
+
+    res = atoi(str + dec);
+
+    // On vérifie que res soit bien dans l'intervalle [-2^31, 2^31-1]
+    if (res < -2147483648 || res > 2147483647)
+        return 0;
+
+    return 1;
+}
+
 /* Copie une chaine de caractères */
 char * copy_string(char *s) {
     char *t;

@@ -20,13 +20,25 @@ void gencode_assign(char * dst, Operand * src) {
 
 	// Si l'opérande est une constante, on stocke vers quelle constante pointe l'id
 	if(src->type == CONST_T) {
-		id_dst.symbol->constant = src->symbol;
+		// Si on peut le convertir en entier, on le fait
+		if (is_int(src->symbol->data)) {
+			to_operand_int(src, src->symbol->data);
+			id_dst.symbol->type_data = INTEGER_T;
+		} else {
+			id_dst.symbol->constant = src->symbol;
+		}
 	}
 
 	// Si c'est un id pointant vers une constante
 	if (src->type == ID_T && src->symbol->type_data == CONST_T) {
-		id_dst.symbol->constant = src->symbol->constant;
-		id_dst.symbol->type_data = CONST_T;
+		// Si on peut le convertir en entier, on le fait
+		if (is_int(src->symbol->constant->data)) {
+			to_operand_int(src, src->symbol->constant->data);
+			id_dst.symbol->type_data = INTEGER_T;
+		} else {
+			id_dst.symbol->constant = src->symbol->constant;
+			id_dst.symbol->type_data = CONST_T;
+		}
 	}
 
 	// On génère le quad
