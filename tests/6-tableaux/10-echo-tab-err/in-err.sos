@@ -1,0 +1,3 @@
+declare tab[1];
+echo ${tab};
+exit
