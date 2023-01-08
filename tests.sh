@@ -2,7 +2,7 @@
 TEST_FOLDER=$PWD"/tests"
 LOG_FILE=$TEST_FOLDER"/tests.log"
 SIMULATEUR="spim"
-MAIN=$PWD"/SoS"
+MAIN=$PWD"/sos"
 NB_SUCCESS=0
 NB_TESTS=1
 
