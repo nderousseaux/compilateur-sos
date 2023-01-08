@@ -155,7 +155,7 @@ fois-div-mod        : STAR                                                      
                     | SLASH                                                             { $$ = OP_DIV; }
                     | PERCENT                                                           { $$ = OP_MOD; }
 
-test-block		    : TEST test-expr                                                    { $$ = $2;}
+test-block		    : TEST test-expr                                                    { $$ = $2; }
 
 test-expr			: test-expr OR_COMP M test-expr2                                    { gencode_or($1, $4, $3, $$); }
                     | test-expr2                                                        { $$ = $1;}
@@ -168,9 +168,10 @@ test-expr3          : EXCLA test-expr3                                          
                     | OPARA test-expr3 CPARA                                            { $$ = $2;}
                     | test-instruction                                                  { $$ = $1; }
 
-test-instruction	: operande-entier operateur2 operande-entier                        { gencode_test($2, $1, $3, $$); }
-                    | concatenation EQUAL concatenation                                 { gencode_test(OP_EQUAL, $1, $3, $$); }
-                    | concatenation NEQUAL concatenation                                { gencode_test(OP_NEQUAL, $1, $3, $$); }
+test-instruction	: operateur1 concatenation                                          { $$ = gencode_test($1, $2, NULL); }
+                    | operande-entier operateur2 operande-entier                        { $$ = gencode_test($2, $1, $3); }
+                    | concatenation EQUAL concatenation                                 { $$ = gencode_test(OP_EQUAL, $1, $3); }
+                    | concatenation NEQUAL concatenation                                { $$ = gencode_test(OP_NEQUAL, $1, $3); }
 
 operateur1          : EMPTY_COMP                                                        { $$ = OP_EMPTY; }
                     | NOEMPTY_COMP                                                      { $$ = OP_NOTEMPTY; }

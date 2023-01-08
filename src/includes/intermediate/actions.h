@@ -35,9 +35,8 @@ Ql * gencode_elif(
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part);  // Quads de l'instruction else
 
-/* Génère le code relatif à un test */
-void gencode_test(
-	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res);
+Ctrl_ql * gencode_test(
+	Operator operator, Operand * op1, Operand * op2);
 
 /* Génère le code relatif à une opération OR */
 void gencode_or(

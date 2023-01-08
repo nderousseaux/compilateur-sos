@@ -81,15 +81,22 @@ Ql * gencode_elif(
 
 
 /* Génère le code relatif à un test */
-void gencode_test(
-	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res) {
+Ctrl_ql * gencode_test(
+	Operator operator, Operand * op1, Operand * op2) {
 	// On génère le quad, la destination (result) sera déterminée plus tard
-	Quad * t = gencode(operator, *op1, *op2, empty());
+	Ctrl_ql * res;
+	CHECK(res = malloc(sizeof(res)));
+	Quad * t;
+	if(op2 == NULL)
+		t = gencode(operator, *op1, empty(), empty());
+	else
+		t = gencode(operator, *op1, *op2, empty());
 	res->tru = create_list(t);
 
 	// On génère le quad faux, la destination sera déterminée plus tard
 	Quad * f = gencode(OP_GOTO, empty(), empty(), empty());
 	res->fal = create_list(f);
+	return res;
 }
 
 /* Génère le code relatif à une opération OR */

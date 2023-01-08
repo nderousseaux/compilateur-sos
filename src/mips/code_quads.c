@@ -151,14 +151,32 @@ void gen_mod(Quad * quad) {
 
 /* Traitement du quad OP_NOTEMPTY */
 void gen_noempty(Quad * quad) {
-    printf("Not implemented yet\n");
-    (void) quad;
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s n'est pas vide",
+        quad->result.value_int,
+        printable_operand(quad->operand1));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // Si t0 == 0, on saute au résultat
+    cmp_not_empty_str(quad->result.value_int, "t0");
 }
 
 /* Traitement du quad OP_EMPTY */
 void gen_empty(Quad * quad) {
-    printf("Not implemented yet\n");
-    (void) quad;
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s est pas vide",
+        quad->result.value_int,
+        printable_operand(quad->operand1));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // Si t0 == 0, on saute au résultat
+    cmp_empty_str(quad->result.value_int, "t0");
 }
 
 /* Traitement du quad OP_EQUAL */

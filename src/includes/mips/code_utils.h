@@ -52,6 +52,12 @@ void jeq(int quad, char *reg1, char *reg2);
 /* Jump si égal, str */
 void cmp_str(int quad_true, int quad_false, char * reg1, char *reg2);
 
+/* Jump si vide, str */
+void cmp_empty_str(int dest, char * reg1);
+
+/* Jump si non vide, str */
+void cmp_not_empty_str(int dest, char * reg1);
+
 /* Jump si différent */
 void jne(int quad, char *reg1, char *reg2);
 

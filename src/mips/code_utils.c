@@ -112,6 +112,16 @@ void cmp_str(int quad_true, int quad_false, char * reg1, char *reg2) {
     nb_cmp_loop++;
 }
 
+/* Jump si vide, str */
+void cmp_empty_str(int dest, char * reg1) {
+    fprintf(f, "\t\tbeqz\t$%s, quad_%d", reg1, dest);
+}
+
+/* Jump si non vide, str */
+void cmp_not_empty_str(int dest, char * reg1) {
+    fprintf(f, "\t\tbnez\t$%s, quad_%d", reg1, dest);
+}
+
 /* Jump si différent */
 void jne(int quad, char *reg1, char *reg2) {
     fprintf(f, "\t\tbne\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
