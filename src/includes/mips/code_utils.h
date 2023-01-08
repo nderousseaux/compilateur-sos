@@ -1,6 +1,6 @@
-/* Module contenant les fonctions pour simplifier
- * l'écriture du code assembleur
- */
+/* Module contenant les fonctions pour simplifier 
+* l'écriture du code assembleur
+*/
 
 #ifndef SRC_INCLUDES_MIPS_CODE_UTILS_H_
 #define SRC_INCLUDES_MIPS_CODE_UTILS_H_
@@ -8,7 +8,7 @@
 #include "../intermediate/symbols.h"
 
 /* Met une opérande dans un registre */
-void put_op_reg(Operand *op, char *reg);
+void put_op_reg(Operand * op, char * reg);
 
 /* Met un entier dans un registre  */
 void put_int_reg(int value, char *reg);
@@ -73,18 +73,15 @@ void jlt(int quad, char *reg1, char *reg2);
 /* Jump si inférieur ou égal */
 void jle(int quad, char *reg1, char *reg2);
 
-/* Appelle la primitive EXIT
- * La valeur de sortie doit être définie dans $a0
- */
+/* Appelle la primitive EXIT 
+* La valeur de sortie doit être définie dans $a0
+*/
 void syscall_exit();
 
 /* Appelle la primitive ECHO
- * La valeur à afficher doit être définie dans $a0
- */
+* La valeur à afficher doit être définie dans $a0
+*/
 void syscall_echo(Operand *op);
 
-void syscall_read();
 
-void syscall_sbrk();
-
-#endif // SRC_INCLUDES_MIPS_CODE_UTILS_H_
+#endif  // SRC_INCLUDES_MIPS_CODE_UTILS_H_

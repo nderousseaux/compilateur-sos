@@ -1,19 +1,17 @@
-/* S'occupe des données dans code mips
-    - Génére les constantes au début du code
+/* S'occupe des données dans code mips 
+	- Génére les constantes au début du code
 */
 
 #include "../includes/imports.h"
 
-extern FILE *f; // Fichier de sortie
+extern FILE *f;  // Fichier de sortie
 
 /* Génére les constantes au début du code */
-void gen_data()
-{
-    fprintf(f, ".data\n");
+void gen_data() {
+	fprintf(f, ".data\n");
 
-    // On enregistre toute les constantes de la table des symboles
-    for (int i = 0; i < symbols_table->capacity; i++)
-    {
+	// On enregistre toute les constantes de la table des symboles
+    for (int i = 0; i < symbols_table->capacity; i++) {
         St_element *element = symbols_table->data[i];
         while (element != NULL) {
             if (element->data->type == CONST_S)
@@ -23,6 +21,4 @@ void gen_data()
             element = element->next;
         }
     }
-
-    fprintf(f, "buffer_read: .space 256\n");
 }

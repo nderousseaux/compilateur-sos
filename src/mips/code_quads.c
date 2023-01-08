@@ -1,21 +1,19 @@
 /* Génère le code mips de chaque quad
- */
+*/
 
 #include "../includes/imports.h"
 
-extern FILE *f; // Fichier de sortie
+extern FILE *f;  // Fichier de sortie
 
 /* Traitement du quad OP_EXIT */
-void gen_end(Quad *quad)
-{
+void gen_end(Quad * quad) {
     fprintf(f, "\t\t# On génère le code de terminaison\n");
     put_int_reg(quad->result.value_int, "a0");
     syscall_exit();
 }
 
 /* Traitement du quad OP_ASSIGN */
-void gen_assign(Quad *quad)
-{
+void gen_assign(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s dans %s\n",
@@ -29,43 +27,8 @@ void gen_assign(Quad *quad)
     put_reg_var("t2", quad->result.symbol->position);
 }
 
-void gen_assign_tab(Quad *quad)
-{
-    fprintf(
-        f,
-        "\t\t# On met à jour la case n°%s avec la valeur %s\n",
-        printable_operand(quad->operand2),
-        printable_operand(quad->operand1));
-
-    // On met l'opérande dans t2
-    put_op_reg(&quad->operand1, "t2");
-
-    // On met t2 dans la case correspondante
-    put_reg_var("t2", quad->result.value_int + 4 * quad->operand2.value_int);
-}
-
-void gen_assign_from_tab(Quad *quad)
-{
-    fprintf(
-        f,
-        "\t\t# On met à jour la variable %s avec la valeur de la case n°%s\n",
-        printable_operand(quad->result),
-        printable_operand(quad->operand1));
-
-    // On met i dans t0
-    put_op_reg(&quad->operand2, "t0");
-    add("t0", "t0", "fp"); // On décalle fp de i
-
-    // On met tab[i] dans t2
-    fprintf(f, "\t\tlw\t$t2,\t4($t0)\n");
-
-    // On met t2 dans la case correspondante
-    put_reg_var("t2", quad->result.symbol->position);
-}
-
 /* Traitement du quad OP_ECHO */
-void gen_echo(Quad *quad)
-{
+void gen_echo(Quad * quad) {
     fprintf(f, "\t\t# On affiche %s\n", printable_operand(quad->result));
 
     // On met la valeur à afficher dans a0
@@ -74,8 +37,7 @@ void gen_echo(Quad *quad)
 }
 
 /* Traitement du quad OP_ADD */
-void gen_add(Quad *quad)
-{
+void gen_add(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s + %s dans %s\n",
@@ -97,8 +59,7 @@ void gen_add(Quad *quad)
 }
 
 /* Traitement du quad OP_SUB */
-void gen_sub(Quad *quad)
-{
+void gen_sub(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s - %s dans %s\n",
@@ -120,14 +81,14 @@ void gen_sub(Quad *quad)
 }
 
 /* Traitement du quad OP_MUL */
-void gen_mul(Quad *quad)
-{
+void gen_mul(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s * %s dans %s\n",
         printable_operand(quad->operand1),
         printable_operand(quad->operand2),
         printable_operand(quad->result));
+
 
     // On met l'opérande 1 dans t0
     put_op_reg(&quad->operand1, "t0");
@@ -143,14 +104,14 @@ void gen_mul(Quad *quad)
 }
 
 /* Traitement du quad OP_DIV */
-void gen_div(Quad *quad)
-{
+void gen_div(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s / %s dans %s\n",
         printable_operand(quad->operand1),
         printable_operand(quad->operand2),
         printable_operand(quad->result));
+
 
     // On met l'opérande 1 dans t0
     put_op_reg(&quad->operand1, "t0");
@@ -166,14 +127,14 @@ void gen_div(Quad *quad)
 }
 
 /* Traitement du quad OP_MOD */
-void gen_mod(Quad *quad)
-{
+void gen_mod(Quad * quad) {
     fprintf(
         f,
         "\t\t# On met %s // %s dans %s\n",
         printable_operand(quad->operand1),
         printable_operand(quad->operand2),
         printable_operand(quad->result));
+
 
     // On met l'opérande 1 dans t0
     put_op_reg(&quad->operand1, "t0");
@@ -264,8 +225,7 @@ void gen_nequal(Quad * quad) {
 }
 
 /* Traitement du quad OP_STSUP */
-void gen_stsup(Quad *quad)
-{
+void gen_stsup(Quad * quad) {
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s > %s\n",
@@ -280,12 +240,11 @@ void gen_stsup(Quad *quad)
     put_op_reg(&quad->operand2, "t1");
 
     // Si t0 > t1, on saute au résultat
-    jgt(quad->result.value_int, "t0", "t1");
+    jgt(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_SUPEQ */
-void gen_supeq(Quad *quad)
-{
+void gen_supeq(Quad * quad) {
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s >= %s\n",
@@ -300,12 +259,11 @@ void gen_supeq(Quad *quad)
     put_op_reg(&quad->operand2, "t1");
 
     // Si t0 >= t1, on saute au résultat
-    jge(quad->result.value_int, "t0", "t1");
+    jge(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_STINF */
-void gen_stinf(Quad *quad)
-{
+void gen_stinf(Quad * quad) {
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s < %s\n",
@@ -320,12 +278,11 @@ void gen_stinf(Quad *quad)
     put_op_reg(&quad->operand2, "t1");
 
     // Si t0 < t1, on saute au résultat
-    jlt(quad->result.value_int, "t0", "t1");
+    jlt(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_INFEQ */
-void gen_infeq(Quad *quad)
-{
+void gen_infeq(Quad * quad) {
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s <= %s\n",
@@ -340,20 +297,11 @@ void gen_infeq(Quad *quad)
     put_op_reg(&quad->operand2, "t1");
 
     // Si t0 <= t1, on saute au résultat
-    jle(quad->result.value_int, "t0", "t1");
+    jle(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_GOTO */
-void gen_goto(Quad *quad)
-{
+void gen_goto(Quad * quad) {
     fprintf(f, "\t\t# On saute au quad %d\n", quad->result.value_int);
     jump(quad->result.value_int);
-}
-
-/* Traitement du quad OP_READ */
-void gen_read(Quad *quad)
-{
-    syscall_read();
-    syscall_sbrk();
-    put_reg_var("v0", quad->result.symbol->position);
 }

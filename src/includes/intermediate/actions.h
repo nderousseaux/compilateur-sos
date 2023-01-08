@@ -7,7 +7,6 @@
 #include "./operands.h"
 #include "./quads.h"
 #include "./ctrl_ql.h"
-#include "./for_struct.h"
 
 /* Génère le quad exit */
 void gencode_exit(Operand *op);
@@ -19,54 +18,48 @@ void gencode_assign(char * dst, Operand * src);
 void gencode_echo(Op_list *op_list);
 
 /* Génère le code relatif à une opération */
-Operand *gencode_operation(
-	Operator operator, Operand * op1, Operand *op2);
+Operand * gencode_operation(
+	Operator operator, Operand * op1, Operand * op2);
 
 /* Génère le code relatif à une instruction if */
 void gencode_if(
-	Ctrl_ql *test_block, // Contient les quads du test
-	int first_true,		 // Index du premier quad vrai
-	Ql *list_false,		 // Goto vers le premier quad si faux
-	Ql *else_part);		 // Quads de l'instruction else
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_true,  // Index du premier quad vrai
+	Ql * list_false,  // Goto vers le premier quad si faux
+	Ql * else_part);  // Quads de l'instruction else
 
 /* Génère le code relatif à une instruction elif */
-Ql *gencode_elif(
-	Ctrl_ql *test_block, // Contient les quads du test
-	int first_true,		 // Index du premier quad vrai
-	Ql *list_false,		 // Goto vers le premier quad si faux
-	Ql *else_part);		 // Quads de l'instruction else
+Ql * gencode_elif(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_true,  // Index du premier quad vrai
+	Ql * list_false,  // Goto vers le premier quad si faux
+	Ql * else_part);  // Quads de l'instruction else
 
 Ctrl_ql * gencode_test(
 	Operator operator, Operand * op1, Operand * op2);
 
 /* Génère le code relatif à une opération OR */
 void gencode_or(
-	Ctrl_ql *test_expr, Ctrl_ql *test_expr2, int first_true, Ctrl_ql *res);
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res);
 
 /* Génère le code relatif à une opération AND */
 void gencode_and(
-	Ctrl_ql *test_expr, Ctrl_ql *test_expr2, int first_true, Ctrl_ql *res);
+	Ctrl_ql * test_expr, Ctrl_ql * test_expr2, int first_true, Ctrl_ql * res);
 
 /* Génère le code relatif à une opération NOT */
-void gencode_not(Ctrl_ql *test_expr, Ctrl_ql *res);
-
-/* Génère le code relatif à la déclaration d'un tableau */
-void gencode_tab(char *dst, char *value);
-
-/* Génère le code relatif au remplissage d'un tableau */
-void gencode_tab_assign(char *tabName, Operand *op, Op_list *op_list);
+void gencode_not(Ctrl_ql * test_expr, Ctrl_ql * res);
 
 /* Génère le code relatif à une instruction while */
-Ql *gencode_while(
-	Ctrl_ql *test_block, // Contient les quads du test
-	int first_cond,		 // index du premier quad de la condition
-	int first_true);	 // Index du premier quad vrai
+Ql* gencode_while(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_cond,  // index du premier quad de la condition
+	int first_true);  // Index du premier quad vrai
 
 /* Génère le code relatif à une instruction until */
-Ql *gencode_until(
-	Ctrl_ql *test_block, // Contient les quads du test
-	int first_cond,		 // index du premier quad de la condition
-	int first_true);	 // Index du premier quad vrai
+Ql * gencode_until(
+	Ctrl_ql * test_block,  // Contient les quads du test
+	int first_cond,  // index du premier quad de la condition
+	int first_true);  // Index du premier quad vrai
 
 /* Concatène deux opérandes de string */
 Operand * gencode_concat(Operand * op1, Operand * op2);
