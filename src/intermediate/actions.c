@@ -45,6 +45,20 @@ void gencode_assign(char * dst, Operand * src) {
 	gencode(OP_ASSIGN, *src, empty(), id_dst);
 }
 
+/* Génère le code pour déclarer un tableau */
+void gencode_decla_tab(char * name, char * size) {
+	int size_i;
+	// On vérifie que la value est positif strictement
+	if ((size_i = to_int(size)) < 1) {
+		fprintf(stderr,
+			"Erreur: La taille du tableau doit être supérieure à 0\n");
+		exit(EXIT_FAILURE);
+	}
+
+	// On ajoute le tableau à la table des symboles
+	add_tab_st(name, size_i);
+}
+
 /* Génère le quad d'affichage */
 void gencode_echo(Op_list *op_list) {
 	// Pour chaque opérande de la liste, on génère un quad echo
