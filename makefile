@@ -1,5 +1,5 @@
 CC			:= cc
-TARGET		:= sos
+TARGET		:= SoS
 
 #Directories
 SRCDIR		:= src
