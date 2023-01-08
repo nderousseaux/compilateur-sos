@@ -1,0 +1,5 @@
+i = 5 ;
+while test ${i} -ne 10 do
+    echo "J'aime la SoS\n";
+    i = $(expr ${i} + 1);
+exit

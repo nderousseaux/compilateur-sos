@@ -1,0 +1,15 @@
+declare id[2];
+i = 1;
+id[0] = "oupsiz";
+id[1] = "Ben voyons";
+id[2] = "Castaner";
+while test i -ne 2 do
+    for string in id do
+        if test id != "Castaner" then
+            echo "Cacacastaner\n"
+        fi ;
+    done ;
+    i = $(expr ${i} + 1) 
+done ;
+
+exit

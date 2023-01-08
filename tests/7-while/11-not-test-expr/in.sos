@@ -1,0 +1,6 @@
+i = 5 ;
+while test !(${i} = 4) do
+    echo "SoS\n";
+    i = $(expr ${i} - 1) 
+done ;
+exit
