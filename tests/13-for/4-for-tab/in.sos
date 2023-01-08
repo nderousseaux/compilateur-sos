@@ -1,9 +1,0 @@
-declare tab[4];
-tab[0] = "QUOIFEUR";
-tab[1] = "WEED";
-tab[2] = 2000;
-tab[3] = "quoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeur";
-for id in ${tab[*]} do
-    echo ${id}"\n"
-done ;
-exit
