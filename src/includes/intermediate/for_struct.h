@@ -10,7 +10,7 @@ typedef struct Ctrl_for
 {
     int q_index;     // Un index de quad
     char *temp_name; // Nom de la variable créée pour le for
-    Quad *q_test;    // Le quad à compléter
+    Ql *q_test;      // Liste de quad à compléter
 } Ctrl_for;
 
 #endif

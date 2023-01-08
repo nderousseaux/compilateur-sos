@@ -168,9 +168,12 @@ Ctrl_for *gencode_start_for()
 	Symbol *index = add_temp_st();
 	package->temp_name = index->name;
 	gencode(OP_ASSIGN, integer(0), empty(), id(index->name));
+	Quad *first_assign = gencode(OP_ASSIGN, empty(), empty(), empty());
 	package->q_index = nextquad;
-	package->q_test = gencode(OP_STINF, integer(index->name), empty(), empty());
-	gencode(OP_ASSIGN);
+	Quad *test_for = gencode(OP_STINF, integer(index->name), empty(), empty());
+
+	package->q_test = create_list(first_assign);
+	add_quad(package->q_test, test_for);
 	return package;
 }
 
@@ -182,5 +185,14 @@ Ctrl_for *gencode_for(
 )
 {
 	gencode(OP_ADD, id(package->temp_name), integer(1), id(package->temp_name));
-	gencode(OP_GOTO, empty(), empty(), integer(package->q_index));
+	gencode(OP_ASSIGN, list_op->data)
+		gencode(OP_GOTO, empty(), empty(), integer(package->q_index));
+
+	Quad *first_assign_to_complete = package->q_test->data[0];
+	first_assign_to_complete->operand1 = list_op->data[0];
+	first_assign_to_complete->result = id(id_name);
+
+	Quad *test_for_to_complete = package->q_test->data[1];
+	test_for_to_complete->operand2 = integer(list_op->size);
+	test_for_to_complete->result = integer(nextquad);
 }
