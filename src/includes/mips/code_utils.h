@@ -22,8 +22,14 @@ void put_const_reg(char *name, char *reg);
 /* Met un registre dans la pile */
 void put_reg_var(char *reg, int pos);
 
+/* Met un octet dans un registre */
+void put_oct_reg(char *dst, char *src);
+
 /* Fait une addition */
 void add(char *res, char *reg1, char *reg2);
+
+/* Ajoute à une registre une valeur entière */
+void addi(char *res, char *reg, int value);
 
 /* Fait une soustraction */
 void sub(char *res, char *reg1, char *reg2);
@@ -42,6 +48,15 @@ void jump(int quad);
 
 /* Jump si égal */
 void jeq(int quad, char *reg1, char *reg2);
+
+/* Jump si égal, str */
+void cmp_str(int quad_true, int quad_false, char * reg1, char *reg2);
+
+/* Jump si vide, str */
+void cmp_empty_str(int dest, char * reg1);
+
+/* Jump si non vide, str */
+void cmp_not_empty_str(int dest, char * reg1);
 
 /* Jump si différent */
 void jne(int quad, char *reg1, char *reg2);

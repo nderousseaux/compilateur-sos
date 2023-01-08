@@ -24,6 +24,7 @@ main () {
     categories_tests=$1
     nb_categories_tests=$2
     i=1
+    s=1
     for categorie_tests in $categories_tests
     do
         entete_categorie $(basename $categorie_tests) $i $nb_categories_tests
@@ -38,18 +39,18 @@ main () {
             do_test
             cd ..
             j=$((j+1))
-            NB_TESTS=$((NB_TESTS+1))
+            s=$((s+1))
             echo "\n" >> $LOG_FILE
         done
         cd ..
         i=$((i+1))
     done
 
-    if [ $NB_SUCCESS -eq $NB_TESTS ]; then
-      coloredEcho "\nTous les tests ont réussi ! ($NB_SUCCESS/$NB_TESTS)" green
+    if [ $NB_SUCCESS -eq $s ]; then
+      coloredEcho "\nTous les tests ont réussi ! ($NB_SUCCESS/$s)" green
       return 0
     else
-      coloredEcho "\nErreurs ! ($NB_SUCCESS/$NB_TESTS)" red
+      coloredEcho "\nErreurs ! ($NB_SUCCESS/$s)" red
       return 1
     fi
 }

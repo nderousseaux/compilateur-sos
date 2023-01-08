@@ -73,3 +73,12 @@ void check_id(char * dst) {
         }
     }
 }
+
+/* Retire les guillemets à une chaine (si ils existents)*/
+char * trim(char * str) {
+    if (str[0] == '"' || str[0] == '\'') {
+        str[strlen(str) - 1] = '\0';
+        return str + 1;
+    }
+    return str;
+}

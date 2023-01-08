@@ -94,9 +94,9 @@
 
 %type <quad_list> liste-instructions instruction else-part N; // Ces noeuds sont des listes de quads
 %type <ctrl_ql> test-instruction test-expr test-expr2 test-expr3 test-block; // Ces noeuds sont des listes de quads de contrôle
-%type <op_list> liste-operandes concatenation; // Ces noeuds sont des listes d'opérandes
-%type <operand> operande operande-entier somme-entiere produit-entier; // Ces noeuds sont des opérandes
-%type <operator> fois-div-mod plus-ou-moins operateur2// Ces noeuds sont des opérations
+%type <op_list> liste-operandes; // Ces noeuds sont des listes d'opérandes
+%type <operand> operande operande-entier somme-entiere produit-entier concatenation; // Ces noeuds sont des opérandes
+%type <operator> fois-div-mod plus-ou-moins operateur1 operateur2// Ces noeuds sont des opérations
 %type <integer> M; // Ces noeuds sont des entiers
 %type <str> id;
 
@@ -128,9 +128,10 @@ else-part           : ELIF test-block THEN M liste-instructions N else-part     
 liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
                     | operande                                                          { $$ = create_list_op($1); }
 
-concatenation       : operande                                                          { $$ = create_list_op($1); }
+concatenation       : concatenation operande                                            { $$ = gencode_concat($1, $2); }
+                    | operande                                                          { $$ = copy_operand($1); }
 
-operande            : MOT                                                               { to_operand_int($$, $1); }
+operande            : MOT                                                               { to_operand_const($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
@@ -154,7 +155,7 @@ fois-div-mod        : STAR                                                      
                     | SLASH                                                             { $$ = OP_DIV; }
                     | PERCENT                                                           { $$ = OP_MOD; }
 
-test-block		    : TEST test-expr                                                    { $$ = $2;}
+test-block		    : TEST test-expr                                                    { $$ = $2; }
 
 test-expr			: test-expr OR_COMP M test-expr2                                    { gencode_or($1, $4, $3, $$); }
                     | test-expr2                                                        { $$ = $1;}
@@ -165,9 +166,15 @@ test-expr2          : test-expr2 AND_COMP M test-expr3                          
 test-expr3          : EXCLA test-expr3                                                  { gencode_not($2, $$); }
                     | EXCLA OPARA test-expr3 CPARA                                      { gencode_not($3, $$); }
                     | OPARA test-expr3 CPARA                                            { $$ = $2;}
-                    | test-instruction                                                  { $$ = $1;}
+                    | test-instruction                                                  { $$ = $1; }
 
-test-instruction	: operande operateur2 operande						                { gencode_test($2, $1, $3, $$); }
+test-instruction	: operateur1 concatenation                                          { $$ = gencode_test($1, $2, NULL); }
+                    | operande-entier operateur2 operande-entier                        { $$ = gencode_test($2, $1, $3); }
+                    | concatenation EQUAL concatenation                                 { $$ = gencode_test(OP_EQUAL, $1, $3); }
+                    | concatenation NEQUAL concatenation                                { $$ = gencode_test(OP_NEQUAL, $1, $3); }
+
+operateur1          : EMPTY_COMP                                                        { $$ = OP_EMPTY; }
+                    | NOEMPTY_COMP                                                      { $$ = OP_NOTEMPTY; }
 
 operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
 					| NEQUAL_COMP											            { $$ = OP_NEQUAL; }

@@ -74,4 +74,18 @@ void print_operand(Operand op);
 Valeur si entier, nom si autre */
 char *printable_operand(Operand op);
 
+/* Copie une operande */
+Operand * copy_operand(Operand * op);
+
+/* Renvoie le string d'une constante
+* Directement si c'est une constante
+* Si c'est un id, on renvoie la chaine pointée par l'id
+*/
+char * str_of_const(Operand * op);
+
+/* Renvoie vrai si l'operande est une constante
+* Ou une variable de type constante
+*/
+char is_const(Operand * op);
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_

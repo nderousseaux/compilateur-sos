@@ -151,17 +151,36 @@ void gen_mod(Quad * quad) {
 
 /* Traitement du quad OP_NOTEMPTY */
 void gen_noempty(Quad * quad) {
-    (void) quad;
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s n'est pas vide",
+        quad->result.value_int,
+        printable_operand(quad->operand1));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // Si t0 == 0, on saute au résultat
+    cmp_not_empty_str(quad->result.value_int, "t0");
 }
 
 /* Traitement du quad OP_EMPTY */
 void gen_empty(Quad * quad) {
-    (void) quad;
+    fprintf(
+        f,
+        "\t\t# On saute au quad n°%d si %s est pas vide",
+        quad->result.value_int,
+        printable_operand(quad->operand1));
+
+    // On met l'opérande 1 dans t0
+    put_op_reg(&quad->operand1, "t0");
+
+    // Si t0 == 0, on saute au résultat
+    cmp_empty_str(quad->result.value_int, "t0");
 }
 
 /* Traitement du quad OP_EQUAL */
 void gen_equal(Quad * quad) {
-    // TODO(nderousseaux) equal vaut aussi pour str ?
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s == %s\n",
@@ -176,12 +195,16 @@ void gen_equal(Quad * quad) {
     put_op_reg(&quad->operand2, "t1");
 
     // Si t0 == t1, on saute au résultat
-    jeq(quad->result.value_int , "t0", "t1");
+
+    // Si on compare deux chaînes de caractères
+    if (is_const(&quad->operand1) && is_const(&quad->operand2))
+        cmp_str(quad->result.value_int, quad->idx+1, "t0", "t1");
+    else
+        jeq(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_NEQUAL */
 void gen_nequal(Quad * quad) {
-    // TODO(nderousseaux) nequal vaut aussi pour str ?
     fprintf(
         f,
         "\t\t# On saute au quad n°%d si %s != %s\n",
@@ -195,8 +218,10 @@ void gen_nequal(Quad * quad) {
     // On met l'opérande 2 dans t1
     put_op_reg(&quad->operand2, "t1");
 
-    // Si t0 != t1, on saute au résultat
-    jne(quad->result.value_int , "t0", "t1");
+    if (is_const(&quad->operand1) && is_const(&quad->operand2))
+        cmp_str(quad->idx+1, quad->result.value_int, "t0", "t1");
+    else
+        jne(quad->result.value_int , "t0", "t1");
 }
 
 /* Traitement du quad OP_STSUP */

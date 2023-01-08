@@ -6,6 +6,8 @@
 
 extern FILE *f;  // Fichier de sortie
 
+int nb_cmp_loop = 0;  // Nombre de boucles de comparaison
+
 /* Met une opérande dans un registre */
 void put_op_reg(Operand * op, char * reg) {
     switch (op->type) {
@@ -49,9 +51,19 @@ void put_reg_var(char *reg, int pos) {
     fprintf(f, "\t\tsw\t$%s,\t%d($fp)\n", reg, pos);
 }
 
+/* Met un octet dans un registre */
+void put_oct_reg(char *dst, char *src) {
+    fprintf(f, "\t\tlb\t$%s,\t($%s)\n", dst, src);
+}
+
 /* Fait une addition */
 void add(char *res, char *reg1, char *reg2) {
     fprintf(f, "\t\tadd\t$%s,\t$%s,\t$%s\n", res, reg1, reg2);
+}
+
+/* Ajoute à une registre une valeur entière */
+void addi(char *res, char *reg, int value) {
+    fprintf(f, "\t\taddi\t$%s,\t$%s,\t%d\n", res, reg, value);
 }
 
 /* Fait une soustraction */
@@ -84,6 +96,30 @@ void jump(int quad) {
 /* Jump si égal */
 void jeq(int quad, char *reg1, char *reg2) {
     fprintf(f, "\t\tbeq\t$%s,\t$%s,\tquad_%d\n", reg1, reg2, quad);
+}
+
+/* Jump si égal, str */
+void cmp_str(int quad_true, int quad_false, char * reg1, char *reg2) {
+    fprintf(f, "\t\t# Comparaison de chaine\n");
+    fprintf(f, "\t\tcmploop_%d:\n", nb_cmp_loop);
+    put_oct_reg("t2", reg1);
+    put_oct_reg("t3", reg2);
+    jne(quad_false, "t2", "t3");
+    jeq(quad_true, "t2", "zero");
+    addi(reg1, reg1, 1);
+    addi(reg2, reg2, 1);
+    fprintf(f, "\t\tj\tcmploop_%d\n", nb_cmp_loop);
+    nb_cmp_loop++;
+}
+
+/* Jump si vide, str */
+void cmp_empty_str(int dest, char * reg1) {
+    fprintf(f, "\t\tbeqz\t$%s, quad_%d", reg1, dest);
+}
+
+/* Jump si non vide, str */
+void cmp_not_empty_str(int dest, char * reg1) {
+    fprintf(f, "\t\tbnez\t$%s, quad_%d", reg1, dest);
 }
 
 /* Jump si différent */

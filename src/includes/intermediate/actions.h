@@ -12,7 +12,7 @@
 void gencode_exit(Operand *op);
 
 /* Génère le quad d'association */
-void gencode_assign(char * dst, Op_list * src);
+void gencode_assign(char * dst, Operand * src);
 
 /* Génère le quad d'affichage */
 void gencode_echo(Op_list *op_list);
@@ -35,9 +35,8 @@ Ql * gencode_elif(
 	Ql * list_false,  // Goto vers le premier quad si faux
 	Ql * else_part);  // Quads de l'instruction else
 
-/* Génère le code relatif à un test */
-void gencode_test(
-	Operator operator, Operand * op1, Operand * op2, Ctrl_ql * res);
+Ctrl_ql * gencode_test(
+	Operator operator, Operand * op1, Operand * op2);
 
 /* Génère le code relatif à une opération OR */
 void gencode_or(
@@ -61,5 +60,8 @@ Ql * gencode_until(
 	Ctrl_ql * test_block,  // Contient les quads du test
 	int first_cond,  // index du premier quad de la condition
 	int first_true);  // Index du premier quad vrai
+
+/* Concatène deux opérandes de string */
+Operand * gencode_concat(Operand * op1, Operand * op2);
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

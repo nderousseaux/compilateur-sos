@@ -176,3 +176,39 @@ char *printable_operand(Operand op) {
 		return op.symbol->name;
 	}
 }
+
+/* Copie une operande */
+Operand * copy_operand(Operand * op) {
+	Operand * new_op = malloc(sizeof(Operand));
+	new_op->type = op->type;
+	new_op->symbol = op->symbol;
+	new_op->value_int = op->value_int;
+	return new_op;
+}
+
+/* Renvoie le string d'une constante
+* Directement si c'est une constante
+* Si c'est un id, on renvoie la chaine pointée par l'id
+*/
+char * str_of_const(Operand * op) {
+	if (op->type == CONST_T) {
+		return op->symbol->data;
+	} else if (op->type == ID_T && op->symbol->type_data == CONST_T) {
+		return op->symbol->constant->data;
+	} else {
+		fprintf(stderr, "Erreur : l'opérande n'est pas une constante\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
+/* Renvoie vrai si l'operande est une constante
+* Ou une variable de type constante
+*/
+char is_const(Operand * op) {
+	if(op->type == CONST_T)
+		return 1;
+	else if (op->type == ID_T && op->symbol->type_data == CONST_T)
+		return 1;
+	else
+		return 0;
+}

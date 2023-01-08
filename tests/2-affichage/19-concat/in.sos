@@ -1,0 +1,3 @@
+i=world;
+j=hello ${i} hello ${i};
+echo ${j}
