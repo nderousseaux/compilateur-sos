@@ -200,3 +200,15 @@ char * str_of_const(Operand * op) {
 		exit(EXIT_FAILURE);
 	}
 }
+
+/* Renvoie vrai si l'operande est une constante
+* Ou une variable de type constante
+*/
+char is_const(Operand * op) {
+	if(op->type == CONST_T)
+		return 1;
+	else if (op->type == ID_T && op->symbol->type_data == CONST_T)
+		return 1;
+	else
+		return 0;
+}

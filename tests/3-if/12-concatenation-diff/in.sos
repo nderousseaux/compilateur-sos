@@ -1,6 +1,6 @@
 mot1 = "Quoi" ;
 mot2 = "Feur" ;
-if test mot1 != mot2 then
-    echo "Coiffeur" ;
+if test ${mot1} != ${mot2} then
+    echo "Coiffeur"
 fi ;
 exit

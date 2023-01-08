@@ -96,7 +96,7 @@
 %type <ctrl_ql> test-instruction test-expr test-expr2 test-expr3 test-block; // Ces noeuds sont des listes de quads de contrôle
 %type <op_list> liste-operandes; // Ces noeuds sont des listes d'opérandes
 %type <operand> operande operande-entier somme-entiere produit-entier concatenation; // Ces noeuds sont des opérandes
-%type <operator> fois-div-mod plus-ou-moins operateur2// Ces noeuds sont des opérations
+%type <operator> fois-div-mod plus-ou-moins operateur1 operateur2// Ces noeuds sont des opérations
 %type <integer> M; // Ces noeuds sont des entiers
 %type <str> id;
 
@@ -166,9 +166,14 @@ test-expr2          : test-expr2 AND_COMP M test-expr3                          
 test-expr3          : EXCLA test-expr3                                                  { gencode_not($2, $$); }
                     | EXCLA OPARA test-expr3 CPARA                                      { gencode_not($3, $$); }
                     | OPARA test-expr3 CPARA                                            { $$ = $2;}
-                    | test-instruction                                                  { $$ = $1;}
+                    | test-instruction                                                  { $$ = $1; }
 
 test-instruction	: operande-entier operateur2 operande-entier                        { gencode_test($2, $1, $3, $$); }
+                    | concatenation EQUAL concatenation                                 { gencode_test(OP_EQUAL, $1, $3, $$); }
+                    | concatenation NEQUAL concatenation                                { gencode_test(OP_NEQUAL, $1, $3, $$); }
+
+operateur1          : EMPTY_COMP                                                        { $$ = OP_EMPTY; }
+                    | NOEMPTY_COMP                                                      { $$ = OP_NOTEMPTY; }
 
 operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
 					| NEQUAL_COMP											            { $$ = OP_NEQUAL; }

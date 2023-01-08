@@ -83,4 +83,9 @@ Operand * copy_operand(Operand * op);
 */
 char * str_of_const(Operand * op);
 
+/* Renvoie vrai si l'operande est une constante
+* Ou une variable de type constante
+*/
+char is_const(Operand * op);
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_
