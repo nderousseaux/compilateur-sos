@@ -1,6 +1,6 @@
 /* Module contenant tout le code relatif à la table des symboles
-	On y retrouve aussi une liste et ses fonctions associées
-	pour stocker les symboles
+    On y retrouve aussi une liste et ses fonctions associées
+    pour stocker les symboles
 
     Il y a trois table des symboles :
     - une pour les variables
@@ -10,11 +10,12 @@
 
 #include "../includes/imports.h"
 
-extern St* symbols_table;
+extern St *symbols_table;
 
 /* Crée une hashtable de taille définie */
-St* init_st() {
-    St* ht;
+St *init_st()
+{
+    St *ht;
     CHECK(ht = malloc(sizeof(St)));
     ht->size = 0;
     ht->size_total = 0;
@@ -22,7 +23,7 @@ St* init_st() {
     ht->last_const = 0;
     ht->last_temp = 0;
     ht->capacity = INIT_SYMBOLS_LIST_CAPACITY;
-    CHECK(ht->data = calloc(INIT_SYMBOLS_LIST_CAPACITY, sizeof(St_element*)));
+    CHECK(ht->data = calloc(INIT_SYMBOLS_LIST_CAPACITY, sizeof(St_element *)));
     return ht;
 }
 
@@ -32,13 +33,28 @@ void add_var_st(char * name, Type_operand type) {
         return;
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = VAR_S;
+    s->type = VAR;
     s->type_data = type;
     s->name = name;
     s->constant = NULL;
     s->data = NULL;
     s->position = symbols_table->last_pos;
-    symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
+    symbols_table->last_pos += 4; // Chaque variable prend 4 octets
+    add_st(symbols_table, name, s);
+}
+
+/* Ajoute une variable tableau à la table des symboles */
+void add_tableau_st(char *name, int size)
+{ // TODO REDONDANCE
+    Symbol *s;
+    CHECK(s = malloc(sizeof(Symbol)));
+    s->type = TAB;
+    s->size = size;
+    s->type_data = TAB_T;
+    s->name = name;
+    s->data = NULL;
+    s->position = symbols_table->last_pos;
+    symbols_table->last_pos += (4 * size); // Le tableau est fixe, sa taille est définie par size
     add_st(symbols_table, name, s);
 }
 
@@ -48,13 +64,12 @@ Symbol * add_const_st(char * data) {
 
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = CONST_S;
+    s->type = CONST;
     s->position = -1;
-    CHECK(s->data = calloc(strlen(data)+1, sizeof(char)));
+    CHECK(s->data = calloc(strlen(data) + 1, sizeof(char)));
     sprintf(s->data, "%s", data);
 
-
-    char* name;
+    char *name;
     CHECK(name = calloc(10, sizeof(char)));
 
     snprintf(name, 10, "const_%d", symbols_table->last_const);
@@ -65,15 +80,16 @@ Symbol * add_const_st(char * data) {
 }
 
 /* Ajoute une temporaire à la table des symboles */
-Symbol * add_temp_st() {
-    Symbol* s;
+Symbol *add_temp_st()
+{
+    Symbol *s;
     CHECK(s = malloc(sizeof(Symbol)));
-    s->type = TEMP_S;
+    s->type = TEMP;
     s->type_data = INTEGER_T;
     s->position = symbols_table->last_pos;
-    symbols_table->last_pos+=4;  // Chaque variable prend 4 octets
+    symbols_table->last_pos += 4; // Chaque variable prend 4 octets
 
-    char * name;
+    char *name;
     CHECK(name = calloc(10, sizeof(char)));
     snprintf(name, 10, "temp_%d", symbols_table->last_temp);
     symbols_table->last_temp++;
@@ -84,29 +100,37 @@ Symbol * add_temp_st() {
 }
 
 /* Ajoute une donnée dans la hashtable*/
-void add_st(St* ht, char* key, Symbol* data) {
+void add_st(St *ht, char *key, Symbol *data)
+{
     // On regarde si on ne devrait pas agrandir la table
-     if (ht->size >= ht->capacity / 2) {
+    if (ht->size >= ht->capacity / 2)
+    {
         extend_st(ht);
     }
 
-    int index = hash(key) % ht->capacity;  // On calcue l'index
+    int index = hash(key) % ht->capacity; // On calcue l'index
 
-    St_element* element = ht->data[index];  // On récupère l'élément à cet index
+    St_element *element = ht->data[index]; // On récupère l'élément à cet index
 
     // Si l'élément est vide, on l'ajoute
-    if (element == NULL) {
+    if (element == NULL)
+    {
         ht->data[index] = add_element_st(key, data);
         ht->size++;
         ht->size_total++;
-    } else {  // Sinon, on parcourt la liste jusqu'à trouver un élément vide
-        while (element != NULL) {
+    }
+    else
+    { // Sinon, on parcourt la liste jusqu'à trouver un élément vide
+        while (element != NULL)
+        {
             // Si l'élément est connu on le remplace
-            if (strcmp(element->key, key) == 0) {
+            if (strcmp(element->key, key) == 0)
+            {
                 element->data = data;
                 return;
             }
-            if (element->next == NULL) {
+            if (element->next == NULL)
+            {
                 element->next = add_element_st(key, data);
                 break;
             }
@@ -117,8 +141,9 @@ void add_st(St* ht, char* key, Symbol* data) {
 }
 
 /* Crée et un élément et renvoie son adresse */
-St_element *add_element_st(char* key, Symbol* data) {
-    St_element* element;
+St_element *add_element_st(char *key, Symbol *data)
+{
+    St_element *element;
     CHECK(element = malloc(sizeof(St_element)));
     element->key = key;
     element->data = data;
@@ -127,12 +152,14 @@ St_element *add_element_st(char* key, Symbol* data) {
 }
 
 /* Récupère une donnée dans la hashtable */
-Symbol* get_st(St* ht, char* key) {
-    int index = hash(key) % ht->capacity;  // On calcue l'index
+Symbol *get_st(St *ht, char *key)
+{
+    int index = hash(key) % ht->capacity; // On calcue l'index
 
-    St_element* element = ht->data[index];  // On récupère l'élément à cet index
+    St_element *element = ht->data[index]; // On récupère l'élément à cet index
 
-    while (element != NULL) {
+    while (element != NULL)
+    {
         if (strcmp(element->key, key) == 0)
             return element->data;
         element = element->next;
@@ -141,24 +168,30 @@ Symbol* get_st(St* ht, char* key) {
 }
 
 /* Affiche la hashtable */
-void print_st(St* ht) {
+void print_st(St *ht)
+{
     printf("\n──────────────── Table des symboles ────────────────\n");
     printf("Nombre d'éléments : %d\n", ht->size);
     printf("Taille de la première couche de la table : %d\n\n", ht->capacity);
 
     int nb_occupe = 0;
 
-    for (int i=0; i < ht->capacity; i++) {
-        St_element* element = ht->data[i];
+    for (int i = 0; i < ht->capacity; i++)
+    {
+        St_element *element = ht->data[i];
 
-        if (element != NULL) {
+        if (element != NULL)
+        {
             printf("Case n°%d/%d\n", i, ht->capacity);
-            do {
+            do
+            {
                 printf("| '%s'", element->key);
-                switch (element->data->type) {
+                switch (element->data->type)
+                {
                 case VAR_S:
                     printf(" (var-");
-                    switch (element->data->type_data) {
+                    switch (element->data->type_data)
+                    {
                     case INTEGER_T:
                         printf("int)");
                         break;
@@ -181,7 +214,7 @@ void print_st(St* ht) {
                 default:
                     break;
                 }
-                if (element->data->type != CONST_S)
+                if (element->data->type != CONST)
                     printf(" (pos:%d)\n", element->data->position);
             } while ((element = element->next) != NULL);
             nb_occupe++;
@@ -192,11 +225,14 @@ void print_st(St* ht) {
 }
 
 /* Supprime la hashtable */
-void destroy_st(St* ht) {
-    for (int i = 0; i < ht->capacity; i++) {
-        St_element* element = ht->data[i];
-        while (element != NULL) {
-            St_element* next = element->next;
+void destroy_st(St *ht)
+{
+    for (int i = 0; i < ht->capacity; i++)
+    {
+        St_element *element = ht->data[i];
+        while (element != NULL)
+        {
+            St_element *next = element->next;
             free(element);
             element = next;
         }
@@ -206,23 +242,26 @@ void destroy_st(St* ht) {
 }
 
 /* Étend la table */
-void extend_st(St* ht) {
-    int new_capacity = ht->capacity * 2;  // On double la taille de la table
+void extend_st(St *ht)
+{
+    int new_capacity = ht->capacity * 2; // On double la taille de la table
 
     // On crée une nouvelle table
-    St_element** new_data;
-    CHECK(new_data = calloc(new_capacity, sizeof(St_element*)));
+    St_element **new_data;
+    CHECK(new_data = calloc(new_capacity, sizeof(St_element *)));
 
     // On parcourt l'ancienne table
-    for (int i = 0; i < ht->capacity; i++) {
-        St_element* element = ht->data[i];
-        while (element != NULL) {
+    for (int i = 0; i < ht->capacity; i++)
+    {
+        St_element *element = ht->data[i];
+        while (element != NULL)
+        {
             // On recalcule l'index
             int index = hash(element->key) % new_capacity;
 
             // On ajoute l'élément à la nouvelle table
             // On sauvegarde le prochain élément
-            St_element* next = element->next;
+            St_element *next = element->next;
             element->next = new_data[index];
             new_data[index] = element;
             element = next;
@@ -236,11 +275,13 @@ void extend_st(St* ht) {
 }
 
 /* Calcule le hash d'une chaine de caractère */
-int hash(char* key) {
+int hash(char *key)
+{
     int hash = 0;
     int i = 0;
     char c = key[0];
-    while (c != '\0') {
+    while (c != '\0')
+    {
         i++;
         // Des carrés pour augmenter la dispersion en cas de chaines
         // similaire (key1 et key2 par exemple)

@@ -22,6 +22,7 @@
     Operand * operand; // Opérande
     Operator operator; // Type d'opérateur
     int integer; // Entier
+    Ctrl_for * ctrl_for; //Quad pour le for
 }
 
 %start programme
@@ -99,6 +100,7 @@
 %type <operator> fois-div-mod plus-ou-moins operateur1 operateur2// Ces noeuds sont des opérations
 %type <integer> M; // Ces noeuds sont des entiers
 %type <str> id;
+%type <ctrl_for> start-for;
 
 
 // Priorités
@@ -114,18 +116,46 @@ liste-instructions  : liste-instructions SEMICOLON instruction                  
 id                  : MOT                                                               { $$ = copy_string($1); }
 
 instruction         : id EQUAL concatenation                                            { gencode_assign($1, $3); }
+                    | id OSQUARE operande-entier CSQUARE EQUAL concatenation            { gencode_tab_assign($1, $3, $6);}
+                    | DECLARE id OSQUARE MOT CSQUARE                                    { gencode_tab($2, $4);}
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
                     | IF test-block THEN M liste-instructions N else-part FI            { gencode_if($2, $4, $6, $7); }
                     | WHILE M test-block DO M liste-instructions DONE                   { $$ = gencode_while($3, $2, $5); }
                     | UNTIL M test-block DO M liste-instructions DONE                   { $$ = gencode_until($3, $2, $5); }
+                    | start-for DO liste-instructions DONE                              { gencode_for($1);}
+                    | FOR id DO liste-instructions DONE                                 { }
+                    | CASE operande IN liste-cas ESAC                                   { }
+                    | READ id                                                           { gencode_read_id($2); }
+                    | READ id OSQUARE operande-entier CSQUARE                           { }
+                    | declaration-de-fonction                                           { }
+                    | appel_de_fonction                                                 { }
+                    | RETURN                                                            { }
+                    | RETURN operande-entier                                            { }
+                    
 
+start-for           : FOR id IN liste-operandes                                         { $$ = gencode_start_for($2, $4);  }
+                                                                                            
 else-part           : ELIF test-block THEN M liste-instructions N else-part             { $$ = gencode_elif($2, $4, $6, $7); }
                     | ELSE liste-instructions                                           { $$ = init_quad_list(); }
                     | /* empty */                                                       { $$ = init_quad_list(); }
 
-liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
+liste-cas           : liste-cas filtre CPARA liste-instructions SEMICOLON SEMICOLON     { }
+                    | filtre CPARA liste-instructions SEMICOLON SEMICOLON               { }
+
+filtre              : MOT                                                               { }
+                    | CHAINE                                                            { }
+                    | filtre PIPE MOT                                                   { }
+                    | filtre PIPE CHAINE                                                { }
+                    | STAR                                                              { }
+
+liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2);
+                                                                                          $$->name_id = NULL; }
+                    | operande                                                          { $$ = create_list_op($1); }
+                    | DOLLAR OBRACE id OSQUARE STAR CSQUARE CBRACE                      { strcpy($3,$$->name_id);}
+
+concatenation       : concatenation operande                                            { }
                     | operande                                                          { $$ = create_list_op($1); }
 
 concatenation       : concatenation operande                                            { $$ = gencode_concat($1, $2); }
@@ -137,6 +167,7 @@ operande            : MOT                                                       
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
 
 operande-entier     : MOT                                                               { to_operand_int($$, $1); }
+                    | DOLLAR OBRACE IDENTIFIER OSQUARE operande-entier CSQUARE CBRACE   { to_operand_tab($$, $3, $5); }
                     | OPARA somme-entiere CPARA                                         { $$ = $2; }
                     | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }
@@ -183,6 +214,14 @@ operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
 					| SUPEQ_COMP											            { $$ = OP_SUPEQ; }
 					| STINF_COMP											            { $$ = OP_STINF; }
 					| INFEQ_COMP											            { $$ = OP_INFEQ; }
+
+declaration-de-fonction : id OPARA CPARA OBRACE decl_loc liste-instructions CBRACE      { }
+
+decl_loc            : decl_loc LOCAL id EQUAL concatenation SEMICOLON                   { }
+                    |
+
+appel_de_fonction   : id liste-operandes                                                { }
+                    | id                                                                { }
 
 M                   : /*Empty*/                                                         { $$ = nextquad(); }
 

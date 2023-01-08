@@ -5,9 +5,12 @@
 #ifndef SRC_INCLUDES_INTERMEDIATE_OPERATORS_H_
 #define SRC_INCLUDES_INTERMEDIATE_OPERATORS_H_
 
-typedef enum Operator {
+typedef enum Operator
+{
 	OP_EXIT,
 	OP_ASSIGN,
+	OP_ASSIGN_TAB,
+	OP_ASSIGN_FROM_TAB,
 	OP_ECHO,
 	OP_ADD,
 	OP_MINUS,
@@ -22,10 +25,11 @@ typedef enum Operator {
 	OP_SUPEQ,
 	OP_STINF,
 	OP_INFEQ,
-	OP_GOTO
+	OP_GOTO,
+	OP_READ
 } Operator;
 
 /* Affiche un opérateur */
 void print_operator(Operator op);
 
-#endif  // SRC_INCLUDES_INTERMEDIATE_OPERATORS_H_
+#endif // SRC_INCLUDES_INTERMEDIATE_OPERATORS_H_
