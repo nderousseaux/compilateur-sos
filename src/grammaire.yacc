@@ -127,7 +127,7 @@ instruction         : id EQUAL concatenation                                    
                     | start-for DO liste-instructions DONE                              { gencode_for($1);}
                     | FOR id DO liste-instructions DONE                                 { }
                     | CASE operande IN liste-cas ESAC                                   { }
-                    | READ id                                                           { }
+                    | READ id                                                           { gencode_read_id($2); }
                     | READ id OSQUARE operande-entier CSQUARE                           { }
                     | declaration-de-fonction                                           { }
                     | appel_de_fonction                                                 { }
