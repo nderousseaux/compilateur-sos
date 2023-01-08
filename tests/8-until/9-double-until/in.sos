@@ -1,0 +1,11 @@
+i = 5 ;
+j = 1 ;
+until test ${i} -ge 125 do
+    until test ${j} -ge 7 do  
+        echo "Dems\n";
+        j = $(expr ${j} + ${j})
+    done ;
+    echo "stache\n";
+    i = $(expr ${i} * ${i}) 
+done ;
+exit
