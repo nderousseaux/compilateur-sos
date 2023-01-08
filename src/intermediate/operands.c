@@ -95,7 +95,7 @@ Operand empty() {
 }
 
 /* Transforme une chaine de caractère en operande entier */
-void to_operand_int(Operand *op, char *value) {  // FIXME REDONDANT
+void to_operand_int(Operand *op, char *value) {
 	op->value_int = to_int(value);
 	op->type = INTEGER_T;
 }

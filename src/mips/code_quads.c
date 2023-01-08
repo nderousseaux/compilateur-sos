@@ -20,11 +20,44 @@ void gen_assign(Quad * quad) {
         printable_operand(quad->operand1),
         printable_operand(quad->result));
 
+    if (quad->operand1.type == TAB_T)
+        fprintf(
+            f,
+            "\t\t# (index du tab indiqué à %d($fp)\n",
+            quad->operand1.value_int);
+
+    // On met l'opérande dans t2
+    put_op_reg(&quad->operand1, "t2");
+    // On met t2 dans la variable
+    put_reg_var("t2", quad->result.symbol->position);
+}
+
+/* Traitement du quad OP_ASSIGN_TAB */
+void gen_assign_tab(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On met %s dans %s[%s]\n",
+        printable_operand(quad->operand1),
+        printable_operand(quad->result),
+        printable_operand(quad->operand2));
+
     // On met l'opérande dans t2
     put_op_reg(&quad->operand1, "t2");
 
-    // On met t2 dans la variable
-    put_reg_var("t2", quad->result.symbol->position);
+    // On met l'addresse de tab dans t0
+    put_int_reg(quad->result.symbol->position, "t0");
+    // On met la valeur de de i dans t1
+    put_op_reg(&quad->operand2, "t1");
+    // On multiplie t1 par 4
+    put_int_reg(4, "t3");
+    mul("t1", "t1", "t3");
+    // On ajoute t0 et t1
+    add("t0", "t0", "t1");
+
+    // On ajoute fp à t0
+    add("t0", "t0", "fp");
+    // On charge la valeur de t2 dans la valeur pointée par t0
+    fprintf(f, "\t\tsw $t2, 0($t0)");
 }
 
 /* Traitement du quad OP_ECHO */

@@ -23,12 +23,34 @@ void put_op_reg(Operand * op, char * reg) {
     case TEMP_T:
         put_var_reg(op->symbol->position, reg);
         break;
+    case TAB_T:
+        put_reg_var_tab(op, reg);
+        break;
     case EMPTY_T:
         put_int_reg(0, reg);
         break;
     default:
         break;
     }
+}
+
+/* Met la valeur d'un tableau dans une opérande */
+void put_reg_var_tab(Operand * op, char * reg) {
+    // On met l'addresse de tab dans t0
+    put_int_reg(op->symbol->position, "t0");
+    // On met la valeur de de i dans t1
+    fprintf(f, "\t\tlw\t$t1,\t%d($fp)\n", op->value_int);
+    // On multiplie t1 par 4
+    put_int_reg(4, "t3");
+    mul("t1", "t1", "t3");
+    // On ajoute t0 et t1
+    add("t0", "t0", "t1");
+
+    // On ajoute fp à t0
+    add("t0", "t0", "fp");
+
+    // On charge la valeur de t0 pointée par t0 dans le reg
+    fprintf(f, "\t\tlw\t$%s,\t0($t0)\n", reg);
 }
 
 /* Met un entier dans un registre  */
@@ -159,11 +181,15 @@ void syscall_exit() {
 * La valeur à afficher doit être définie dans $a0
 */
 void syscall_echo(Operand *op) {
-    if (op->type == CONST_T)
+    if(op->symbol->type_data == TAB_T) {
+        fprintf(f, "\t\tli\t$v0,\t1\n");
+    } else if (op->type == CONST_T)
         fprintf(f, "\t\tli\t$v0,\t4\n");
-    else if (op->type == ID_T && op->symbol->type_data == CONST_T)
+    else if (
+        op->type == ID_T &&
+        op->symbol->type_data == CONST_T) {
         fprintf(f, "\t\tli\t$v0,\t4\n");
-    else
+    } else
         fprintf(f, "\t\tli\t$v0,\t1\n");
     fprintf(f, "\t\tsyscall\n");
 }

@@ -14,6 +14,17 @@ void gencode_exit(Operand *op);
 /* Génère le quad d'association */
 void gencode_assign(char * dst, Operand * src);
 
+/* Génère le code pour associer un tableau */
+void gencode_assign_tab(char * dst, Operand * index, Operand * src);
+
+/* Génère le code pour associer un tableau à une var
+* renvoie une opérande temporaire contenant la valeur du tableau
+*/
+Operand * gencode_tab_to_temp(char * name, Operand * index);
+
+/* Génère le code pour déclarer un tableau */
+void gencode_decla_tab(char * name, char * size);
+
 /* Génère le quad d'affichage */
 void gencode_echo(Op_list *op_list);
 
@@ -63,5 +74,10 @@ Ql * gencode_until(
 
 /* Concatène deux opérandes de string */
 Operand * gencode_concat(Operand * op1, Operand * op2);
+
+/* Génère le code pour le début de for */
+Ctrl_for * gencode_start_for(char *id_name, Op_list * op_list);
+
+void gencode_for(Ctrl_for *list);
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

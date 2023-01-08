@@ -2,20 +2,27 @@
 
 /* Affiche le message d'aide avec l'option -h */
 void print_usage(char *program_name) {
-    printf("Usage:\t%s [-o output-file] [-d] <input file>\n", program_name);
+    printf("Usage:\t%s [-o output-file] [-t] <input file>\n", program_name);
     printf("\t%s [-c]\n\n", program_name);
     printf("\t-o\t\tSpecify output file (default: %s)\n", OUTPUT_FILE);
-    printf("\t-d\t\tPrint symbols table and quad list during compilation \n");
+    printf("\t-t\t\tPrint symbols table and quad list during compilation\n");
     printf("\t-c\t\tPrint copyright\n");
+    printf("\t-v\t\tPrint this to show the project's members\n");
     printf("\t-h\t\tPrint this help\n");
 }
 
 /* Affiche le logo avec l'option -c */
+
 void print_copyright() {
-    char *file = {
-        #include "includes/copyright"
-    };
-    printf("%s", file);
+}
+
+/* Affiche les membres du projet avec l'option -v */
+void print_member() {
+    printf("Membres du projet:\n");
+    printf("- Arnaud FILIPPI\n");
+    printf("- Charles JARDOT\n");
+    printf("- Thomas POIRIER\n");
+    printf("- Nathanaël DEROUSSEAUX\n");
 }
 
 /* Parse les arguments, renvoie 0 si pas debug, 1 si mode debug */
@@ -24,7 +31,19 @@ char parse_args(char **finput, char **foutput, int argc, char **argv) {
 
     // On récupère les options
     int opt;
-    while ((opt = getopt(argc, argv, "dcho:")) != -1) {
+
+    struct option long_options[] = {
+        {"version", required_argument, NULL, 'v'},
+        {"tos", required_argument, NULL, 't'},
+        {0, 0, 0, 0}};
+
+    int option_index = 0;
+
+    char *optstring = "tvhco:";
+
+    while (
+        (opt = getopt_long(
+            argc, argv, optstring, long_options, &option_index)) != -1) {
         switch (opt) {
         case 'o':  // Fichier de sortie
             *foutput = optarg;
@@ -37,8 +56,12 @@ char parse_args(char **finput, char **foutput, int argc, char **argv) {
             print_copyright();
             exit(EXIT_SUCCESS);
             break;
-        case 'd':  // Debug
+        case 't':  // Table des symboles
             debug = 1;
+            break;
+        case 'v':  // Membres du projet
+            print_member();
+            exit(EXIT_SUCCESS);
             break;
         default:
             print_usage(argv[0]);

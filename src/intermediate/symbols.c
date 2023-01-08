@@ -57,7 +57,7 @@ Symbol * add_const_st(char * data) {
     char* name;
     CHECK(name = calloc(10, sizeof(char)));
 
-    snprintf(name, 10, "const_%d", symbols_table->last_const);
+    snprintf(name, 10, "_const_%d", symbols_table->last_const);
     symbols_table->last_const++;
     s->name = name;
     add_st(symbols_table, name, s);
@@ -75,11 +75,23 @@ Symbol * add_temp_st() {
 
     char * name;
     CHECK(name = calloc(10, sizeof(char)));
-    snprintf(name, 10, "temp_%d", symbols_table->last_temp);
+    snprintf(name, 10, "_temp_%d", symbols_table->last_temp);
     symbols_table->last_temp++;
     s->name = name;
     add_st(symbols_table, name, s);
 
+    return s;
+}
+
+/* Ajoute un tableau à la table des symboles */
+Symbol * add_tab_st(char * name, int size) {
+    Symbol* s;
+    CHECK(s = malloc(sizeof(Symbol)));
+    s->type = TAB_S;
+    s->position = symbols_table->last_pos;
+    symbols_table->last_pos+=4*size;  // Chaque variable prend 4 octets
+    s->name = name;
+    add_st(symbols_table, name, s);
     return s;
 }
 

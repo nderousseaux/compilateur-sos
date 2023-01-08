@@ -1,0 +1,4 @@
+declare tab[10];
+tab[3]=1;
+echo $(expr ${tab[3]} + 1);
+exit

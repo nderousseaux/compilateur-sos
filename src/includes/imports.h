@@ -4,11 +4,12 @@
 #define SRC_INCLUDES_IMPORTS_H_
 
 // On inclut les .h de la librairie standard
-#include <string.h>
+#include <errno.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
 // On inclut les .h de notre application
 #include "./SoS.h"

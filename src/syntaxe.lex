@@ -55,6 +55,7 @@ expr			        { return EXPR; }
 \"				        { return DQUOTE; }
 '				        { return QUOTE; }
 \$				        { return DOLLAR; }
+\?                      { return QMARK; }
 
 \+				        { return PLUS; } // Opérateurs
 \-				        { return MINUS; }

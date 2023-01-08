@@ -1,0 +1,8 @@
+i = 5;
+j = 6;
+k = 7;
+l = 9;
+for id in ${i} ${j} ${k} ${l} $(expr 69) do
+    echo ${id}
+done ;
+exit
