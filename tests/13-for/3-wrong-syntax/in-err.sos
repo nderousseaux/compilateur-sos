@@ -1,0 +1,6 @@
+i = 5;
+for id ${i} Do
+    id2 = ${id};
+    echo ${id2}
+done ;
+exit

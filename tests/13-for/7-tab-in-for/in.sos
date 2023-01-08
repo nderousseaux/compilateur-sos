@@ -1,0 +1,6 @@
+declare tablo[2];
+for id in "Gag" 77
+    tablo[1] = ${id};
+    echo ${tablo[1]}"\n";
+done ;
+exit

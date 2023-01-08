@@ -1,0 +1,11 @@
+i = 5;
+j = {i};
+for id in ${i}, ${j}, $( expr ${i} + {j}) do
+    id2 = ${id};
+    id3 = ${id2};
+    id4 = ${id3};
+    echo ${id2}"\n";
+    echo ${id3}"\n";
+    echo ${id4}"\n"
+done ;
+exit
