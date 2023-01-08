@@ -19,6 +19,7 @@ typedef enum Type_operand {
 	CONST_T,
 	INTEGER_T,
     TEMP_T,
+    TAB_T,
 	EMPTY_T
 } Type_operand;
 

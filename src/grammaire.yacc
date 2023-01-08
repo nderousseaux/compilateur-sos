@@ -133,7 +133,8 @@ liste-operandes     : liste-operandes operande                                  
 concatenation       : concatenation operande                                            { $$ = gencode_concat($1, $2); }
                     | operande                                                          { $$ = copy_operand($1); }
 
-operande            : MOT                                                               { to_operand_const($$, $1); }
+operande            : DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { }
+                    | MOT                                                               { to_operand_const($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}

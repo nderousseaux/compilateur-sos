@@ -49,6 +49,12 @@ void gencode_assign(char * dst, Operand * src) {
 void gencode_assign_tab(char * dst, Operand * index, Operand * src) {
 	Operand tab = empty();
 	to_operand_id(&tab, dst, 0);
+	tab.type = TAB_T;
+
+	if(index->type != ID_T) {
+		to_operand_temp(index);
+		gencode(OP_ASSIGN, integer(index->value_int), empty(), *index);
+	}
 
 	// On veut avoir la case index, du tableau dst. On y stocke src
 	gencode(OP_ASSIGN_TAB, *src, *index, tab);

@@ -39,8 +39,20 @@ void gen_assign_tab(Quad * quad) {
     // On met l'opérande dans t2
     put_op_reg(&quad->operand1, "t2");
 
-    // On met t2 dans la tab[i]
-    put_reg_var_tab("t2", quad->result.symbol->position, quad->operand2.value_int);
+    // On met l'addresse de tab dans t0
+    put_int_reg(quad->result.symbol->position, "t0");
+    // On met la valeur de de i dans t1
+    put_op_reg(&quad->operand2, "t1");
+    // On multiplie t1 par 4
+    put_int_reg(4, "t3");
+    mul("t1", "t1", "t3");
+    // On ajoute t0 et t1
+    add("t0", "t0", "t1");
+
+    // On ajoute fp à t0
+    add("t0", "t0", "fp");
+    // On charge la valeur de t2 dans la valeur pointée par t0
+    fprintf(f, "\t\tsw $t2, 0($t0)");
 }
 
 /* Traitement du quad OP_ECHO */
