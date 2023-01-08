@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <getopt.h>
 
 // On inclut les .h de notre application
 #include "./SoS.h"
