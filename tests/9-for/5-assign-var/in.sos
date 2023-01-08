@@ -1,6 +1,6 @@
 i = 5;
-j = {i};
-for id in ${i}, ${j}, $( expr ${i} + {j}) do
+j = ${i};
+for id in ${i} ${j} $(expr ${i} + ${j}) do
     id2 = ${id};
     id3 = ${id2};
     id4 = ${id3};

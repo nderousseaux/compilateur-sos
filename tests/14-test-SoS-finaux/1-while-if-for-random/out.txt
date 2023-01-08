@@ -1,7 +1,0 @@
-19
-1
-le sel de baleine
-4
--1
-je suis rempli
-Fin du code SoS
