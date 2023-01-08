@@ -1,6 +1,6 @@
 i = 5 ;
 until test ${i} -eq 10 do
-    echo "J'aime la SoS\n";
+    echo "Jaime la SoS\n";
     i = $(expr ${i} + 1) 
 done ;
 exit

@@ -1,7 +1,7 @@
 i = 5 ;
-j = ${i}
-until test ${i} -eq ${j} + 1 do
-    echo "J'aime la SoS\n";
-    j = $(expr ${j} + ${i}) 
+j = ${i};
+until test ${i} -eq $(expr ${j} + 1) do
+    echo "Jaime la SoS\n";
+    i = $(expr ${i} + 1) 
 done ;
 exit
