@@ -185,8 +185,6 @@ void syscall_echo(Operand *op) {
         fprintf(f, "\t\tli\t$v0,\t4\n");
     else if (op->type == ID_T && op->symbol->type_data == CONST_T)
         fprintf(f, "\t\tli\t$v0,\t4\n");
-    else if (op->type == TEMP_T && op->symbol->type_data == CONST_T)
-        fprintf(f, "\t\tli\t$v0,\t4\n");
     else
         fprintf(f, "\t\tli\t$v0,\t1\n");
     fprintf(f, "\t\tsyscall\n");

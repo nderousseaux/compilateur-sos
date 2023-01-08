@@ -1,6 +1,6 @@
 mot1 = "salut" ;
 mot2 = "salut" ;
-if test ${mot1} -eq ${mot2} then
+if test ${mot1} = ${mot2} then
     echo "Test 16 OK"
 fi ;
 exit

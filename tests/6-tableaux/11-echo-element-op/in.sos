@@ -1,4 +1,4 @@
 declare tab[10];
-tab[1+1]=1;
-echo ${tab[1+1]}
+tab[$(expr 1 + 1)]=1;
+echo ${tab[$(expr 1 + 1)]};
 exit

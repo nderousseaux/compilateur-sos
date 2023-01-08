@@ -22,14 +22,17 @@ int to_int(char *str) {
             break;
         if (str[i] < '0' || str[i] > '9') {
             fprintf(stderr, "Erreur: %s n'est pas un entier\n", str);
+            exit(1);
         }
     }
 
     res = atoi(str + dec);
 
     // On vérifie que res soit bien dans l'intervalle [-2^31, 2^31-1]
-    if (res < -2147483648 || res > 2147483647)
+    if (res < -2147483648 || res > 2147483647) {
         fprintf(stderr, "Erreur: %s n'est pas un entier sur 32 bits\n", str);
+        exit(1);
+    }
 
     return res;
 }

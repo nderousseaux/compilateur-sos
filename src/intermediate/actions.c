@@ -51,6 +51,12 @@ void gencode_assign_tab(char * dst, Operand * index, Operand * src) {
 	to_operand_id(&tab, dst, 0);
 	tab.type = TAB_T;
 
+	// On transforme src en operande entier
+	if (src->type == CONST_T) {
+		if (is_int(src->symbol->data))
+			to_operand_int(src, src->symbol->data);
+	}
+
 	if(index->type != ID_T) {
 		to_operand_temp(index);
 		gencode(OP_ASSIGN, integer(index->value_int), empty(), *index);
@@ -86,6 +92,8 @@ Operand * gencode_tab_to_temp(char * name, Operand * index) {
 
 /* Génère le code pour déclarer un tableau */
 void gencode_decla_tab(char * name, char * size) {
+	check_id(name);
+
 	int size_i;
 	// On vérifie que la value est positif strictement
 	if ((size_i = to_int(size)) < 1) {
@@ -102,6 +110,13 @@ void gencode_decla_tab(char * name, char * size) {
 void gencode_echo(Op_list *op_list) {
 	// Pour chaque opérande de la liste, on génère un quad echo
 	for (int i = 0; i < op_list->size; i++) {
+		if (op_list->data[i].symbol->type == TAB_S) {
+			fprintf(stderr,
+				"Erreur: Impossible d'afficher un tableau\n");
+			exit(EXIT_FAILURE);
+		}
+
+
 		gencode(OP_ECHO, empty(), empty(), op_list->data[i]);
 	}
 }

@@ -144,6 +144,7 @@ operande-entier     : MOT                                                       
                     | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4; }
+                    | DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); }
                                                                                             
 
 somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }
