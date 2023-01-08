@@ -7,8 +7,8 @@
 
 #include "../intermediate/symbols.h"
 
-/* Met une opérande dans un tableau */
-void put_reg_var_tab(char * reg, int pos, int index);
+/* Met la valeur d'un tableau dans une opérande */
+void put_reg_var_tab(Operand * op, char * reg);
 
 /* Met une opérande dans un registre */
 void put_op_reg(Operand * op, char * reg);

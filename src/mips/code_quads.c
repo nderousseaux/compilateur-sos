@@ -20,9 +20,14 @@ void gen_assign(Quad * quad) {
         printable_operand(quad->operand1),
         printable_operand(quad->result));
 
+    if (quad->operand1.type == TAB_T)
+        fprintf(
+            f,
+            "\t\t# (index du tab indiqué à %d($fp)\n",
+            quad->operand1.value_int);
+
     // On met l'opérande dans t2
     put_op_reg(&quad->operand1, "t2");
-
     // On met t2 dans la variable
     put_reg_var("t2", quad->result.symbol->position);
 }

@@ -17,6 +17,11 @@ void gencode_assign(char * dst, Operand * src);
 /* Génère le code pour associer un tableau */
 void gencode_assign_tab(char * dst, Operand * index, Operand * src);
 
+/* Génère le code pour associer un tableau à une var
+* renvoie une opérande temporaire contenant la valeur du tableau
+*/
+Operand * gencode_tab_to_temp(char * name, Operand * index);
+
 /* Génère le code pour déclarer un tableau */
 void gencode_decla_tab(char * name, char * size);
 

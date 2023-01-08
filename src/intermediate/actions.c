@@ -56,8 +56,32 @@ void gencode_assign_tab(char * dst, Operand * index, Operand * src) {
 		gencode(OP_ASSIGN, integer(index->value_int), empty(), *index);
 	}
 
+
 	// On veut avoir la case index, du tableau dst. On y stocke src
 	gencode(OP_ASSIGN_TAB, *src, *index, tab);
+}
+
+/* Génère le code pour associer un tableau à une var
+* renvoie une opérande temporaire contenant la valeur du tableau
+*/
+Operand * gencode_tab_to_temp(char * name, Operand * index) {
+	Operand *op = malloc(sizeof(Operand));
+	to_operand_temp(op);
+	op->symbol->type_data = CONST_T;
+
+	Operand * tab = malloc(sizeof(Operand));
+	tab->type = TAB_T;
+	tab->symbol = get_st(symbols_table, name);
+	if(index->type != ID_T) {
+		to_operand_temp(index);
+		gencode(OP_ASSIGN, integer(index->value_int), empty(), *index);
+	}
+	tab->value_int = index->symbol->position;
+
+	// On assigne la valeur du tableau à l'opérande temporaire
+	gencode(OP_ASSIGN, *tab, empty(), *op);
+
+	return op;
 }
 
 /* Génère le code pour déclarer un tableau */
