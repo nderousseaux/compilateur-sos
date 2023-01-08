@@ -114,6 +114,7 @@ liste-instructions  : liste-instructions SEMICOLON instruction                  
 id                  : MOT                                                               { $$ = copy_string($1); }
 
 instruction         : id EQUAL concatenation                                            { gencode_assign($1, $3); }
+                    | id OSQUARE operande-entier CSQUARE EQUAL concatenation            { gencode_assign_tab($1, $3, $6); }
                     | DECLARE id OSQUARE MOT CSQUARE                                    { gencode_decla_tab($2, $4); }
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }

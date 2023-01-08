@@ -31,6 +31,11 @@ void put_op_reg(Operand * op, char * reg) {
     }
 }
 
+/* Met une opérande dans un tableau */
+void put_reg_var_tab(char * reg, int pos, int index) {
+    fprintf(f, "\t\tsw\t$%s,\t%d($fp)\n", reg, pos + index * 4);
+}
+
 /* Met un entier dans un registre  */
 void put_int_reg(int value, char *reg) {
     fprintf(f, "\t\tli\t$%s,\t%d\n", reg, value);

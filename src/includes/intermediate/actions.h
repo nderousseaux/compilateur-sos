@@ -14,6 +14,9 @@ void gencode_exit(Operand *op);
 /* Génère le quad d'association */
 void gencode_assign(char * dst, Operand * src);
 
+/* Génère le code pour associer un tableau */
+void gencode_assign_tab(char * dst, Operand * index, Operand * src);
+
 /* Génère le code pour déclarer un tableau */
 void gencode_decla_tab(char * name, char * size);
 

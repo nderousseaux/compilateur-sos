@@ -45,6 +45,15 @@ void gencode_assign(char * dst, Operand * src) {
 	gencode(OP_ASSIGN, *src, empty(), id_dst);
 }
 
+/* Génère le code pour associer un tableau */
+void gencode_assign_tab(char * dst, Operand * index, Operand * src) {
+	Operand tab = empty();
+	to_operand_id(&tab, dst, 0);
+
+	// On veut avoir la case index, du tableau dst. On y stocke src
+	gencode(OP_ASSIGN_TAB, *src, *index, tab);
+}
+
 /* Génère le code pour déclarer un tableau */
 void gencode_decla_tab(char * name, char * size) {
 	int size_i;

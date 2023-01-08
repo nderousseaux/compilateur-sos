@@ -57,7 +57,7 @@ Symbol * add_const_st(char * data) {
     char* name;
     CHECK(name = calloc(10, sizeof(char)));
 
-    snprintf(name, 10, "0const_%d", symbols_table->last_const);
+    snprintf(name, 10, "_const_%d", symbols_table->last_const);
     symbols_table->last_const++;
     s->name = name;
     add_st(symbols_table, name, s);
@@ -75,7 +75,7 @@ Symbol * add_temp_st() {
 
     char * name;
     CHECK(name = calloc(10, sizeof(char)));
-    snprintf(name, 10, "0temp_%d", symbols_table->last_temp);
+    snprintf(name, 10, "_temp_%d", symbols_table->last_temp);
     symbols_table->last_temp++;
     s->name = name;
     add_st(symbols_table, name, s);

@@ -27,6 +27,22 @@ void gen_assign(Quad * quad) {
     put_reg_var("t2", quad->result.symbol->position);
 }
 
+/* Traitement du quad OP_ASSIGN_TAB */
+void gen_assign_tab(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On met %s dans %s[%s]\n",
+        printable_operand(quad->operand1),
+        printable_operand(quad->result),
+        printable_operand(quad->operand2));
+
+    // On met l'opérande dans t2
+    put_op_reg(&quad->operand1, "t2");
+
+    // On met t2 dans la tab[i]
+    put_reg_var_tab("t2", quad->result.symbol->position, quad->operand2.value_int);
+}
+
 /* Traitement du quad OP_ECHO */
 void gen_echo(Quad * quad) {
     fprintf(f, "\t\t# On affiche %s\n", printable_operand(quad->result));
