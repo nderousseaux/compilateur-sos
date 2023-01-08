@@ -1,0 +1,5 @@
+i = 5 ;
+until test ${i} -lt -725 do
+    echo "J'aime la SoS\n";
+    i = $(expr ${i} * -${i}) 
+exit

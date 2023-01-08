@@ -1,0 +1,6 @@
+i = 2147483646 ;
+until test ${i} -eq 2147483647 do
+    echo "J'aime la SoS\n";
+    i = $(expr ${i} + 2) 
+done ;
+exit

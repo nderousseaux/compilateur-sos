@@ -1,0 +1,6 @@
+i = 5 ;
+until test ${i} -eq 4 do
+    echo "J'aime la SoS\n";
+    i = $(expr ${i} * 1000) 
+done ;
+exit
