@@ -24,4 +24,6 @@ void gen_data()
             element = element->next;
         }
     }
+
+    fprintf(f, "buffer_read: .space 256\n");
 }

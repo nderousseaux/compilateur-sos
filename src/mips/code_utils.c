@@ -137,6 +137,21 @@ void syscall_exit()
     fprintf(f, "\t\tsyscall\n");
 }
 
+void syscall_read()
+{
+    fprintf(f, "li $a0, buffer_read\n");
+    fprintf(f, "li $a1, 256\n");
+    fprintf(f, "\t\tli\t$v0,\t8\n");
+    fprintf(f, "\t\tsyscall\n");
+}
+
+void syscall_sbrk()
+{
+    fprintf(f, "li $a0, 256\n");
+    fprintf(f, "\t\tli\t$v0,\t9\n");
+    fprintf(f, "\t\tsyscall\n");
+}
+
 /* Appelle la primitive ECHO
  * La valeur à afficher doit être définie dans $a0
  */

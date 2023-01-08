@@ -75,4 +75,6 @@ Ctrl_for *gencode_start_for(char *id_name, Op_list *op_list);
 
 void gencode_for(Ctrl_for *list);
 
+void gencode_read_id(char *id_name);
+
 #endif // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

@@ -261,13 +261,13 @@ Ctrl_for *gencode_start_for(char *id_name, Op_list *op_list)
 
 	strcpy(list->temp_name, compteur->name);
 
-	gencode(OP_ASSIGN, integer(op_tab->symbol->position-4), empty(), compteur_op);
+	gencode(OP_ASSIGN, integer(op_tab->symbol->position - 4), empty(), compteur_op);
 
 	// On crée mot
 	add_var_st(id_name, CONST_T);
 
 	list->q_index = nextquad();
-	Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(op_tab->symbol->position-4+(op_list->size-1)*4), empty()); // Dest à compléter
+	Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(op_tab->symbol->position - 4 + (op_list->size - 1) * 4), empty()); // Dest à compléter
 	// Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(-1333), empty()); // Dest à compléter
 
 	Ql *need_complete = init_quad_list();
@@ -291,34 +291,8 @@ void gencode_for(Ctrl_for *list)
 	complete(list->q_test, nextquad());
 }
 
-/*
-
-for mot in TAB = (A|B|C) do
-echo mot
-done
-
-
-
-# START FOR
-
-CREER TAB -> FAIT
-
-CREER COMPTEUR I; -> FAIT
-i = 0; -> FAIT
-
-CREER MOT; -> FAIT
-
-if i > 2 jump end 			--> flag_if
-mot = TAB[i] -> FAIT
-i = i + 1 -> FAIT
-
-LISTE INSTRUCTION
-echo mot
-
-
-goto flag_if
-
-end
-
-
-*/
+void gencode_read_id(char *id_name)
+{
+	add_var_st(id_name, CONST_T);
+	gencode(OP_READ, empty(), empty(), id(id_name));
+}
