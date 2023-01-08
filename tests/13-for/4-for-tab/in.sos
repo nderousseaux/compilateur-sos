@@ -3,7 +3,7 @@ tab[0] = "QUOIFEUR";
 tab[1] = "WEED";
 tab[2] = 2000;
 tab[3] = "quoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeurquoifeur";
-for id in ${i} do
-    echo ${id[*]}"\n"
+for id in ${tab[*]} do
+    echo ${id}"\n"
 done ;
 exit
