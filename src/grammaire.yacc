@@ -120,17 +120,17 @@ instruction         : id EQUAL concatenation                                    
                     | id OSQUARE operande-entier CSQUARE EQUAL concatenation            { gencode_assign_tab($1, $3, $6); }
                     | DECLARE id OSQUARE MOT CSQUARE                                    { gencode_decla_tab($2, $4); }
                     | IF test-block THEN M liste-instructions N else-part FI            { gencode_if($2, $4, $6, $7); }
-                    | start-for DO liste-instructions DONE                              { gencode_for($1); }
                     | FOR id DO liste-instructions DONE                                 { /*TODO*/ }
+                    | start-for DO liste-instructions DONE                              { gencode_for($1); }
                     | WHILE M test-block DO M liste-instructions DONE                   { $$ = gencode_while($3, $2, $5); }
                     | UNTIL M test-block DO M liste-instructions DONE                   { $$ = gencode_until($3, $2, $5); }
                     | CASE operande IN liste-case ESAC                                  { /*TODO*/ }
+                    | ECHO_T liste-operandes                                            { gencode_echo($2); }
                     | READ id                                                           { /*TODO*/ }
                     | declaration-fonction                                              { /*TODO*/ }
                     | appel-fonction                                                    { /*TODO*/ }
                     | RETURN                                                            { /*TODO*/ }
                     | RETURN operande                                                   { /*TODO*/ }
-                    | ECHO_T liste-operandes                                            { gencode_echo($2); }
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
 
@@ -151,42 +151,11 @@ filtre              : MOT                                                       
 
 liste-operandes     : liste-operandes operande                                          { $$ = add_op($1, $2); }
                     | operande                                                          { $$ = create_list_op($1); }
+                    | STAR OBRACE id OSQUARE STAR CSQUARE CBRACE                        { /*TODO*/ }
 
 concatenation       : concatenation operande                                            { $$ = gencode_concat($1, $2); }
                     | operande                                                          { $$ = copy_operand($1); }
                     | DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); } //TODO supprimer
-
-operande            : DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); }
-                    | MOT                                                               { to_operand_const($$, $1); }
-                    | CHAINE                                                            { to_operand_const($$, $1); }
-                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
-                    | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
-                    | DOLLAR MOT                                                        { /*TODO*/ }
-                    | DOLLAR STAR                                                       { /*TODO*/ }
-                    | DOLLAR QMARK                                                      { /*TODO*/ }
-                    | DOLLAR OPARA appel-fonction CPARA                                 { /*TODO*/ }
-
-operande-entier     : MOT                                                               { to_operand_int($$, $1); }
-                    | OPARA somme-entiere CPARA                                         { $$ = $2; }
-                    | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
-                    | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }
-                    | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4; }
-                    | DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); }
-                    | DOLLAR MOT                                                        { /*TODO*/ }
-                                                                                            
-
-somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }
-                    | produit-entier                                                    { $$ = $1; }
-                
-produit-entier      : produit-entier fois-div-mod operande-entier                       { $$ = gencode_operation($2, $1, $3); }
-                    | operande-entier                                                   { $$ = $1; }
-
-plus-ou-moins       : PLUS                                                              { $$ = OP_ADD; }
-                    | MINUS                                                             { $$ = OP_MINUS; }
-
-fois-div-mod        : STAR                                                              { $$ = OP_MULT; }
-                    | SLASH                                                             { $$ = OP_DIV; }
-                    | PERCENT                                                           { $$ = OP_MOD; }
 
 test-block		    : TEST test-expr                                                    { $$ = $2; }
 
@@ -206,6 +175,16 @@ test-instruction	: operateur1 concatenation                                     
                     | concatenation EQUAL concatenation                                 { $$ = gencode_test(OP_EQUAL, $1, $3); }
                     | concatenation NEQUAL concatenation                                { $$ = gencode_test(OP_NEQUAL, $1, $3); }
 
+operande            : DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
+                    | DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); }
+                    | MOT                                                               { to_operand_const($$, $1); }
+                    | DOLLAR MOT                                                        { /*TODO*/ }
+                    | DOLLAR STAR                                                       { /*TODO*/ }
+                    | DOLLAR QMARK                                                      { /*TODO*/ }
+                    | CHAINE                                                            { to_operand_const($$, $1); }
+                    | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
+                    | DOLLAR OPARA appel-fonction CPARA                                 { /*TODO*/ }                                                  
+
 operateur1          : EMPTY_COMP                                                        { $$ = OP_EMPTY; }
                     | NOEMPTY_COMP                                                      { $$ = OP_NOTEMPTY; }
 
@@ -215,6 +194,27 @@ operateur2			: EQUAL_COMP     									                { $$ = OP_EQUAL; }
 					| SUPEQ_COMP											            { $$ = OP_SUPEQ; }
 					| STINF_COMP											            { $$ = OP_STINF; }
 					| INFEQ_COMP											            { $$ = OP_INFEQ; }
+
+somme-entiere		: somme-entiere plus-ou-moins produit-entier                        { $$ = gencode_operation($2, $1, $3); }
+                    | produit-entier                                                    { $$ = $1; }
+                
+produit-entier      : produit-entier fois-div-mod operande-entier                       { $$ = gencode_operation($2, $1, $3); }
+                    | operande-entier                                                   { $$ = $1; }
+
+operande-entier     : DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }
+                    | DOLLAR OBRACE id OSQUARE operande-entier CSQUARE CBRACE           { $$ = gencode_tab_to_temp($3, $5); }
+                    | DOLLAR MOT                                                        { /*TODO*/ }
+                    | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
+                    | MOT                                                               { to_operand_int($$, $1); }
+                    | OPARA somme-entiere CPARA                                         { $$ = $2; }
+                    | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4; }           
+
+plus-ou-moins       : PLUS                                                              { $$ = OP_ADD; }
+                    | MINUS                                                             { $$ = OP_MINUS; }
+
+fois-div-mod        : STAR                                                              { $$ = OP_MULT; }
+                    | SLASH                                                             { $$ = OP_DIV; }
+                    | PERCENT                                                           { $$ = OP_MOD; }
 
 
 declaration-fonction: id OPARA CPARA OBRACE decl-loc liste-instructions CBRACE          { /*TODO*/ }
