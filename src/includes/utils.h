@@ -25,4 +25,7 @@ char * copy_string(char *s);
 /* Vérifie que id correspond bien à la regex */
 void check_id(char * dst);
 
+/* Retire les guillemets à une chaine (si ils existents)*/
+char * trim(char * str);
+
 #endif  // SRC_INCLUDES_UTILS_H_

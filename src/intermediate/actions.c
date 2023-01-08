@@ -11,33 +11,26 @@ void gencode_exit(Operand *op) {
 }
 
 /* Génère le quad d'association */
-void gencode_assign(char * dst, Op_list * src) {
-	// On vérifie que la liste ne contient qu'une seule opérande
-	if (src->size > 1) {
-		fprintf(stderr,
-		"Erreur: l'opérande de droite de l'assignation contient plus d'une opérande");
-		exit(EXIT_FAILURE);
-	}
-
+void gencode_assign(char * dst, Operand * src) {
 	check_id(dst);
 
-	add_var_st(dst, src->data[0].type);
+	add_var_st(dst, src->type);
 
 	Operand id_dst = id(dst);
 
 	// Si l'opérande est une constante, on stocke vers quelle constante pointe l'id
-	if(src->data[0].type == CONST_T) {
-		id_dst.symbol->constant = src->data[0].symbol;
+	if(src->type == CONST_T) {
+		id_dst.symbol->constant = src->symbol;
 	}
 
 	// Si c'est un id pointant vers une constante
-	if (src->data[0].type == ID_T && src->data[0].symbol->type_data == CONST_T) {
-		id_dst.symbol->constant = src->data[0].symbol->constant;
+	if (src->type == ID_T && src->symbol->type_data == CONST_T) {
+		id_dst.symbol->constant = src->symbol->constant;
 		id_dst.symbol->type_data = CONST_T;
 	}
 
 	// On génère le quad
-	gencode(OP_ASSIGN, src->data[0], empty(), id_dst);
+	gencode(OP_ASSIGN, *src, empty(), id_dst);
 }
 
 /* Génère le quad d'affichage */
@@ -141,4 +134,19 @@ Ql * gencode_until(
 	complete(test_block->tru, nextquad());
 	complete(test_block->fal, first_true);
 	return test_block->tru;
+}
+
+/* Concatène deux opérandes de string */
+Operand * gencode_concat(Operand * op1, Operand * op2) {
+	// On concatène les deux strings
+	char * str;
+	CHECK(str = calloc(
+		sizeof(char),
+		(strlen(op1->symbol->name) + strlen(op2->symbol->name) + 1)));
+	sprintf(str, "%s%s", str_of_const(op1), str_of_const(op2));
+
+	// On crée un nouveau symbole
+	Operand * res = malloc(sizeof(Operand));
+	to_operand_const(res, str);
+	return res;
 }

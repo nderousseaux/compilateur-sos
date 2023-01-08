@@ -42,6 +42,8 @@ void add_var_st(char * name, Type_operand type) {
 
 /* Ajoute une constante à la table des symboles */
 Symbol * add_const_st(char * data) {
+    data = trim(data);
+
     Symbol* s;
     CHECK(s = malloc(sizeof(Symbol)));
     s->type = CONST_S;
