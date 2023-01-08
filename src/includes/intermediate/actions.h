@@ -50,6 +50,12 @@ void gencode_and(
 /* Génère le code relatif à une opération NOT */
 void gencode_not(Ctrl_ql * test_expr, Ctrl_ql * res);
 
+/* Génère le code relatif à la déclaration d'un tableau */
+void gencode_tab(char *dst, char * value);
+
+/* Génère le code relatif au remplissage d'un tableau */
+void gencode_tab_assign(char * tabName, Operand *op ,Op_list * op_list);
+
 /* Génère le code relatif à une instruction while */
 Ql* gencode_while(
 	Ctrl_ql * test_block,  // Contient les quads du test
@@ -61,5 +67,7 @@ Ql * gencode_until(
 	Ctrl_ql * test_block,  // Contient les quads du test
 	int first_cond,  // index du premier quad de la condition
 	int first_true);  // Index du premier quad vrai
+
+
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

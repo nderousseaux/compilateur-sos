@@ -113,9 +113,9 @@ programme           : liste-instructions                                        
 liste-instructions  : liste-instructions SEMICOLON instruction                          { }
                     | instruction                                                       { }
 
-id                  : MOT                                                               { $$ = copy_string($1); }
-
-instruction         : id EQUAL concatenation                                            { gencode_assign($1, $3); }
+instruction         : IDENTIFIER EQUAL concatenation                                    { gencode_assign($1, $3); }
+                    | IDENTIFIER OSQUARE operande-entier CSQUARE EQUAL concatenation    { gencode_tab_assign($1, $3, $6);}
+                    | DECLARE IDENTIFIER OSQUARE MOT CSQUARE                            { gencode_tab($2, $4);}
                     | EXIT                                                              { gencode_exit(0); }
                     | EXIT operande-entier                                              { gencode_exit($2); }
                     | ECHO_T liste-operandes                                            { gencode_echo($2); }
@@ -135,12 +135,14 @@ liste-operandes     : liste-operandes operande                                  
 
 concatenation       : operande                                                          { $$ = create_list_op($1); }
 
-operande            : MOT                                                               { to_operand_int($$, $1); }
+operande            : DOLLAR OBRACE IDENTIFIER OSQUARE operande-entier CSQUARE CBRACE   { to_operand_tab($$, $3, $5);}
+                    | MOT                                                               { to_operand_int($$, $1); }
                     | CHAINE                                                            { to_operand_const($$, $1); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 0); }
                     | DOLLAR OPARA EXPR somme-entiere CPARA                             { $$ = $4;}
 
 operande-entier     : MOT                                                               { to_operand_int($$, $1); }
+                    | DOLLAR OBRACE IDENTIFIER OSQUARE operande-entier CSQUARE CBRACE   { to_operand_tab($$, $3, $5); }
                     | OPARA somme-entiere CPARA                                         { $$ = $2; }
                     | plus-ou-moins operande-entier                                     { $$ = gencode_operation($1, NULL, $2); }
                     | DOLLAR OBRACE id CBRACE                                           { to_operand_id($$, $3, 1); }

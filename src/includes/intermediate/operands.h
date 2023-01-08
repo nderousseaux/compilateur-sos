@@ -53,6 +53,9 @@ Operand integer(int value);
 /* Crée une opérande de type empty (pas d'operande) */
 Operand empty();
 
+/* Transforme une chaine de caractère en opérande tab */
+void to_operand_tab(Operand * op, char * value, Operand * op2);
+
 /* Transforme une chaine de caractère en operande entier */
 void to_operand_int(Operand *op, char *value);
 
@@ -73,5 +76,6 @@ void print_operand(Operand op);
 /* Renvoie une valeur printable de l'opérande 
 Valeur si entier, nom si autre */
 char *printable_operand(Operand op);
+
 
 #endif  // SRC_INCLUDES_INTERMEDIATE_OPERANDS_H_

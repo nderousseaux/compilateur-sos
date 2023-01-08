@@ -13,6 +13,9 @@ void print_operator(Operator op) {
 		case OP_ASSIGN:
 			printf("ASSIGN");
 			break;
+		case OP_ASSIGN_TAB:
+			printf("ASSIGN TAB");
+			break;
 		case OP_ECHO:
 			printf("ECHO");
 			break;

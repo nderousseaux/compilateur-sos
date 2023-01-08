@@ -10,6 +10,9 @@ void gen_end(Quad * quad);
 /* Traitement du quad OP_ASSIGN */
 void gen_assign(Quad * quad);
 
+/* Traitement du quad OP_ASSIGN_TAB */
+void gen_assign_tab(Quad * quad);
+
 /* Traitement du quad OP_ECHO */
 void gen_echo(Quad * quad);
 
