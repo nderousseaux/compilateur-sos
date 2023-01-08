@@ -181,11 +181,15 @@ void syscall_exit() {
 * La valeur à afficher doit être définie dans $a0
 */
 void syscall_echo(Operand *op) {
-    if (op->type == CONST_T)
+    if(op->symbol->type_data == TAB_T) {
+        fprintf(f, "\t\tli\t$v0,\t1\n");
+    } else if (op->type == CONST_T)
         fprintf(f, "\t\tli\t$v0,\t4\n");
-    else if (op->type == ID_T && op->symbol->type_data == CONST_T)
+    else if (
+        op->type == ID_T &&
+        op->symbol->type_data == CONST_T) {
         fprintf(f, "\t\tli\t$v0,\t4\n");
-    else
+    } else
         fprintf(f, "\t\tli\t$v0,\t1\n");
     fprintf(f, "\t\tsyscall\n");
 }

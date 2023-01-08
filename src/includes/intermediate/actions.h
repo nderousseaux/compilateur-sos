@@ -75,4 +75,9 @@ Ql * gencode_until(
 /* Concatène deux opérandes de string */
 Operand * gencode_concat(Operand * op1, Operand * op2);
 
+/* Génère le code pour le début de for */
+Ctrl_for * gencode_start_for(char *id_name, Op_list * op_list);
+
+void gencode_for(Ctrl_for *list);
+
 #endif  // SRC_INCLUDES_INTERMEDIATE_ACTIONS_H_

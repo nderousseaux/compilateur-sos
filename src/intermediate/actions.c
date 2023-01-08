@@ -237,3 +237,60 @@ Operand * gencode_concat(Operand * op1, Operand * op2) {
 	to_operand_const(res, str);
 	return res;
 }
+
+/* Génère le code pour le début de for */
+Ctrl_for * gencode_start_for(char *id_name, Op_list * op_list) {
+	Ctrl_for *list = malloc(sizeof(Ctrl_for));
+	CHECK(list);
+
+	// On crée le tableau
+	int size = op_list->size;
+	Symbol *temp_id = add_temp_st();
+	add_tab_st(temp_id->name, size);
+	for (int i = 0; i < size; i++) {
+		Operand op = integer(i);
+		gencode_assign_tab(temp_id->name, &op, &op_list->data[i]);
+	}
+
+	list->temp_name = calloc(100, sizeof(char));
+	CHECK(list->temp_name);
+	Symbol *compteur = add_temp_st();
+	Operand compteur_op = id(compteur->name);
+	strcpy(list->temp_name, compteur->name);
+
+	gencode(OP_ASSIGN, integer(0), empty(), compteur_op);
+
+	// On crée le mot
+	add_var_st(id_name, CONST_T);
+
+	list->q_index = nextquad();
+	Operand idd = id(list->temp_name);
+	Quad * test_for = gencode(
+		OP_STSUP, idd, integer(op_list->size-1), empty());
+
+
+	Ql * need_complete = init_quad_list();
+	add_quad(need_complete, test_for);
+
+	list->q_test = need_complete;
+
+	// On assigne tab[i] à mot ---> mot = tab[i]
+	Operand *op_tab = malloc(sizeof(Operand));
+	op_tab->symbol = get_st(symbols_table, temp_id->name);  // tableau
+	op_tab->value_int = compteur->position;			   // index
+	op_tab->type = TAB_T;						   // type
+
+	Operand d = id(id_name);
+	d.symbol->type_data = TAB_T;
+	gencode(OP_ASSIGN, *op_tab, empty(), d);
+
+	// i += 1
+	gencode(OP_ADD, id(list->temp_name), integer(1), id(list->temp_name));
+
+	return list;
+}
+
+void gencode_for(Ctrl_for *list) {
+	gencode(OP_GOTO, empty(), empty(), integer(list->q_index));
+	complete(list->q_test, nextquad());
+}
