@@ -42,6 +42,26 @@ void gen_assign_tab(Quad * quad){
     put_reg_var("t2", quad->result.value_int + 4*quad->operand2.value_int);
 }
 
+void gen_assign_from_tab(Quad * quad) {
+    fprintf(
+        f,
+        "\t\t# On met à jour la variable %s avec la valeur de la case n°%s\n",
+        printable_operand(quad->result),
+        printable_operand(quad->operand1)
+    );
+
+    // On met i dans t0
+    put_op_reg(&quad->operand2, "t0");
+    add("t0", "t0", "fp");  // On décalle fp de i
+
+    // On met tab[i] dans t2
+    fprintf(f, "\t\tlw\t$t2,\t4($t0)\n");
+
+    // On met t2 dans la case correspondante
+    put_reg_var("t2", quad->result.symbol->position);
+
+}
+
 
 /* Traitement du quad OP_ECHO */
 void gen_echo(Quad * quad) {

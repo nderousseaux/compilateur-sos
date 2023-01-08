@@ -256,30 +256,31 @@ Ctrl_for *gencode_start_for(char *id_name, Op_list *op_list)
 	Symbol *compteur = add_temp_st();
 
 	Operand compteur_op = id(compteur->name);
+	Operand *op_tab = malloc(sizeof(Operand));
+	to_operand_tab(op_tab, tab, &compteur_op);
 
 	strcpy(list->temp_name, compteur->name);
 
-	gencode(OP_ASSIGN, integer(0), empty(), compteur_op);
+	gencode(OP_ASSIGN, integer(op_tab->symbol->position-4), empty(), compteur_op);
 
 	// On crée mot
 	add_var_st(id_name, CONST_T);
 
 	list->q_index = nextquad();
-	Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(op_list->size), empty()); // Dest à compléter
+	Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(op_tab->symbol->position-4+(op_list->size-1)*4), empty()); // Dest à compléter
+	// Quad *test_for = gencode(OP_STSUP, id(list->temp_name), integer(-1333), empty()); // Dest à compléter
 
 	Ql *need_complete = init_quad_list();
 	add_quad(need_complete, test_for);
 
 	list->q_test = need_complete;
 
-	// On assigne tab[i] à mot ---> mot = tab[i]
-	Operand *op_tab = malloc(sizeof(Operand));
-	to_operand_tab(op_tab, tab, &compteur_op);
+	// On assigne tab[i] à mot ---> mot = tab[i
 
-	gencode(OP_ASSIGN, *op_tab, empty(), id(id_name));
+	gencode(OP_ASSIGN_FROM_TAB, *op_tab, id(list->temp_name), id(id_name));
 
 	// i += 1
-	gencode(OP_ADD, id(list->temp_name), integer(1), id(list->temp_name));
+	gencode(OP_ADD, id(list->temp_name), integer(4), id(list->temp_name));
 
 	return list;
 }

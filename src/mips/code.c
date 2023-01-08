@@ -45,6 +45,9 @@ void gen_code() {
 			case OP_ASSIGN_TAB:
 				gen_assign_tab(quad);
 				break;
+			case OP_ASSIGN_FROM_TAB:
+				gen_assign_from_tab(quad);
+				break;
 			case OP_ECHO:
 				gen_echo(quad);
 				break;

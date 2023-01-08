@@ -9,6 +9,7 @@ typedef enum Operator {
 	OP_EXIT,
 	OP_ASSIGN,
 	OP_ASSIGN_TAB,
+	OP_ASSIGN_FROM_TAB,
 	OP_ECHO,
 	OP_ADD,
 	OP_MINUS,
